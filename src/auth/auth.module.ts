@@ -22,7 +22,7 @@ if (!process.env.JWT_SECRET) {
 @Module({
   imports: [
     PrismaModule,
-    PassportModule,
+    PassportModule, // Removida a estratégia padrão
     EmailModule,
     SupabaseModule,
 

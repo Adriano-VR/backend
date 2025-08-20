@@ -26,6 +26,12 @@ async function bootstrap() {
   // Removido o prefixo global 'api' para evitar bloqueio por adblock
   // app.setGlobalPrefix('api');
 
+  // Log das rotas configuradas
+  console.log('\x1b[36m%s\x1b[0m', '🔍 Verificando configuração de rotas...');
+  const server = app.getHttpServer();
+  const router = server._events.request._router;
+  console.log('\x1b[36m%s\x1b[0m', '🔍 Router configurado:', !!router);
+
   const config = new DocumentBuilder()
     .setTitle('Mente Segura API')
     .setDescription('API para o projeto Mente Segura')

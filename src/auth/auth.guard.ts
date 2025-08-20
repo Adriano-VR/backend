@@ -31,9 +31,10 @@ export class AuthGuard implements CanActivate {
     console.log('🔍 [AuthGuard] Método:', request.method);
     console.log('🔍 [AuthGuard] Token presente:', !!token);
 
+    // Se não há token, bloquear acesso (rota protegida)
     if (!token) {
       console.log('❌ [AuthGuard] Token não encontrado, bloqueando acesso');
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Token de autenticação é obrigatório');
     }
 
     try {
@@ -45,7 +46,7 @@ export class AuthGuard implements CanActivate {
       request['user'] = payload;
     } catch (error) {
       console.log('❌ [AuthGuard] Token inválido:', error.message);
-      throw new UnauthorizedException();
+      throw new UnauthorizedException('Token inválido ou expirado');
     }
     return true;
   }

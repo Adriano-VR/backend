@@ -100,6 +100,7 @@ export class AuthController {
     return this.authService.handleOAuthCallback(dto);
   }
 
+  // ROTAS PROTEGIDAS - precisam de autenticação
   @UseGuards(AuthGuard)
   @Post('complete-profile')
   async completeProfile(
