@@ -58,6 +58,10 @@ async function bootstrap() {
     'http://localhost:3004', // Backend local port
     'http://localhost:3005', // Alternative local port
     'http://192.168.100.51:3004', // IP local development
+    'http://192.168.100.51:3000', // IP local frontend
+    'http://192.168.100.51', // IP local sem porta
+    'http://192.168.100.*', // Todos IPs da rede 192.168.100.x
+    'http://192.168.*.*', // Todos IPs da rede 192.168.x.x
     'https://www.mentesegura.institute',
     'https://mentesegura.institute',
     'https://mentesegura.vercel.app', // Staging environment
@@ -73,6 +77,16 @@ async function bootstrap() {
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
       if (!origin) return callback(null, true);
+
+      // Permitir todos os IPs locais
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        return callback(null, true);
+      }
+
+      // Permitir IPs da rede local
+      if (origin.includes('192.168.') || origin.includes('10.0.') || origin.includes('172.')) {
+        return callback(null, true);
+      }
 
       if (allOrigins.includes(origin)) {
         callback(null, true);

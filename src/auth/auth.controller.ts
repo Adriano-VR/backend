@@ -41,12 +41,28 @@ export class AuthController {
   })
   @Post('register')
   async register(@Body() dto: RegisterDto) {
-    return this.authService.register(dto);
+    console.log('🔐 [AuthController] Recebida requisição de registro:', { email: dto.email });
+    try {
+      const result = await this.authService.register(dto);
+      console.log('✅ [AuthController] Registro realizado com sucesso');
+      return result;
+    } catch (error) {
+      console.error('❌ [AuthController] Erro no registro:', error);
+      throw error;
+    }
   }
 
   @Post('login')
   async login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+    console.log('🔐 [AuthController] Recebida requisição de login:', { email: dto.email });
+    try {
+      const result = await this.authService.login(dto);
+      console.log('✅ [AuthController] Login realizado com sucesso');
+      return result;
+    } catch (error) {
+      console.error('❌ [AuthController] Erro no login:', error);
+      throw error;
+    }
   }
 
   @ApiOperation({
