@@ -79,3 +79,4 @@ Foi criado um script de teste (`scripts/test-oauth-callback.ts`) que simula os d
 - `src/auth/auth.service.ts`: Lógica principal do OAuth callback
 - `scripts/test-oauth-callback.ts`: Script de teste
 - `docs/oauth-callback-fix.md`: Esta documentação
+

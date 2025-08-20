@@ -23,8 +23,8 @@ async function bootstrap() {
   }));
   console.log('\x1b[36m%s\x1b[0m', '🔍 Pipe de validação global aplicado');
 
-  // Definir prefixo global para as rotas da API
-  app.setGlobalPrefix('api');
+  // Removido o prefixo global 'api' para evitar bloqueio por adblock
+  // app.setGlobalPrefix('api');
 
   const config = new DocumentBuilder()
     .setTitle('Mente Segura API')
@@ -44,7 +44,7 @@ async function bootstrap() {
     )
     .build();
   const documentFactory = () => SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('api/docs', app, documentFactory);
+  SwaggerModule.setup('docs', app, documentFactory); // Removido o prefixo 'api' da documentação
 
   // Handler customizado para a rota raiz '/'
   const expressApp = app.getHttpAdapter().getInstance();

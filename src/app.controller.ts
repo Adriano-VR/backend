@@ -10,8 +10,9 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('api')
-  getApiHello(): string {
-    return 'Hello World específico para /api!';
-  }
+  // Removida a rota '/api' para evitar bloqueio por adblock
+  // @Get('api')
+  // getApiHello(): string {
+  //   return 'Hello World específico para /api!';
+  // }
 }
