@@ -40,18 +40,16 @@ export class DepartmentsService {
       return this.departmentRepository.reactivate(existingDeletedDepartment.id);
     }
 
-    // Verifica se o slug já existe e gera um novo se necessário
-    let slug = createDepartmentDto.slug;
-    const existingBySlug = await this.departmentRepository.findBySlug(slug);
-    if (existingBySlug) {
-      // Se o slug já existe, gera um novo usando a mesma lógica determinística
-      slug = this.generateDeterministicSlug(createDepartmentDto.name);
-    }
+    // Gera um slug único incluindo o ID da organização para evitar conflitos entre organizações
+    const uniqueSlug = await this.generateUniqueSlug(
+      createDepartmentDto.name, 
+      createDepartmentDto.organizationId
+    );
 
-    // Cria um novo departamento se não existe nenhum com o mesmo nome
+    // Cria um novo departamento com slug único
     return this.departmentRepository.create({
       ...createDepartmentDto,
-      slug: slug,
+      slug: uniqueSlug,
     });
   }
 
@@ -126,6 +124,66 @@ export class DepartmentsService {
     }
 
     return this.departmentRepository.delete(department.id);
+  }
+
+  /**
+   * Gera um slug único baseado no nome e organização, verificando se já existe no banco
+   * @param name Nome do departamento
+   * @param organizationId ID da organização
+   * @returns Slug único
+   */
+  private async generateUniqueSlug(name: string, organizationId: string): Promise<string> {
+    // Gerar slug base incluindo parte do ID da organização para garantir unicidade
+    const baseSlug = this.generateBaseSlug(name);
+    const orgSuffix = this.generateOrganizationSuffix(organizationId);
+    let finalSlug = `${baseSlug}-${orgSuffix}`;
+    let counter = 1;
+
+    // Verificar se o slug já existe e gerar um novo se necessário
+    while (await this.departmentRepository.findBySlug(finalSlug)) {
+      finalSlug = `${baseSlug}-${orgSuffix}-${counter}`;
+      counter++;
+      
+      // Limite de segurança para evitar loop infinito
+      if (counter > 100) {
+        // Se chegou ao limite, adiciona timestamp para garantir unicidade
+        const timestamp = Date.now();
+        finalSlug = `${baseSlug}-${orgSuffix}-${timestamp}`;
+        break;
+      }
+    }
+
+    return finalSlug;
+  }
+
+  /**
+   * Gera um sufixo baseado no ID da organização para garantir unicidade
+   * @param organizationId ID da organização
+   * @returns Sufixo único para a organização
+   */
+  private generateOrganizationSuffix(organizationId: string): string {
+    // Usar os primeiros 8 caracteres do ID da organização
+    // Isso garante que departamentos de organizações diferentes tenham slugs diferentes
+    return organizationId.substring(0, 8);
+  }
+
+  /**
+   * Gera um slug base baseado no nome
+   * @param name Nome do departamento
+   * @returns Slug base
+   */
+  private generateBaseSlug(name: string): string {
+    // Remover caracteres especiais e espaços, converter para minúsculas
+    const cleanText = name
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '') // Remove acentos
+      .replace(/[^a-z0-9\s-]/g, '') // Remove caracteres especiais
+      .replace(/\s+/g, '-') // Substitui espaços por hífens
+      .replace(/-+/g, '-') // Remove hífens duplicados
+      .trim();
+    
+    return cleanText;
   }
 
   /**
