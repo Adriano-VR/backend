@@ -1,0 +1,79 @@
+{
+  "slug": "form_mock_001",
+  "id": "form_mock_001",
+  "titulo": "Formulário de Teste - 5 Perguntas",
+  "descricao": "Formulário de teste com 5 perguntas simples para validação do sistema",
+  "instrucoes": "**Instruções para o Formulário de Teste:**\n\n- Este é um formulário de teste com 5 perguntas simples\n- Responda todas as perguntas com base na sua experiência\n- Para questões de escala, selecione o número que melhor representa sua situação:\n  - 1 = Muito baixo/Nunca\n  - 2 = Baixo/Raramente\n  - 3 = Médio/Às vezes\n  - 4 = Alto/Frequentemente\n  - 5 = Muito alto/Sempre\n- Seja honesto em suas respostas\n- Este formulário é apenas para fins de teste",
+  "tipo": "teste",
+  "questions": [
+    {
+      "codigo": "MOCK1",
+      "categoria": "Satisfação Geral",
+      "label": "Em uma escala de 1 a 5, quão satisfeito você está com o ambiente de trabalho?",
+      "tipo": "radio",
+      "opcoes": [
+        { "value": 1, "label": "Muito baixo" },
+        { "value": 2, "label": "Baixo" },
+        { "value": 3, "label": "Médio" },
+        { "value": 4, "label": "Alto" },
+        { "value": 5, "label": "Muito alto" }
+      ],
+      "obrigatorio": true,
+      "fonte": "MOCK"
+    },
+    {
+      "codigo": "MOCK2",
+      "categoria": "Comunicação",
+      "label": "Com que frequência você se comunica efetivamente com sua equipe?",
+      "tipo": "radio",
+      "opcoes": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ],
+      "obrigatorio": true,
+      "fonte": "MOCK"
+    },
+    {
+      "codigo": "MOCK3",
+      "categoria": "Desenvolvimento",
+      "label": "Qual é o seu nível de satisfação com as oportunidades de crescimento na empresa?",
+      "tipo": "radio",
+      "opcoes": [
+        { "value": 1, "label": "Muito insatisfeito" },
+        { "value": 2, "label": "Insatisfeito" },
+        { "value": 3, "label": "Neutro" },
+        { "value": 4, "label": "Satisfeito" },
+        { "value": 5, "label": "Muito satisfeito" }
+      ],
+      "obrigatorio": true,
+      "fonte": "MOCK"
+    },
+    {
+      "codigo": "MOCK4",
+      "categoria": "Bem-estar",
+      "label": "Como você avalia seu nível de estresse no trabalho?",
+      "tipo": "radio",
+      "opcoes": [
+        { "value": 1, "label": "Muito baixo" },
+        { "value": 2, "label": "Baixo" },
+        { "value": 3, "label": "Médio" },
+        { "value": 4, "label": "Alto" },
+        { "value": 5, "label": "Muito alto" }
+      ],
+      "obrigatorio": true,
+      "fonte": "MOCK"
+    },
+    {
+      "codigo": "MOCK5",
+      "categoria": "Feedback",
+      "label": "Quantas vezes você recebeu feedback construtivo no último mês?",
+      "tipo": "text",
+      "opcoes": [],
+      "obrigatorio": true,
+      "fonte": "MOCK"
+    }
+  ]
+} 

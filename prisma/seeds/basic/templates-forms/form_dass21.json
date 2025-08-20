@@ -1,0 +1,324 @@
+{
+  "slug": "form_dass21",
+  "id": "form_dass21_001",
+  "title": "Avaliação DASS-21 - Depression, Anxiety and Stress Scale",
+  "description": "Formulário para avaliação de depressão, ansiedade e estresse baseado na escala DASS-21.",
+  "instructions": "**Instruções importantes para o DASS-21:**\n\n- Este formulário avalia sintomas de depressão, ansiedade e estresse\n- Responda todas as perguntas com base na sua experiência na **última semana**\n- Para cada questão, selecione a opção que melhor descreve sua situação:\n  - 0 = Não se aplicou a mim\n  - 1 = Aplicou-se a mim em algum grau, ou em parte do tempo\n  - 2 = Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo\n  - 3 = Aplicou-se muito a mim, ou na maior parte do tempo\n- Seja honesto e sincero em suas respostas\n- Não deixe perguntas em branco\n- Este formulário é confidencial e será usado apenas para avaliação psicológica\n- **Importante:** Este formulário não substitui uma avaliação profissional",
+  "questions": [
+    {
+      "id": "q_001",
+      "code": "DASS1",
+      "dimension": "Estresse",
+      "comment": "Avaliação de estresse",
+      "level": "DASS21",
+      "text": "Achei difícil me acalmar",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_002",
+      "code": "DASS2",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Senti minha boca seca",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_003",
+      "code": "DASS3",
+      "dimension": "Depressão",
+      "comment": "Avaliação de depressão",
+      "level": "DASS21",
+      "text": "Não consegui vivenciar nenhum sentimento positivo",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_004",
+      "code": "DASS4",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Tive dificuldade em respirar em alguns momentos (ex. respiração ofegante, falta de ar, sem ter feito nenhum esforço físico)",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_005",
+      "code": "DASS5",
+      "dimension": "Depressão",
+      "comment": "Avaliação de depressão",
+      "level": "DASS21",
+      "text": "Achei difícil ter iniciativa para fazer as coisas",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_006",
+      "code": "DASS6",
+      "dimension": "Estresse",
+      "comment": "Avaliação de estresse",
+      "level": "DASS21",
+      "text": "Tive a tendência de reagir de forma exagerada às situações",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_007",
+      "code": "DASS7",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Senti tremores (ex. nas mãos)",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_008",
+      "code": "DASS8",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Senti que estava sempre nervoso",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_009",
+      "code": "DASS9",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Preocupei-me com situações em que eu pudesse entrar em pânico e parecesse ridículo(a)",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_010",
+      "code": "DASS10",
+      "dimension": "Depressão",
+      "comment": "Avaliação de depressão",
+      "level": "DASS21",
+      "text": "Senti que não tinha nada a desejar",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_011",
+      "code": "DASS11",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Senti-me agitado",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_012",
+      "code": "DASS12",
+      "dimension": "Estresse",
+      "comment": "Avaliação de estresse",
+      "level": "DASS21",
+      "text": "Achei difícil relaxar",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_013",
+      "code": "DASS13",
+      "dimension": "Depressão",
+      "comment": "Avaliação de depressão",
+      "level": "DASS21",
+      "text": "Senti-me depressivo(a) e sem ânimo",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_014",
+      "code": "DASS14",
+      "dimension": "Estresse",
+      "comment": "Avaliação de estresse",
+      "level": "DASS21",
+      "text": "Fui intolerante com as coisas que me impediam de continuar o que eu estava fazendo",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_015",
+      "code": "DASS15",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Senti que ia entrar em pânico",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_016",
+      "code": "DASS16",
+      "dimension": "Depressão",
+      "comment": "Avaliação de depressão",
+      "level": "DASS21",
+      "text": "Não consegui me entusiasmar com nada",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_017",
+      "code": "DASS17",
+      "dimension": "Depressão",
+      "comment": "Avaliação de depressão",
+      "level": "DASS21",
+      "text": "Senti que não tinha valor como pessoa",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_018",
+      "code": "DASS18",
+      "dimension": "Estresse",
+      "comment": "Avaliação de estresse",
+      "level": "DASS21",
+      "text": "Senti que estava um pouco emotivo/sensível demais",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_019",
+      "code": "DASS19",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Sabia que meu coração estava alterado mesmo não tendo feito nenhum esforço físico (ex. aumento da frequência cardíaca, disritmia cardíaca)",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_020",
+      "code": "DASS20",
+      "dimension": "Ansiedade",
+      "comment": "Avaliação de ansiedade",
+      "level": "DASS21",
+      "text": "Senti medo sem motivo",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    },
+    {
+      "id": "q_021",
+      "code": "DASS21",
+      "dimension": "Depressão",
+      "comment": "Avaliação de depressão",
+      "level": "DASS21",
+      "text": "Senti que a vida não tinha sentido",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 0, "label": "Não se aplicou a mim" },
+        { "value": 1, "label": "Aplicou-se a mim em algum grau, ou em parte do tempo" },
+        { "value": 2, "label": "Aplicou-se a mim em um grau considerável, ou uma boa parte do tempo" },
+        { "value": 3, "label": "Aplicou-se muito a mim, ou na maior parte do tempo" }
+      ]
+    }
+  ]
+}

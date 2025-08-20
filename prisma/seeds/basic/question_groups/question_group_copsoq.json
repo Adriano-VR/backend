@@ -1,0 +1,59 @@
+{
+  "questionGroups": [
+    {
+      "name": "Demandas no trabalho",
+      "label": "Demandas no trabalho",
+      "slug": "demandas-no-trabalho",
+      "meta": {
+        "description": "Questões relacionadas às demandas quantitativas, cognitivas e emocionais no ambiente de trabalho",
+        "color": "#FF6B6B",
+        "icon": "workload"
+      },
+      "order": 1
+    },
+    {
+      "name": "Organização e conteúdo",
+      "label": "Organização e conteúdo",
+      "slug": "organizacao-e-conteudo",
+      "meta": {
+        "description": "Questões sobre influência, desenvolvimento, previsibilidade e transparência no trabalho",
+        "color": "#4ECDC4",
+        "icon": "organization"
+      },
+      "order": 2
+    },
+    {
+      "name": "Relações sociais e liderança",
+      "label": "Relações sociais e liderança",
+      "slug": "relacoes-sociais-e-lideranca",
+      "meta": {
+        "description": "Questões sobre apoio social, liderança, confiança e justiça no ambiente de trabalho",
+        "color": "#45B7D1",
+        "icon": "leadership"
+      },
+      "order": 3
+    },
+    {
+      "name": "Recompensas e valores",
+      "label": "Recompensas e valores",
+      "slug": "recompensas-e-valores",
+      "meta": {
+        "description": "Questões sobre reconhecimento, significado do trabalho, auto-eficácia e satisfação",
+        "color": "#96CEB4",
+        "icon": "rewards"
+      },
+      "order": 4
+    },
+    {
+      "name": "Saúde e bem‑estar",
+      "label": "Saúde e bem‑estar",
+      "slug": "saude-e-bem-estar",
+      "meta": {
+        "description": "Questões sobre saúde geral, conflito trabalho-família, burnout e comportamentos ofensivos",
+        "color": "#FFEAA7",
+        "icon": "health"
+      },
+      "order": 5
+    }
+  ]
+}

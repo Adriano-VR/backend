@@ -1,0 +1,48 @@
+{
+  "questionGroups": [
+    {
+      "name": "Autoconhecimento e identidade espiritual",
+      "label": "Autoconhecimento e identidade espiritual",
+      "slug": "autoconhecimento-e-identidade-espiritual",
+      "meta": {
+        "description": "Questões relacionadas ao conhecimento de si mesmo, propósito pessoal, valores, princípios e gestão dos pensamentos",
+        "color": "#9B59B6",
+        "icon": "self-awareness"
+      },
+      "order": 1
+    },
+    {
+      "name": "Propósito e conexão divina",
+      "label": "Propósito e conexão divina",
+      "slug": "proposito-e-conexao-divina",
+      "meta": {
+        "description": "Questões sobre produtividade espiritual, comunicação, foco no propósito e conexão com o divino",
+        "color": "#3498DB",
+        "icon": "divine-connection"
+      },
+      "order": 2
+    },
+    {
+      "name": "Desenvolvimento e crescimento espiritual",
+      "label": "Desenvolvimento e crescimento espiritual",
+      "slug": "desenvolvimento-e-crescimento-espiritual",
+      "meta": {
+        "description": "Questões sobre desenvolvimento integral, inspiração divina, alinhamento de valores, fé e mentoria espiritual",
+        "color": "#27AE60",
+        "icon": "spiritual-growth"
+      },
+      "order": 3
+    },
+    {
+      "name": "Serviço ao próximo e práticas espirituais",
+      "label": "Serviço ao próximo e práticas espirituais",
+      "slug": "servico-ao-proximo-e-praticas-espirituais",
+      "meta": {
+        "description": "Questões sobre liderança espiritual, influência positiva, serviço altruísta, paz interior, gratidão, perdão, oração e empatia",
+        "color": "#E67E22",
+        "icon": "spiritual-service"
+      },
+      "order": 4
+    }
+  ]
+}

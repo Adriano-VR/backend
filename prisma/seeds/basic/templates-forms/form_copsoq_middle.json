@@ -1,0 +1,1224 @@
+{
+  "slug": "form_copsoq_middle",
+  "id": "form_copsoq_middle_001",
+  "title": "Avaliação COPSOQ III - Núcleo MIDDLE",
+  "instructions": "**Instruções importantes para o formulário COPSOQ III - Núcleo MIDDLE:**\n\n- Responda todas as perguntas com base na sua experiência no trabalho\n- Para questões de escala de frequência, selecione o número que melhor representa sua situação:\n  - 1 = Nunca\n  - 2 = Raramente\n  - 3 = Às vezes\n  - 4 = Frequentemente\n  - 5 = Sempre\n- Para questões de escala de intensidade, selecione:\n  - 1 = Muito baixo\n  - 2 = Baixo\n  - 3 = Médio\n  - 4 = Alto\n  - 5 = Muito alto\n- Seja honesto e sincero em suas respostas\n- Não deixe perguntas em branco\n- Este formulário é confidencial e será usado apenas para melhorar as condições de trabalho",
+  "questions": [
+    {
+      "id": "q_001",
+      "code": "EQ1",
+      "dimension": "Demandas no trabalho",
+      "comment": "Exigências quantitativas",
+      "level": "MIDDLE",
+      "text": "A sua carga de trabalho acumula-se por ser mal distribuída?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_002",
+      "code": "EQ2",
+      "dimension": "Demandas no trabalho",
+      "comment": "Exigências quantitativas",
+      "level": "MIDDLE",
+      "text": "Com que frequência não tem tempo para completar todas as tarefas do seu trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_003",
+      "code": "EQ3",
+      "dimension": "Demandas no trabalho",
+      "comment": "Exigências quantitativas",
+      "level": "MIDDLE",
+      "text": "Precisa fazer horas-extra?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_004",
+      "code": "RT4",
+      "dimension": "Demandas no trabalho",
+      "comment": "Ritmo de trabalho",
+      "level": "MIDDLE",
+      "text": "Precisa trabalhar muito rapidamente?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_005",
+      "code": "EC5",
+      "dimension": "Demandas no trabalho",
+      "comment": "Exigências cognitivas",
+      "level": "MIDDLE",
+      "text": "O seu trabalho exige a sua atenção constante?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_006",
+      "code": "EC6",
+      "dimension": "Demandas no trabalho",
+      "comment": "Exigências cognitivas",
+      "level": "MIDDLE",
+      "text": "O seu trabalho requer que seja bom a propor novas ideias?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_007",
+      "code": "EC7",
+      "dimension": "Demandas no trabalho",
+      "comment": "Exigências cognitivas",
+      "level": "MIDDLE",
+      "text": "O seu trabalho exige que tome decisões difíceis?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_008",
+      "code": "EE8",
+      "dimension": "Demandas no trabalho",
+      "comment": "Exigências emocionais",
+      "level": "MIDDLE",
+      "text": "O seu trabalho exige emocionalmente de si?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_009",
+      "code": "IT9",
+      "dimension": "Organização e conteúdo",
+      "comment": "Influência no trabalho",
+      "level": "MIDDLE",
+      "text": "Tem um elevado grau de influência no seu trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_010",
+      "code": "IT10",
+      "dimension": "Organização e conteúdo",
+      "comment": "Influência no trabalho",
+      "level": "MIDDLE",
+      "text": "Participa na escolha das pessoas com quem trabalha?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_011",
+      "code": "IT11",
+      "dimension": "Organização e conteúdo",
+      "comment": "Influência no trabalho",
+      "level": "MIDDLE",
+      "text": "Pode influenciar a quantidade de trabalho que lhe compete a si?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_012",
+      "code": "IT12",
+      "dimension": "Organização e conteúdo",
+      "comment": "Influência no trabalho",
+      "level": "MIDDLE",
+      "text": "Tem alguma influência sobre o tipo de tarefas que faz?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_013",
+      "code": "PD13",
+      "dimension": "Organização e conteúdo",
+      "comment": "Possibilidades de desenvolvimento",
+      "level": "MIDDLE",
+      "text": "O seu trabalho exige que tenha iniciativa?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_014",
+      "code": "PD14",
+      "dimension": "Organização e conteúdo",
+      "comment": "Possibilidades de desenvolvimento",
+      "level": "MIDDLE",
+      "text": "O seu trabalho permite-lhe aprender coisas novas?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_015",
+      "code": "PD15",
+      "dimension": "Organização e conteúdo",
+      "comment": "Possibilidades de desenvolvimento",
+      "level": "MIDDLE",
+      "text": "O seu trabalho permite-lhe usar as suas habilidades ou perícias?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_016",
+      "code": "PR16",
+      "dimension": "Organização e conteúdo",
+      "comment": "Previsibilidade",
+      "level": "MIDDLE",
+      "text": "No seu local de trabalho, é informado com antecedência sobre decisões importantes, mudanças ou planos para o futuro?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_017",
+      "code": "PR17",
+      "dimension": "Organização e conteúdo",
+      "comment": "Previsibilidade",
+      "level": "MIDDLE",
+      "text": "Recebe toda a informação de que necessita para fazer bem o seu trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_018",
+      "code": "TP18",
+      "dimension": "Organização e conteúdo",
+      "comment": "Transparência do papel laboral desempenhado",
+      "level": "MIDDLE",
+      "text": "O seu trabalho apresenta objectivos claros?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_019",
+      "code": "TP19",
+      "dimension": "Organização e conteúdo",
+      "comment": "Transparência do papel laboral desempenhado",
+      "level": "MIDDLE",
+      "text": "Sabe exactamente quais as suas responsabilidades?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_020",
+      "code": "TP20",
+      "dimension": "Organização e conteúdo",
+      "comment": "Transparência do papel laboral desempenhado",
+      "level": "MIDDLE",
+      "text": "Sabe exactamente o que é esperado de si?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_021",
+      "code": "RE21",
+      "dimension": "Recompensas e valores",
+      "comment": "Recompensas",
+      "level": "MIDDLE",
+      "text": "O seu trabalho é reconhecido e apreciado pela gerência?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_022",
+      "code": "RE22",
+      "dimension": "Recompensas e valores",
+      "comment": "Recompensas",
+      "level": "MIDDLE",
+      "text": "A gerência do seu local de trabalho respeita-o?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_023",
+      "code": "RE23",
+      "dimension": "Recompensas e valores",
+      "comment": "Recompensas",
+      "level": "MIDDLE",
+      "text": "É tratado de forma justa no seu local de trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_024",
+      "code": "CPL24",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Conflitos de papéis laborais",
+      "level": "MIDDLE",
+      "text": "Faz coisas no seu trabalho que uns concordam mas outros não?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_025",
+      "code": "CPL25",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Conflitos de papéis laborais",
+      "level": "MIDDLE",
+      "text": "Por vezes tem que fazer coisas que deveriam ser feitas de outra maneira?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_026",
+      "code": "CPL26",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Conflitos de papéis laborais",
+      "level": "MIDDLE",
+      "text": "Por vezes tem que fazer coisas que considera desnecessárias?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_027",
+      "code": "ASC27",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Apoio social de colegas",
+      "level": "MIDDLE",
+      "text": "Com que frequência tem ajuda e apoio dos seus colegas de trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_028",
+      "code": "ASC28",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Apoio social de colegas",
+      "level": "MIDDLE",
+      "text": "Com que frequência os seus colegas estão dispostos a ouvi-lo(a) sobre os seus problemas de trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_029",
+      "code": "ASC29",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Apoio social de colegas",
+      "level": "MIDDLE",
+      "text": "Com que frequência os seus colegas falam consigo acerca do seu desempenho laboral?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_030",
+      "code": "ASS30",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Apoio social de superiores",
+      "level": "MIDDLE",
+      "text": "Com que frequência o seu superior imediato fala consigo sobre como está a decorrer o seu trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_031",
+      "code": "ASS31",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Apoio social de superiores",
+      "level": "MIDDLE",
+      "text": "Com que frequência tem ajuda e apoio do seu superior imediato?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_032",
+      "code": "ASS32",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Apoio social de superiores",
+      "level": "MIDDLE",
+      "text": "Com que frequência é que o seu superior imediato fala consigo em relação ao seu desempenho laboral?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_033",
+      "code": "CST33",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Comunidade social no trabalho",
+      "level": "MIDDLE",
+      "text": "Existe um bom ambiente de trabalho entre si e os seus colegas?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_034",
+      "code": "CST34",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Comunidade social no trabalho",
+      "level": "MIDDLE",
+      "text": "Existe uma boa cooperação entre os colegas de trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_035",
+      "code": "CST35",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Comunidade social no trabalho",
+      "level": "MIDDLE",
+      "text": "No seu local de trabalho sente-se parte de uma comunidade?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_036",
+      "code": "QL36",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Qualidade da liderança",
+      "level": "MIDDLE",
+      "text": "Oferece aos indivíduos e ao grupo boas oportunidades de desenvolvimento?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_037",
+      "code": "QL37",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Qualidade da liderança",
+      "level": "MIDDLE",
+      "text": "Dá prioridade à satisfação no trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_038",
+      "code": "QL38",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Qualidade da liderança",
+      "level": "MIDDLE",
+      "text": "É bom no planeamento do trabalho?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_039",
+      "code": "QL39",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Qualidade da liderança",
+      "level": "MIDDLE",
+      "text": "É bom a resolver conflitos?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_040",
+      "code": "CH40",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Confiança horizontal",
+      "level": "MIDDLE",
+      "text": "Os funcionários ocultam informações uns dos outros?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_041",
+      "code": "CH41",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Confiança horizontal",
+      "level": "MIDDLE",
+      "text": "Os funcionários ocultam informação à gerência?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_042",
+      "code": "CH42",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Confiança horizontal",
+      "level": "MIDDLE",
+      "text": "Os funcionários confiam uns nos outros de um modo geral?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_043",
+      "code": "CV43",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Confiança vertical",
+      "level": "MIDDLE",
+      "text": "A gerência confia nos seus funcionários para fazerem o seu trabalho bem?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_044",
+      "code": "CV44",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Confiança vertical",
+      "level": "MIDDLE",
+      "text": "Confia na informação que lhe é transmitida pela gerência?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_045",
+      "code": "CV45",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Confiança vertical",
+      "level": "MIDDLE",
+      "text": "A gerência oculta informação aos seus funcionários?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_046",
+      "code": "JR46",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Justiça e respeito",
+      "level": "MIDDLE",
+      "text": "Os conflitos são resolvidos de uma forma justa?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_047",
+      "code": "JR47",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Justiça e respeito",
+      "level": "MIDDLE",
+      "text": "As sugestões dos funcionários são tratadas de forma séria pela gerência?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_048",
+      "code": "JR48",
+      "dimension": "Relações sociais e liderança",
+      "comment": "Justiça e respeito",
+      "level": "MIDDLE",
+      "text": "O trabalho é igualmente distribuído pelos funcionários?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_049",
+      "code": "AE49",
+      "dimension": "Recompensas e valores",
+      "comment": "Auto-eficácia",
+      "level": "MIDDLE",
+      "text": "Sou sempre capaz de resolver problemas, se tentar o suficiente.",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_050",
+      "code": "AE50",
+      "dimension": "Recompensas e valores",
+      "comment": "Auto-eficácia",
+      "level": "MIDDLE",
+      "text": "É-me fácil seguir os meus planos e atingir os meus objectivos.",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_051",
+      "code": "ST51",
+      "dimension": "Recompensas e valores",
+      "comment": "Significado do trabalho",
+      "level": "MIDDLE",
+      "text": "O seu trabalho tem algum significado para si?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_052",
+      "code": "ST52",
+      "dimension": "Recompensas e valores",
+      "comment": "Significado do trabalho",
+      "level": "MIDDLE",
+      "text": "Sente que o seu trabalho é importante?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_053",
+      "code": "ST53",
+      "dimension": "Recompensas e valores",
+      "comment": "Significado do trabalho",
+      "level": "MIDDLE",
+      "text": "Sente-se motivado e envolvido com o seu trabalho?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_054",
+      "code": "CLT54",
+      "dimension": "Recompensas e valores",
+      "comment": "Compromisso face ao local de trabalho",
+      "level": "MIDDLE",
+      "text": "Gosta de falar com os outros sobre o seu local de trabalho?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_055",
+      "code": "CLT55",
+      "dimension": "Recompensas e valores",
+      "comment": "Compromisso face ao local de trabalho",
+      "level": "MIDDLE",
+      "text": "Sente que os problemas do seu local de trabalho são seus também?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_056",
+      "code": "STB56",
+      "dimension": "Recompensas e valores",
+      "comment": "Satisfação no trabalho",
+      "level": "MIDDLE",
+      "text": "As suas perspectivas de trabalho?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_057",
+      "code": "STB57",
+      "dimension": "Recompensas e valores",
+      "comment": "Satisfação no trabalho",
+      "level": "MIDDLE",
+      "text": "As condições físicas do seu local de trabalho?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_058",
+      "code": "STB58",
+      "dimension": "Recompensas e valores",
+      "comment": "Satisfação no trabalho",
+      "level": "MIDDLE",
+      "text": "A forma como as suas capacidades são utilizadas?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_059",
+      "code": "STB59",
+      "dimension": "Recompensas e valores",
+      "comment": "Satisfação no trabalho",
+      "level": "MIDDLE",
+      "text": "O seu trabalho de uma forma global?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_060",
+      "code": "IL60",
+      "dimension": "Recompensas e valores",
+      "comment": "Insegurança Laboral",
+      "level": "MIDDLE",
+      "text": "Sente-se preocupado em ficar desempregado?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_061",
+      "code": "SG61",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Saúde Geral",
+      "level": "MIDDLE",
+      "text": "Em geral, sente que a sua saúde é:",
+      "type": "qualitative",
+      "options": [
+        { "value": 5, "label": "Muito boa" },
+        { "value": 4, "label": "Boa" },
+        { "value": 3, "label": "Razoável" },
+        { "value": 2, "label": "Má" },
+        { "value": 1, "label": "Muito má" }
+      ]
+    },
+    {
+      "id": "q_062",
+      "code": "CTF62",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Conflito Trabalho/Família",
+      "level": "MIDDLE",
+      "text": "Sente que o seu trabalho lhe exige muita energia que acaba por afectar a sua vida privada negativamente?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_063",
+      "code": "CTF63",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Conflito Trabalho/Família",
+      "level": "MIDDLE",
+      "text": "Sente que o seu trabalho lhe exige muito tempo que acaba por afectar a sua vida privada negativamente?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_064",
+      "code": "CTF64",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Conflito Trabalho/Família",
+      "level": "MIDDLE",
+      "text": "A sua família e os seus amigos dizem-lhe que trabalha demais?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_065",
+      "code": "PDOR65",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Problemas em dormir",
+      "level": "MIDDLE",
+      "text": "Dificuldade a adormecer?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_066",
+      "code": "PDOR66",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Problemas em dormir",
+      "level": "MIDDLE",
+      "text": "Acordou várias vezes durante a noite e depois não conseguia adormecer novamente?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_067",
+      "code": "BO67",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Burnout",
+      "level": "MIDDLE",
+      "text": "Fisicamente exausto?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_068",
+      "code": "BO68",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Burnout",
+      "level": "MIDDLE",
+      "text": "Emocionalmente exausto?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_069",
+      "code": "ES69",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Stress",
+      "level": "MIDDLE",
+      "text": "Irritado?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_070",
+      "code": "ES70",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Stress",
+      "level": "MIDDLE",
+      "text": "Ansioso?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_071",
+      "code": "SD71",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Sintomas Depressivos",
+      "level": "MIDDLE",
+      "text": "Triste?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_072",
+      "code": "SD72",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Sintomas Depressivos",
+      "level": "MIDDLE",
+      "text": "Falta de interesse por coisas quotidianas?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_073",
+      "code": "COF73",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Comportamentos ofensivos",
+      "level": "MIDDLE",
+      "text": "Tem sido alvo de insultos ou provocações verbais?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_074",
+      "code": "COF74",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Comportamentos ofensivos",
+      "level": "MIDDLE",
+      "text": "Tem sido exposto a assédio sexual indesejado?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_075",
+      "code": "COF75",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Comportamentos ofensivos",
+      "level": "MIDDLE",
+      "text": "Tem sido exposto a ameaças de violência?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    },
+    {
+      "id": "q_076",
+      "code": "COF76",
+      "dimension": "Saúde e bem‑estar",
+      "comment": "Comportamentos ofensivos",
+      "level": "MIDDLE",
+      "text": "Tem sido exposto a violência física?",
+      "type": "scale_frequency",
+      "options": [
+        { "value": 1, "label": "Nunca" },
+        { "value": 2, "label": "Raramente" },
+        { "value": 3, "label": "Às vezes" },
+        { "value": 4, "label": "Frequentemente" },
+        { "value": 5, "label": "Sempre" }
+      ]
+    }
+  ]
+}

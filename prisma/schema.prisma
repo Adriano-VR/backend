@@ -1,0 +1,561 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+   binaryTargets = ["native", "windows"]
+  // output   = "../generated/prisma"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Role {
+  super_admin
+  executive
+  manager
+  collaborator
+  professional
+  support
+  preset
+}
+
+enum Sector {
+  industry
+  service
+  commerce
+  other
+}
+
+model profile {
+  id                      String               @id @unique // ID do usuário autenticado (Supabase auth.users.id)
+  role                    Role                 @default(preset)
+  name                    String
+  profilePicture          String?              @map("profile_picture")
+  completedOnboarding     Boolean              @default(false) @map("completed_onboarding")
+  personalCorpEmail       String?              @map("personal_corp_email")
+  displayName             String?              @map("display_name")
+  slug                    String               @unique
+  email                   String               @unique
+  gender                  String?              @map("gender")
+  birthDate               DateTime?            @map("birth_date")
+  cpf                     String?              @unique
+  whatsapp                String?
+  bio                     String?              @map("bio")
+  emailConfirmed          Boolean              @default(false) @map("email_confirmed")
+  jobTitle                String?              @map("job_title")
+  settings                Json?
+  departmentId            String?              @map("department_id")
+  department              department?          @relation(fields: [departmentId], references: [id], onDelete: SetNull)
+  createdForms            form[]               @relation("FormCreatedBy")
+  createdProjects         project[]            @relation("ProjectCreatedBy")
+  notifications           notification[]
+  organizationsCreated    organization[]       @relation("OrganizationsCreatedBy")
+  createdGroups           group[]              @relation("GroupsCreatedBy")
+  createdAt               DateTime             @default(now()) @map("created_at")
+  updatedAt               DateTime             @updatedAt @map("updated_at")
+  deletedAt               DateTime?            @map("deleted_at")
+  submittedForms          submittedForm[]
+  userCourseProgresses    userCourseProgress[]
+  organizationMemberships organizationMember[]
+  histories               history[]
+  appointments            appointment[]
+
+  @@index([role, email, id])
+  @@map("profile")
+}
+
+// export type UserSettings = {
+//   onboardingCompleted?: boolean;
+//   nr1Status?: 'never_heard_of_it' | 'we_know_but_dont_do' | 'choosing_solution' | 'meeting_requirements';
+//   runTour?: boolean;
+//   profileCompleted?: boolean;
+//   onboardingProgress?: {
+//     currentStep?: number;
+//     answers?: Record<string, any>;
+//     updatedAt?: string;
+//     createdAt?: string;
+//   };
+// };
+
+model organization {
+  id                     String               @id @default(uuid())
+  name                   String
+  logo                   String?              @map("logo")
+  fantasyName            String?              @map("fantasy_name")
+  cnpj                   String?              @unique @map("cnpj")
+  corporateEmail         String?              @map("corporate_email")
+  userId                 String?              @unique @map("user_id")
+  numberOfEmployees      String?              @map("number_of_employees")
+  whatsapp               String?
+  inviteCode             String               @unique @map("invite_code")
+  type                   String?              @map("type")
+  openingDate            DateTime?            @map("opening_date")
+  situation              String?              @map("situation")
+  situationDate          DateTime?            @map("situation_date")
+  situationSpecial       String?              @map("situation_special")
+  situationSpecialDate   DateTime?            @map("situation_special_date")
+  legalNature            String?              @map("legal_nature")
+  companySize            String?              @map("company_size")
+  mainActivity           Json?                @map("main_activity")
+  secondaryActivities    Json?                @map("secondary_activities")
+  qsa                    Json?                @map("qsa")
+  capitalStock           String?              @map("capital_stock")
+  efr                    String?              @map("efr")
+  status                 String?              @map("status")
+  motiveSituation        String?              @map("motive_situation")
+  lastUpdate             DateTime?            @map("last_update")
+  billing                Json?                @map("billing")
+  simples                Json?                @map("simples")
+  simei                  Json?                @map("simei")
+  extra                  Json?                @map("extra")
+  addressId              String?              @map("address_id")
+  address                address?             @relation(fields: [addressId], references: [id], onDelete: SetNull)
+  createdById            String?              @map("created_by_id")
+  createdBy              profile?             @relation("OrganizationsCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  slug                   String               @unique
+  numberOfCollaborators  String?              @map("number_of_collaborators")
+  hasCompletedOnboarding Boolean              @default(false) @map("has_completed_onboarding")
+  headOfficeUuid         String?              @unique @map("head_office_uuid")
+  isActive               Boolean              @default(true) @map("is_active")
+  nr1Status              Nr1Status?           @map("nr1_status")
+  registrationCode       String?              @unique @map("registration_code")
+  settings               Json?
+  createdAt              DateTime             @default(now()) @map("created_at")
+  updatedAt              DateTime             @updatedAt @map("updated_at")
+  deletedAt              DateTime?            @map("deleted_at")
+  projects               project[]
+  departments            department[]
+  forms                  form[]
+  groupId                Int?                 @map("group_id")
+  group                  group?               @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  members                organizationMember[]
+  activity               activity?
+
+  @@map("organization")
+}
+
+model activity {
+  id             String        @id @default(uuid())
+  cnae           String?
+  name           String
+  slug           String        @unique
+  sector         Sector
+  organizationId String?       @unique @map("organization_id")
+  organization   organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+}
+
+model department {
+  id             String        @id @default(uuid())
+  name           String
+  slug           String        @unique
+  createdAt      DateTime      @default(now()) @map("created_at")
+  organizationId String?       @map("organization_id")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  deletedAt      DateTime?     @map("deleted_at")
+  organization   organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  profiles       profile[]
+
+  @@map("department")
+}
+
+model group {
+  id             Int            @id @default(autoincrement())
+  name           String?
+  slug           String         @unique
+  createdAt      DateTime       @default(now()) @map("created_at")
+  createdById    String?        @map("created_by_id")
+  createdBy      profile?       @relation("GroupsCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  organizationId String?        @map("organization_id")
+  updatedAt      DateTime       @updatedAt @map("updated_at")
+  deletedAt      DateTime?      @map("deleted_at")
+  organizations  organization[]
+
+  // organization   organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  @@map("group")
+}
+
+model form {
+  id                       String          @id @default(uuid())
+  slug                     String          @unique
+  title                    String
+  description              String?
+  instructions             String?         @map("instructions") // Instruções em markdown
+  isTemplate               Boolean         @default(false) @map("is_template")
+  templateId               String?         @map("template_id")
+  createdAt                DateTime        @default(now()) @map("created_at")
+  createdById              String?         @map("created_by_id")
+  organizationId           String?         @map("organization_id")
+  updatedAt                DateTime        @updatedAt @map("updated_at")
+  deletedAt                DateTime?       @map("deleted_at")
+  limitDate                DateTime?       @map("limit_date")
+  template                 form?           @relation("FormTemplate", fields: [templateId], references: [id], onDelete: SetNull)
+  formsUsingThisAsTemplate form[]          @relation("FormTemplate")
+  createdBy                profile?        @relation("FormCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  organization             organization?   @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  questions                formQuestion[]
+  submittedForms           submittedForm[]
+  qualityDiagnosis         String @default("")
+
+  @@map("form")
+}
+
+model formQuestion {
+  id     String @id @default(uuid())
+  formId String
+  form   form   @relation(fields: [formId], references: [id])
+  questionId String
+  question   question @relation(fields: [questionId], references: [id])
+  order    Int
+  required Boolean
+  hidden   Boolean @default(false)
+}
+
+model questionGroup {
+  id        String     @id @unique @default(uuid())
+  name      String
+  label      String  
+  slug      String   @unique
+  meta      Json?
+  order     Int
+  createdAt DateTime   @default(now()) @map("created_at")
+  updatedAt DateTime   @updatedAt @map("updated_at")
+  deletedAt DateTime?  @map("deleted_at")
+  questions question[]
+
+  @@map("question_group")
+}
+
+model question {
+  id             String         @id @unique @default(uuid())
+  //-------------add isso -------------
+  code           String         @map("code") // EQ1, EC4, etc.
+  level          String         @map("level") // CORE, MIDDLE, LONG
+  dimension      String         @map("dimension") // Exigências cognitivas.
+  comment        String?        @map("comment") // Comentário para a questão.
+  text           String
+  type           QuestionType
+  options        Json? // Array de objetos com { value: number, label: string } para escalas e múltipla escolha
+  questionGroupId String?       @map("question_group_id")
+  questionGroup  questionGroup? @relation(fields: [questionGroupId], references: [id], onDelete: SetNull)
+  createdAt      DateTime       @default(now()) @map("created_at")
+  updatedAt      DateTime       @default(now()) @map("updated_at")
+  deletedAt      DateTime?      @map("deleted_at")
+  formQuestion   formQuestion[]
+  answers        answer[]
+
+  @@map("question")
+}
+
+model submittedForm {
+  id          String    @id @default(uuid())
+  status      Status    @default(pending) @map("status")
+  completedAt DateTime? @map("completed_at")
+  formId      String?   @map("form_id")
+  startedAt   DateTime  @default(now()) @map("started_at")
+  profileId   String?   @map("user_id")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  answers     answer[]
+  form        form?     @relation(fields: [formId], references: [id], onDelete: SetNull)
+  profile     profile?  @relation(fields: [profileId], references: [id], onDelete: SetNull)
+
+  @@map("submitted_form")
+}
+
+model answer {
+  id              String         @id @default(uuid())
+  value           String?        @map("value")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  deletedAt       DateTime?      @map("deleted_at")
+  questionId      String?
+  submittedFormId String?
+  question        question?      @relation(fields: [questionId], references: [id], onDelete: SetNull)
+  submittedForm   submittedForm? @relation(fields: [submittedFormId], references: [id], onDelete: SetNull)
+
+  @@unique([submittedFormId, questionId])
+  @@map("answer")
+}
+
+model notification {
+  id        String    @id @default(uuid())
+  title     String
+  message   String?
+  createdAt DateTime  @default(now()) @map("created_at")
+  isRead    Boolean   @default(false) @map("is_read")
+  updatedAt DateTime  @default(now()) @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+  profileId String?   @map("user_id")
+  profile   profile?  @relation(fields: [profileId], references: [id], onDelete: SetNull)
+
+  @@map("notification")
+}
+
+model project {
+  id             String        @id @default(uuid())
+  title          String
+  slug           String        @unique
+  isTemplate     Boolean       @default(false) @map("is_template")
+  type           ProjectType   @default(project) @map("type")
+  description    String?
+  problem        String?
+  solution       String?
+  impact         String?
+  metrics        String?
+  timeline       String?
+  actions        action[]
+  resources      String?
+  risks          String?
+  status         Status        @default(pending)
+  createdAt      DateTime      @default(now()) @map("created_at")
+  createdById    String?       @map("created_by_id")
+  organizationId String?       @map("organization_id")
+  updatedAt      DateTime      @updatedAt @map("updated_at")
+  deletedAt      DateTime?     @map("deleted_at")
+  createdBy      profile?      @relation("ProjectCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
+  organization   organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+
+  @@map("project")
+}
+
+model action {
+  id          String       @id @default(uuid())
+  title       String
+  description String?
+  projectId   String?      @map("project_id")
+  project     project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
+  status      Status       @default(pending) @map("status") // pending, in_progress, completed
+  startDate   DateTime?    @map("start_date")
+  endDate     DateTime?    @map("end_date")
+  responsible String?      @map("responsible")
+  responsibleProfileId String?      @map("responsible_profile_id")
+  resources     String?      @map("resources")
+  createdAt   DateTime     @default(now()) @map("created_at")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  deletedAt   DateTime?    @map("deleted_at")
+  @@map("action")
+}
+
+  model lead {
+  id          String       @id @default(uuid())
+  nome        String
+  email       String
+  whatsapp    String?
+  payload     Json?
+  createdAt   DateTime     @default(now()) @map("created_at")
+  formType    LeadFormType @map("form_type")
+  pageUrl     String       @map("page_url")
+  updatedAt   DateTime     @updatedAt @map("updated_at")
+  deletedAt   DateTime?    @map("deleted_at")
+  utmCampaign String?      @map("utm_campaign")
+  utmMedium   String?      @map("utm_medium")
+  utmSource   String?      @map("utm_source")
+
+  @@map("lead")
+}
+
+enum Status {
+  pending
+  in_progress
+  completed
+}
+
+enum Nr1Status {
+  never_heard_of_it
+  we_know_but_dont_do
+  choosing_solution
+  meeting_requirements
+}
+
+//-------------add isso -------------
+enum QuestionType {
+  scale_frequency
+  scale_intensity
+  qualitative
+  multiple_choice
+  text
+  number
+}
+
+enum LeadFormType {
+  RISK_CALCULATOR
+  DEMO_REQUEST
+  HOME_FORM
+}
+
+enum ProjectType {
+  project
+  action_plan
+}
+
+model trail {
+  id          String    @id @default(uuid())
+  slug        String    @unique
+  title       String
+  description String?
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  courses     course[]
+
+  @@map("trail")
+}
+
+model course {
+  id                   String               @id @default(uuid())
+  slug                 String               @unique
+  title                String
+  description          String?
+  trailId              String?              @map("trail_id")
+  trail                trail?               @relation(fields: [trailId], references: [id], onDelete: SetNull)
+  createdAt            DateTime             @default(now()) @map("created_at")
+  updatedAt            DateTime             @updatedAt @map("updated_at")
+  deletedAt            DateTime?            @map("deleted_at")
+  modules              module[]
+  userCourseProgresses userCourseProgress[]
+
+  @@map("course")
+}
+
+model module {
+  id          String    @id @default(uuid())
+  slug        String    @unique
+  title       String
+  description String?
+  courseId    String    @map("course_id")
+  course      course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+  lessons     lesson[]
+
+  @@map("module")
+}
+
+model lesson {
+  id        String    @id @default(uuid())
+  slug      String    @unique
+  title     String
+  content   String?
+  moduleId  String    @map("module_id")
+  module    module    @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
+
+  @@map("lesson")
+}
+
+model userCourseProgress {
+  id          String         @id @default(uuid())
+  profileId   String         @map("user_id")
+  courseId    String         @map("course_id")
+  startedAt   DateTime       @default(now()) @map("started_at")
+  completedAt DateTime?      @map("completed_at")
+  progress    Float?
+  status      ProgressStatus @default(in_progress)
+  details     Json?
+  profile     profile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  course      course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, courseId])
+  @@map("user_course_progress")
+}
+
+enum ProgressStatus {
+  in_progress
+  completed
+  not_started
+  abandoned
+}
+
+model organizationMember {
+  id             String           @id @default(uuid())
+  profileId      String           @map("profile_id")
+  organizationId String           @map("organization_id")
+  role           Role // Permissão do usuário nesta organização
+  status         PermissionStatus @default(pending)
+  createdAt      DateTime         @default(now()) @map("created_at")
+  updatedAt      DateTime         @updatedAt @map("updated_at")
+  deletedAt      DateTime?        @map("deleted_at")
+  profile        profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  organization   organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+
+  @@unique([profileId, organizationId])
+  @@map("organization_member")
+}
+
+enum PermissionStatus {
+  pending
+  active
+  suspended
+  removed
+}
+
+model address {
+  id           String         @id @default(uuid())
+  street       String?        @map("street")
+  number       String?        @map("number")
+  complement   String?        @map("complement")
+  district     String?        @map("district")
+  city         String?        @map("city")
+  state        String?        @map("state")
+  zipCode      String?        @map("zip_code")
+  organization organization[]
+
+  @@map("address")
+}
+
+enum HistoryType {
+  feeling
+  form // Novo tipo para registrar formulários respondidos
+  // You can add more types here in the future, such as: activity, event, etc.
+}
+
+model history {
+  id        String      @id @default(uuid())
+  type      HistoryType @default(feeling) // By default, it will be "feeling"
+  data      Json // Dynamic data related to the type
+  profileId String      @map("profile_id")
+  profile   profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  deletedAt DateTime?   @map("deleted_at")
+
+  @@map("history")
+}
+
+enum AppointmentStatus {
+  scheduled
+  confirmed
+  completed
+  cancelled
+  rescheduled
+}
+
+model appointment {
+  id          String            @id @default(uuid())
+  title       String
+  description String?
+  startTime   DateTime          @map("start_time")
+  endTime     DateTime          @map("end_time")
+  status      AppointmentStatus @default(scheduled)
+  location    String?
+  notes       String?
+  profileId   String            @map("profile_id")
+  profile     profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  createdAt   DateTime          @default(now()) @map("created_at")
+  updatedAt   DateTime          @updatedAt @map("updated_at")
+  deletedAt   DateTime?         @map("deleted_at")
+
+  @@map("appointment")
+}

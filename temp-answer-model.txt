@@ -1,0 +1,15 @@
+model answer {
+  id              String         @id @default(uuid())
+  value           String?        @map("value")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @updatedAt @map("updated_at")
+  deletedAt       DateTime?      @map("deleted_at")
+  questionId      String?
+  submittedFormId String?
+  question        question?      @relation(fields: [questionId], references: [id], onDelete: SetNull)
+  submittedForm   submittedForm? @relation(fields: [submittedFormId], references: [id], onDelete: SetNull)
+
+  @@unique([submittedFormId, questionId])
+  @@map("answer")
+}
+

@@ -1,0 +1,5 @@
+export enum LeadFormType {
+  RISK_CALCULATOR = 'RISK_CALCULATOR',
+  DEMO_REQUEST = 'DEMO_REQUEST',
+  HOME_FORM = 'HOME_FORM',
+}

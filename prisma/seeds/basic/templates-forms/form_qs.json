@@ -1,0 +1,383 @@
+{
+  "slug": "form_qs",
+  "id": "form_qs_001",
+  "title": "Avaliação de Inteligência Espiritual e Propósito",
+  "instructions": "**TESTE DA QS - Avaliação de Desenvolvimento Espiritual e Propósito:**\n\n- Avalie a sua situação a partir dos enunciados ou proposições, dando uma nota de 1 a 5 a cada questão, sendo:\n  - 1 = Muito ruim\n  - 2 = Ruim\n  - 3 = Regular\n  - 4 = Bom\n  - 5 = Muito bom\n- Responda todas as perguntas com base na sua experiência pessoal e espiritual atual\n- Seja honesto e sincero em suas respostas\n- Não deixe perguntas em branco\n- Este formulário é confidencial e será usado apenas para seu desenvolvimento pessoal\n- Reflita sobre cada questão antes de responder",
+  "questions": [
+    {
+      "id": "q_001",
+      "code": "AC1",
+      "dimension": "Grupo 1",
+      "level": "ESPIRITUAL",
+      "text": "Sobre conhecer a si mesmo, você diria que se conhece?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_002",
+      "code": "PP2",
+      "dimension": "Grupo 1",
+      "level": "ESPIRITUAL",
+      "text": "Sobre ter um propósito, uma causa, uma razão que o tire da cama com ânimo, como você está?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_003",
+      "code": "VP3",
+      "dimension": "Grupo 1",
+      "level": "ESPIRITUAL",
+      "text": "Em relação a não negociar seus valores e princípios por algo momentâneo, como está?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_004",
+      "code": "GP4",
+      "dimension": "Grupo 1",
+      "level": "ESPIRITUAL",
+      "text": "Sobre gerenciar seus pensamentos, como você está?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_005",
+      "code": "DI5",
+      "dimension": "Grupo 1",
+      "level": "ESPIRITUAL",
+      "text": "Sobre saber quem está falando dentro de si mesmo -- se a emoção (sabotadores), você mesmo ou o espírito--, como está?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_006",
+      "code": "AU6",
+      "dimension": "Grupo 1",
+      "level": "ESPIRITUAL",
+      "text": "Sobre entender a si mesmo, que você é único e especial e não deve comparar-se a ninguém, nem para sentir-se melhor ou pior, como você está?",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_007",
+      "code": "SF7",
+      "dimension": "Grupo 2",
+      "level": "ESPIRITUAL",
+      "text": "Sobre sentir-se útil e feliz no local onde você produz.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_008",
+      "code": "FC8",
+      "dimension": "Grupo 2",
+      "level": "ESPIRITUAL",
+      "text": "Sobre ser flexível para melhorar a comunicação com os outros.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_009",
+      "code": "FP9",
+      "dimension": "Grupo 2",
+      "level": "ESPIRITUAL",
+      "text": "Sobre fazer as coisas na hora certa, sem perder tempo com coisas fora do seu propósito.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_010",
+      "code": "LE10",
+      "dimension": "Grupo 2",
+      "level": "ESPIRITUAL",
+      "text": "Sobre seu interesse e sua prioridade em cumprir leis espirituais.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_011",
+      "code": "CP11",
+      "dimension": "Grupo 2",
+      "level": "ESPIRITUAL",
+      "text": "Sobre sentir-se conectado a um propósito divino mais amplo, no universo criado por Deus.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_012",
+      "code": "DC12",
+      "dimension": "Grupo 3",
+      "level": "ESPIRITUAL",
+      "text": "Sobre estar comprometido com seu desenvolvimento completo e uniforme (corpo, alma e espírito), para melhor cumprir sua missão.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_013",
+      "code": "ID13",
+      "dimension": "Grupo 3",
+      "level": "ESPIRITUAL",
+      "text": "Quanto à convicção de receber inspirações divinas para suas ações, sem ouvir a voz da sabotagem.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_014",
+      "code": "AP14",
+      "dimension": "Grupo 3",
+      "level": "ESPIRITUAL",
+      "text": "Sobre alinhar seu propósito aos seus valores, para evitar crises e arrependimentos.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_015",
+      "code": "CF15",
+      "dimension": "Grupo 3",
+      "level": "ESPIRITUAL",
+      "text": "Sobre construir confiança e fé, para neutralizar seus medos e anseios.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_016",
+      "code": "MS16",
+      "dimension": "Grupo 3",
+      "level": "ESPIRITUAL",
+      "text": "Sobre ser mentoreado e submeter-se às autoridade constituídas sobre você.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_017",
+      "code": "GD17",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre gerar discípulos, iluminar outros, sendo um exemplo a ser seguido.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_018",
+      "code": "DI18",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre provocar o despertamento de outros e influenciar o desenvolvimento deles.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_019",
+      "code": "SO19",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre servir os outros sem visar ao retorno, apenas a satisfação por ver o benefício do outro.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_020",
+      "code": "PB20",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre o quanto sua presença faz bem aos outros, trazendo, paz, confiança e vontade de crescer.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_021",
+      "code": "PA21",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre ter paz que vem da convicção de estar agindo de acordo com o propósito divino e exalando amor no olhar e nas ações.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_022",
+      "code": "VG22",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre viver uma vida de intensa gratidão a Deus e ao próximo.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_023",
+      "code": "PF23",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre a facilidade de perdoar e não sofrer por traições e decepções.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_024",
+      "code": "OM24",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre sua capacidade de reduzir sua atividade neurológica por meio da oração e meditação.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    },
+    {
+      "id": "q_025",
+      "code": "EP25",
+      "dimension": "Grupo 4",
+      "level": "ESPIRITUAL",
+      "text": "Sobre sua capacidade de colocar-se no lugar do outro, dirigindo a mente a sentir alegria e a tristeza do outro.",
+      "type": "scale_intensity",
+      "options": [
+        { "value": 1, "label": "Muito ruim" },
+        { "value": 2, "label": "Ruim" },
+        { "value": 3, "label": "Regular" },
+        { "value": 4, "label": "Bom" },
+        { "value": 5, "label": "Muito bom" }
+      ]
+    }
+  ]
+}

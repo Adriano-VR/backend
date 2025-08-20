@@ -1,0 +1,37 @@
+{
+  "questionGroups": [
+    {
+      "name": "Depressão",
+      "label": "Depressão",
+      "slug": "depressao",
+      "meta": {
+        "description": "Questões relacionadas aos sintomas depressivos, incluindo humor negativo, falta de motivação, baixa autoestima e desesperança",
+        "color": "#34495E",
+        "icon": "mood-down"
+      },
+      "order": 1
+    },
+    {
+      "name": "Ansiedade",
+      "label": "Ansiedade",
+      "slug": "ansiedade",
+      "meta": {
+        "description": "Questões sobre sintomas de ansiedade, incluindo agitação física, medo, pânico e preocupações excessivas",
+        "color": "#E74C3C",
+        "icon": "anxiety"
+      },
+      "order": 2
+    },
+    {
+      "name": "Estresse",
+      "label": "Estresse",
+      "slug": "estresse",
+      "meta": {
+        "description": "Questões relacionadas aos níveis de estresse, tensão, irritabilidade e dificuldade de relaxamento",
+        "color": "#F39C12",
+        "icon": "stress"
+      },
+      "order": 3
+    }
+  ]
+}
