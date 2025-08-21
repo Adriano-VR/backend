@@ -138,7 +138,7 @@ async function bootstrap() {
   console.log('\x1b[4m\x1b[36m%s\x1b[0m', `http://localhost:${port}`);
   console.log(
     '\x1b[35m%s\x1b[0m',
-    '💡 Pressione Ctrl+C para encerrar o servidor',
+    '💡 Pressione Ctrl+C para encerrar o servidord',
   );
 }
 bootstrap();
