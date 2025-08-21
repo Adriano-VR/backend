@@ -80,3 +80,4 @@ Foi criado um script de teste (`scripts/test-oauth-callback.ts`) que simula os d
 - `scripts/test-oauth-callback.ts`: Script de teste
 - `docs/oauth-callback-fix.md`: Esta documentação
 
+

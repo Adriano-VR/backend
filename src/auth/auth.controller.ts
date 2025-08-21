@@ -131,6 +131,18 @@ export class AuthController {
     }
   }
 
+  @UseGuards(AuthGuard)
+  @Get('profile')
+  async getProfileRoute(@Request() req: AuthenticatedRequest) {
+    // Extrair o token do header Authorization
+    const token = this.extractTokenFromHeader(req);
+    if (!token) {
+      throw new UnauthorizedException('Token não encontrado');
+    }
+
+    return this.authService.getProfile(token);
+  }
+
   @ApiOperation({
     summary: 'Verificar usuário Supabase',
     description: 'Verifica e retorna informações completas de um usuário autenticado via Supabase',

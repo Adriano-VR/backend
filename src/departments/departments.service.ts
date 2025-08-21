@@ -18,6 +18,8 @@ export class DepartmentsService {
   ) {}
 
   async create(createDepartmentDto: CreateDepartmentDto): Promise<Department> {
+    console.log('🔧 [DepartmentsService] Criando departamento:', createDepartmentDto);
+    
     // Primeiro verifica se existe um departamento ativo com o mesmo nome
     const existingActiveDepartment = await this.departmentRepository.findByName(
       createDepartmentDto.name,
@@ -37,19 +39,41 @@ export class DepartmentsService {
       );
     if (existingDeletedDepartment) {
       // Reativa o departamento existente
+      console.log('🔄 [DepartmentsService] Reativando departamento existente:', existingDeletedDepartment.name);
       return this.departmentRepository.reactivate(existingDeletedDepartment.id);
     }
 
-    // Gera um slug único incluindo o ID da organização para evitar conflitos entre organizações
-    const uniqueSlug = await this.generateUniqueSlug(
-      createDepartmentDto.name, 
-      createDepartmentDto.organizationId
-    );
+    // Se o frontend enviou um slug, verificar se é único
+    let finalSlug = createDepartmentDto.slug;
+    
+    if (finalSlug) {
+      console.log('🔧 [DepartmentsService] Usando slug fornecido pelo frontend:', finalSlug);
+      
+      // Verificar se o slug já existe
+      const existingBySlug = await this.departmentRepository.findBySlug(finalSlug);
+      if (existingBySlug) {
+        console.log('⚠️ [DepartmentsService] Slug já existe, gerando novo slug único');
+        // Se o slug já existe, gerar um novo
+        finalSlug = await this.generateUniqueSlug(
+          createDepartmentDto.name, 
+          createDepartmentDto.organizationId
+        );
+      }
+    } else {
+      console.log('🔧 [DepartmentsService] Nenhum slug fornecido, gerando novo');
+      // Se não foi fornecido slug, gerar um novo
+      finalSlug = await this.generateUniqueSlug(
+        createDepartmentDto.name, 
+        createDepartmentDto.organizationId
+      );
+    }
+
+    console.log('✅ [DepartmentsService] Slug final:', finalSlug);
 
     // Cria um novo departamento com slug único
     return this.departmentRepository.create({
       ...createDepartmentDto,
-      slug: uniqueSlug,
+      slug: finalSlug,
     });
   }
 
