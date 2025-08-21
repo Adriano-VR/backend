@@ -470,12 +470,22 @@ export class AuthService {
   }
 
   /** Pega dados básicos do perfil */
-  async getProfile(token: string) {
-    const decoded = this.jwtService.verify(token);
-    const userId = decoded.sub;
-    const user = await this.profileRepository.findById(userId);
-    if (!user) throw new UnauthorizedException('Usuário não encontrado');
-    return user;
+  async getProfile(userId: string) {
+    console.log('🔍 [Auth] Obtendo perfil do usuário:', userId);
+    
+    try {
+      const user = await this.profileRepository.findById(userId);
+      if (!user) {
+        console.log('❌ [Auth] Usuário não encontrado:', userId);
+        throw new UnauthorizedException('Usuário não encontrado');
+      }
+      
+      console.log('✅ [Auth] Perfil obtido com sucesso:', { id: user.id, email: user.email });
+      return user;
+    } catch (error) {
+      console.error('❌ [Auth] Erro ao obter perfil:', error);
+      throw error;
+    }
   }
 
   /** Atualiza somente o perfil do usuário */

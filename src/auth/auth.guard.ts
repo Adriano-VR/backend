@@ -43,6 +43,7 @@ export class AuthGuard implements CanActivate {
       });
 
       console.log('✅ [AuthGuard] Token válido, permitindo acesso');
+      console.log('🔍 [AuthGuard] Payload do JWT:', JSON.stringify(payload, null, 2));
       request['user'] = payload;
     } catch (error) {
       console.log('❌ [AuthGuard] Token inválido:', error.message);

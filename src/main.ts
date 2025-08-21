@@ -71,10 +71,9 @@ async function bootstrap() {
     'https://www.mentesegura.institute',
     'https://mentesegura.institute',
     'https://mentesegura.vercel.app', // Staging environment
+    'https://mentesegura-adriano2607-adrianos-projects-b798a1ff.vercel.app', // Vercel preview
     'https://mentesegura-backend.fly.dev',
     'https://mentesegura-git-preview-xbase-app.vercel.app',
-    'https://mentesegura-4fsx91la5-adrianos-projects-b798a1ff.vercel.app',
-    'https://mentesegura-adriano2607-adrianos-projects-b798a1ff.vercel.app', // Vercel preview
   ];
 
   // Add any additional origins from environment variables
@@ -84,28 +83,50 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) return callback(null, true);
-
-      // Permitir todos os IPs locais
-      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      if (!origin) {
+        console.log('✅ [CORS] Permitindo requisição sem origin (mobile app)');
         return callback(null, true);
       }
 
-      // Permitir IPs da rede local
+      console.log('🔍 [CORS] Verificando origin:', origin);
+
+      // Permitir todos os IPs locais
+      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+        console.log('✅ [CORS] Origin local permitido:', origin);
+        return callback(null, true);
+      }
+
+      // Permitir IPs da rede local (mais permissivo)
       if (origin.includes('192.168.') || origin.includes('10.0.') || origin.includes('172.')) {
+        console.log('✅ [CORS] IP local permitido:', origin);
+        return callback(null, true);
+      }
+
+      // Permitir qualquer IP da rede 192.168.x.x
+      if (origin.match(/^http:\/\/192\.168\.\d+\.\d+/)) {
+        console.log('✅ [CORS] IP da rede 192.168.x.x permitido:', origin);
+        return callback(null, true);
+      }
+
+      // Permitir domínios Vercel (incluindo previews)
+      if (origin.includes('vercel.app') || origin.includes('vercel.com')) {
+        console.log('✅ [CORS] Domínio Vercel permitido:', origin);
         return callback(null, true);
       }
 
       if (allOrigins.includes(origin)) {
+        console.log('✅ [CORS] Origin na whitelist permitido:', origin);
         callback(null, true);
       } else {
-        console.log('🚫 CORS blocked origin:', origin);
+        console.log('🚫 [CORS] Origin bloqueado:', origin);
         callback(new Error('Not allowed by CORS'));
       }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
+    preflightContinue: false,
+    optionsSuccessStatus: 204,
   });
   console.log('\x1b[36m%s\x1b[0m', '🔒 CORS configurado para:', allOrigins);
 

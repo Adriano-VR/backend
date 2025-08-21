@@ -19,7 +19,12 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
 
 interface AuthenticatedRequest extends ExpressRequest {
-  user: { id: string; role: string; [key: string]: any };
+  user: { 
+    sub: string;           // ID do usuário (formato JWT padrão)
+    role: string;          // Role do usuário
+    completedOnboarding?: boolean; // Status do onboarding
+    [key: string]: any;    // Outros campos
+  };
 }
 
 @ApiTags('Autenticação')
@@ -107,19 +112,23 @@ export class AuthController {
     @Request() req: AuthenticatedRequest,
     @Body() dto: CompleteProfileDto,
   ) {
-    return this.authService.completeProfile(req.user.id, dto);
+    return this.authService.completeProfile(req.user.sub, dto);
   }
 
   @UseGuards(AuthGuard)
   @Get('me')
   async getProfile(@Request() req: AuthenticatedRequest) {
-    // Extrair o token do header Authorization
-    const token = this.extractTokenFromHeader(req);
-    if (!token) {
-      throw new UnauthorizedException('Token não encontrado');
+    // O AuthGuard já validou o token e colocou o usuário em req.user
+    console.log('🔍 [AuthController] Obtendo perfil do usuário:', req.user.sub);
+    
+    try {
+      const result = await this.authService.getProfile(req.user.sub);
+      console.log('✅ [AuthController] Perfil obtido com sucesso');
+      return result;
+    } catch (error) {
+      console.error('❌ [AuthController] Erro ao obter perfil:', error);
+      throw error;
     }
-
-    return this.authService.getProfile(token);
   }
 
   @ApiOperation({
