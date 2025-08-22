@@ -5,6 +5,15 @@ import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 async function bootstrap() {
+  // Configurar logging para suprimir logs do Supabase/GoTrueClient
+  process.env.SUPABASE_LOG_LEVEL = 'error';
+  process.env.GOTRUE_LOG_LEVEL = 'error';
+  
+  // Suprimir logs de debug do Supabase
+  if (process.env.NODE_ENV !== 'development') {
+    process.env.SUPABASE_DEBUG = 'false';
+  }
+
   console.log('\x1b[35m%s\x1b[0m', '🚀 Iniciando servidor...');
 
   const app = await NestFactory.create(AppModule);
@@ -23,14 +32,8 @@ async function bootstrap() {
   }));
   console.log('\x1b[36m%s\x1b[0m', '🔍 Pipe de validação global aplicado');
 
-  // Removido o prefixo global 'api' para evitar bloqueio por adblock
+  // Configurar prefixo global 'api' para compatibilidade com o frontend
   // app.setGlobalPrefix('api');
-
-  // Log das rotas configuradas
-  console.log('\x1b[36m%s\x1b[0m', '🔍 Verificando configuração de rotas...');
-  const server = app.getHttpServer();
-  const router = server._events.request._router;
-  console.log('\x1b[36m%s\x1b[0m', '🔍 Router configurado:', !!router);
 
   const config = new DocumentBuilder()
     .setTitle('Mente Segura API')
@@ -64,17 +67,11 @@ async function bootstrap() {
     'http://localhost:3004', // Backend local port
     'http://localhost:3005', // Alternative local port
     'http://192.168.100.51:3004', // IP local development
-    'http://192.168.100.51:3000', // IP local frontend
-    'http://192.168.100.51', // IP local sem porta
-    'http://192.168.100.*', // Todos IPs da rede 192.168.100.x
-    'http://192.168.*.*', // Todos IPs da rede 192.168.x.x
     'https://www.mentesegura.institute',
     'https://mentesegura.institute',
     'https://mentesegura.vercel.app', // Staging environment
-    'https://mentesegura-adriano2607-adrianos-projects-b798a1ff.vercel.app', // Vercel preview
     'https://mentesegura-backend.fly.dev',
     'https://mentesegura-git-preview-xbase-app.vercel.app',
-    'https://mentesegura-phi.vercel.app'
   ];
 
   // Add any additional origins from environment variables
@@ -84,50 +81,18 @@ async function bootstrap() {
   app.enableCors({
     origin: (origin, callback) => {
       // Allow requests with no origin (like mobile apps or curl requests)
-      if (!origin) {
-        console.log('✅ [CORS] Permitindo requisição sem origin (mobile app)');
-        return callback(null, true);
-      }
-
-      console.log('🔍 [CORS] Verificando origin:', origin);
-
-      // Permitir todos os IPs locais
-      if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
-        console.log('✅ [CORS] Origin local permitido:', origin);
-        return callback(null, true);
-      }
-
-      // Permitir IPs da rede local (mais permissivo)
-      if (origin.includes('192.168.') || origin.includes('10.0.') || origin.includes('172.')) {
-        console.log('✅ [CORS] IP local permitido:', origin);
-        return callback(null, true);
-      }
-
-      // Permitir qualquer IP da rede 192.168.x.x
-      if (origin.match(/^http:\/\/192\.168\.\d+\.\d+/)) {
-        console.log('✅ [CORS] IP da rede 192.168.x.x permitido:', origin);
-        return callback(null, true);
-      }
-
-      // Permitir domínios Vercel (incluindo previews)
-      if (origin.includes('vercel.app') || origin.includes('vercel.com')) {
-        console.log('✅ [CORS] Domínio Vercel permitido:', origin);
-        return callback(null, true);
-      }
+      if (!origin) return callback(null, true);
 
       if (allOrigins.includes(origin)) {
-        console.log('✅ [CORS] Origin na whitelist permitido:', origin);
         callback(null, true);
       } else {
-        console.log('🚫 [CORS] Origin bloqueado:', origin);
+        console.log('🚫 CORS blocked origin:', origin);
         callback(new Error('Not allowed by CORS'));
       }
     },
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
     credentials: true,
-    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin'],
-    preflightContinue: false,
-    optionsSuccessStatus: 204,
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
   });
   console.log('\x1b[36m%s\x1b[0m', '🔒 CORS configurado para:', allOrigins);
 
@@ -138,7 +103,7 @@ async function bootstrap() {
   console.log('\x1b[4m\x1b[36m%s\x1b[0m', `http://localhost:${port}`);
   console.log(
     '\x1b[35m%s\x1b[0m',
-    '💡 Pressione Ctrl+C para encerrar o servidord',
+    '💡 Pressione Ctrl+C para encerrar o servidor',
   );
 }
 bootstrap();

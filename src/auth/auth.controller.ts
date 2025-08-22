@@ -19,12 +19,7 @@ import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
 
 interface AuthenticatedRequest extends ExpressRequest {
-  user: { 
-    sub: string;           // ID do usuário (formato JWT padrão)
-    role: string;          // Role do usuário
-    completedOnboarding?: boolean; // Status do onboarding
-    [key: string]: any;    // Outros campos
-  };
+  user: { id: string; role: string; [key: string]: any };
 }
 
 @ApiTags('Autenticação')
@@ -46,28 +41,12 @@ export class AuthController {
   })
   @Post('register')
   async register(@Body() dto: RegisterDto) {
-    console.log('🔐 [AuthController] Recebida requisição de registro:', { email: dto.email });
-    try {
-      const result = await this.authService.register(dto);
-      console.log('✅ [AuthController] Registro realizado com sucesso');
-      return result;
-    } catch (error) {
-      console.error('❌ [AuthController] Erro no registro:', error);
-      throw error;
-    }
+    return this.authService.register(dto);
   }
 
   @Post('login')
   async login(@Body() dto: LoginDto) {
-    console.log('🔐 [AuthController] Recebida requisição de login:', { email: dto.email });
-    try {
-      const result = await this.authService.login(dto);
-      console.log('✅ [AuthController] Login realizado com sucesso');
-      return result;
-    } catch (error) {
-      console.error('❌ [AuthController] Erro no login:', error);
-      throw error;
-    }
+    return this.authService.login(dto);
   }
 
   @ApiOperation({
@@ -100,35 +79,37 @@ export class AuthController {
     return this.authService.signInWithGoogle();
   }
 
+  @Post('google/collaborator')
+  async signInWithGoogleCollaborator(@Body() dto: { organizationId: string }) {
+    console.log('🔐 [Controller] Recebendo requisição de registro de colaborador via Google');
+    console.log('🏢 [Controller] Organização:', dto.organizationId);
+    return this.authService.signInWithGoogleCollaborator(dto.organizationId);
+  }
+
   @Post('oauth/callback')
   async oauthCallback(@Body() dto: OAuthCallbackDto) {
     return this.authService.handleOAuthCallback(dto);
   }
 
-  // ROTAS PROTEGIDAS - precisam de autenticação
   @UseGuards(AuthGuard)
   @Post('complete-profile')
   async completeProfile(
     @Request() req: AuthenticatedRequest,
     @Body() dto: CompleteProfileDto,
   ) {
-    return this.authService.completeProfile(req.user.sub, dto);
+    return this.authService.completeProfile(req.user.id, dto);
   }
 
   @UseGuards(AuthGuard)
   @Get('me')
   async getProfile(@Request() req: AuthenticatedRequest) {
-    // O AuthGuard já validou o token e colocou o usuário em req.user
-    console.log('🔍 [AuthController] Obtendo perfil do usuário:', req.user.sub);
-    
-    try {
-      const result = await this.authService.getProfile(req.user.sub);
-      console.log('✅ [AuthController] Perfil obtido com sucesso');
-      return result;
-    } catch (error) {
-      console.error('❌ [AuthController] Erro ao obter perfil:', error);
-      throw error;
+    // Extrair o token do header Authorization
+    const token = this.extractTokenFromHeader(req);
+    if (!token) {
+      throw new UnauthorizedException('Token não encontrado');
     }
+
+    return this.authService.getProfile(token);
   }
 
   @UseGuards(AuthGuard)

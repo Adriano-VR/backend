@@ -4,7 +4,9 @@ import { PassportModule } from '@nestjs/passport';
 
 import { ConfigService } from '@nestjs/config';
 import { OrganizationMemberRepository } from 'src/repositories/organization-member-repository';
+import { OrganizationRepository } from 'src/repositories/organization-repositorie';
 import { PrismaOrganizationMemberRepository } from 'src/repositories/prisma/prisma-organization-member-repository';
+import { PrismaOrganizationRepository } from 'src/repositories/prisma/prisma-organization-repositorie';
 import { PrismaProfileRepository } from 'src/repositories/prisma/prisma-profile-repositorie';
 import { ProfileRepository } from 'src/repositories/profile-repositorie';
 import { EmailModule } from '../email/email.module';
@@ -22,7 +24,7 @@ if (!process.env.JWT_SECRET) {
 @Module({
   imports: [
     PrismaModule,
-    PassportModule, // Removida a estratégia padrão
+    PassportModule,
     EmailModule,
     SupabaseModule,
 
@@ -50,6 +52,10 @@ if (!process.env.JWT_SECRET) {
     {
       provide: OrganizationMemberRepository,
       useClass: PrismaOrganizationMemberRepository,
+    },
+    {
+      provide: OrganizationRepository,
+      useClass: PrismaOrganizationRepository,
     },
   ],
 })

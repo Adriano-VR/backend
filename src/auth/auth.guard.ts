@@ -26,15 +26,8 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
-    // Log para debug
-    console.log('🔍 [AuthGuard] Verificando rota:', request.url);
-    console.log('🔍 [AuthGuard] Método:', request.method);
-    console.log('🔍 [AuthGuard] Token presente:', !!token);
-
-    // Se não há token, bloquear acesso (rota protegida)
     if (!token) {
-      console.log('❌ [AuthGuard] Token não encontrado, bloqueando acesso');
-      throw new UnauthorizedException('Token de autenticação é obrigatório');
+      throw new UnauthorizedException();
     }
 
     try {
@@ -42,12 +35,15 @@ export class AuthGuard implements CanActivate {
         secret: this.jwtSecret,
       });
 
-      console.log('✅ [AuthGuard] Token válido, permitindo acesso');
-      console.log('🔍 [AuthGuard] Payload do JWT:', JSON.stringify(payload, null, 2));
+      // const route = request.route;
+      // const method = request.method;
+
+      // console.log('🔍 Route:', route)
+      // console.log('🔍 Method:', method)
+
       request['user'] = payload;
-    } catch (error) {
-      console.log('❌ [AuthGuard] Token inválido:', error.message);
-      throw new UnauthorizedException('Token inválido ou expirado');
+    } catch {
+      throw new UnauthorizedException();
     }
     return true;
   }

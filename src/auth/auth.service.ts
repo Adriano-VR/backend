@@ -17,6 +17,7 @@ import { Nr1Status } from './dto/nr1-status.enum';
 import { OAuthCallbackDto } from './dto/oauth-callback.dto';
 import { RegisterDto } from './dto/register.dto';
 import { HttpException } from '@nestjs/common';
+import { OrganizationRepository } from '../repositories/organization-repositorie';
 
 @Injectable()
 export class AuthService {
@@ -28,6 +29,7 @@ export class AuthService {
     private readonly supabaseService: SupabaseService,
     private utilsService: UtilsService,
     private readonly emailService: EmailService,
+    private readonly organizationRepository: OrganizationRepository,
   ) {}
 
   /** Só cria o usuário */
@@ -363,10 +365,67 @@ export class AuthService {
     }
   }
 
+  /** Gera URL do Google OAuth para colaboradores */
+  async signInWithGoogleCollaborator(organizationId: string) {
+    console.log('🔐 [Auth] Gerando URL do Google OAuth para colaborador...');
+    console.log('🏢 [Auth] Organização:', organizationId);
+    
+    try {
+      // Verificar se a organização existe
+      const organization = await this.organizationRepository.findById(organizationId);
+      if (!organization) {
+        console.error('❌ [Auth] Organização não encontrada:', organizationId);
+        throw new BadRequestException('Organização não encontrada');
+      }
+
+      const frontendUrl = process.env.FRONTEND_URL || 'https://www.mentesegura.institute';
+      // Usar callback específico para colaboradores que já define o role
+      // Incluir organizationId na URL para preservar essa informação
+      const redirectUrl = `${frontendUrl}/collaborator/callback?org=${organizationId}`;
+      
+      console.log('🔗 URL de redirecionamento para colaborador:', redirectUrl);
+      
+      const { data, error } = await this.supabaseService.signInWithOAuth('google', {
+        redirectTo: redirectUrl,
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'consent',
+        },
+        // Passar dados customizados para definir o role como colaborador
+        options: {
+          data: {
+            role: 'collaborator',
+            organizationId: organizationId,
+            userType: 'collaborator'
+          }
+        }
+      });
+
+      if (error) {
+        console.error('❌ [Auth] Erro ao gerar URL do Google OAuth para colaborador:', error);
+        throw new BadRequestException(error.message);
+      }
+
+      if (!data?.url) {
+        console.error('❌ [Auth] URL de redirecionamento não gerada para colaborador');
+        throw new BadRequestException('URL de redirecionamento não gerada');
+      }
+
+      console.log('✅ [Auth] URL do Google OAuth para colaborador gerada com sucesso');
+      return { url: data.url };
+    } catch (error) {
+      console.error('❌ [Auth] Erro inesperado no Google OAuth para colaborador:', error);
+      throw new BadRequestException('Erro ao gerar URL do Google OAuth para colaborador');
+    }
+  }
+
   /** OAuth via Supabase */
   async handleOAuthCallback(dto: OAuthCallbackDto) {
     console.log('🔐 [Auth] Iniciando OAuth callback para usuário:', dto.user.id);
     console.log('📧 [Auth] Email do usuário:', dto.user.email);
+    console.log('🏢 [Auth] Dados custom:', dto.user.custom);
+    console.log('👤 [Auth] User metadata:', dto.user.user_metadata);
+    console.log('🔍 [Auth] DTO completo recebido:', JSON.stringify(dto, null, 2));
 
     // 1. Primeiro, tentar encontrar o profile pelo ID do usuário
     let user = await this.profileRepository.findById(dto.user.id);
@@ -394,6 +453,7 @@ export class AuthService {
         // Criar novo profile com o ID do usuário atual
         user = await this.profileRepository.create({
           ...(dto.user.custom?.role ? { role: dto.user.custom.role } : {}),
+          ...(dto.user.custom?.departmentId ? { departmentId: dto.user.custom.departmentId } : {}),
           slug,
           id: dto.user.id,
           name: dto.user.user_metadata.name || dto.user.email!,
@@ -417,8 +477,18 @@ export class AuthService {
         slug = `${slug}-${Date.now()}`;
       }
 
+      console.log('🔧 [Auth] Dados para criar profile:', {
+        id: dto.user.id,
+        slug,
+        name: dto.user.user_metadata.name || dto.user.email!,
+        email: dto.user.email!,
+        emailConfirmed: true,
+        role: dto.user.custom?.role || 'preset'
+      });
+
       user = await this.profileRepository.create({
         ...(dto.user.custom?.role ? { role: dto.user.custom.role } : {}),
+        ...(dto.user.custom?.departmentId ? { departmentId: dto.user.custom.departmentId } : {}),
         slug,
         id: dto.user.id,
         name: dto.user.user_metadata.name || dto.user.email!,
@@ -426,11 +496,17 @@ export class AuthService {
         emailConfirmed: true,
       });
 
-      console.log('✅ [Auth] Novo profile criado com sucesso');
+      console.log('✅ [Auth] Novo profile criado com sucesso:', user);
 
       // 5. Se tem organização customizada, criar membro da organização
       if (dto.user.custom?.organizationId && dto.user.custom?.role) {
         try {
+          console.log('🏢 [Auth] Criando membro da organização:', {
+            profileId: user.id,
+            organizationId: dto.user.custom.organizationId,
+            role: dto.user.custom.role
+          });
+          
           await this.organizationMemberRepository.create({
             profile: {
               connect: {
@@ -444,15 +520,17 @@ export class AuthService {
             },
             role: dto.user.custom.role,
           });
-          console.log('🏢 [Auth] Membro da organização criado');
+          console.log('🏢 [Auth] Membro da organização criado com sucesso');
         } catch (error) {
           console.error('❌ [Auth] Erro ao criar membro da organização:', error);
+          // Não vamos falhar o processo por causa deste erro
         }
       }
     }
 
     // 6. Buscar o user final para garantir que temos todos os dados
     user = await this.profileRepository.findById(dto.user.id);
+    console.log('🔍 [Auth] User final encontrado:', !!user);
 
     if (user) {
       const token = this.jwtService.sign({
@@ -462,6 +540,9 @@ export class AuthService {
       });
 
       console.log('🎉 [Auth] OAuth callback concluído com sucesso para:', user.email);
+      console.log('🎉 [Auth] Role do usuário:', user.role);
+      console.log('🎉 [Auth] Token gerado:', !!token);
+      
       return { access_token: token, user };
     } else {
       console.error('❌ [Auth] Erro: Não foi possível criar ou encontrar o profile');
@@ -470,21 +551,37 @@ export class AuthService {
   }
 
   /** Pega dados básicos do perfil */
-  async getProfile(userId: string) {
-    console.log('🔍 [Auth] Obtendo perfil do usuário:', userId);
+  async getProfile(token: string) {
+    console.log('🔍 [Auth] Validando token para getProfile...');
     
     try {
+      const decoded = this.jwtService.verify(token);
+      const userId = decoded.sub;
+      
+      console.log('🔍 [Auth] Token decodificado, userId:', userId);
+      
       const user = await this.profileRepository.findById(userId);
+      
       if (!user) {
-        console.log('❌ [Auth] Usuário não encontrado:', userId);
-        throw new UnauthorizedException('Usuário não encontrado');
+        console.error('❌ [Auth] Usuário não encontrado no banco para userId:', userId);
+        throw new UnauthorizedException('Usuário não encontrado no banco de dados');
       }
       
-      console.log('✅ [Auth] Perfil obtido com sucesso:', { id: user.id, email: user.email });
+      console.log('✅ [Auth] Usuário encontrado:', { id: user.id, email: user.email, role: user.role });
       return user;
     } catch (error) {
-      console.error('❌ [Auth] Erro ao obter perfil:', error);
-      throw error;
+      console.error('❌ [Auth] Erro ao validar token ou buscar usuário:', error);
+      
+      if (error instanceof UnauthorizedException) {
+        throw error;
+      }
+      
+      // Se for erro de JWT inválido
+      if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+        throw new UnauthorizedException('Token inválido ou expirado');
+      }
+      
+      throw new UnauthorizedException('Erro ao validar autenticação');
     }
   }
 

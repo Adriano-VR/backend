@@ -1,14 +1,25 @@
 import { Injectable } from '@nestjs/common';
 import { createClient, SupabaseClient } from '@supabase/supabase-js';
+import { supabaseConfig, getLogLevel } from './supabase.config';
 
 @Injectable()
 export class SupabaseService {
   private supabase: SupabaseClient;
 
   constructor() {
+    // Configurar logging baseado no ambiente
+    const logLevel = getLogLevel();
+    
     this.supabase = createClient(
       process.env.SUPABASE_URL!,
       process.env.SUPABASE_SERVICE_ROLE_KEY!, // Use service role key no backend
+      {
+        ...supabaseConfig,
+        realtime: {
+          ...supabaseConfig.realtime,
+          log_level: logLevel,
+        },
+      }
     );
   }
 
