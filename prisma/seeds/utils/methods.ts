@@ -76,12 +76,12 @@ export const createUser = async (user: any) => {
 }
 
 
-export const createOrganization = async (managerId: string, organization: OrganizationMock) => {
+export const createOrganization = async (adminId: string, organization: OrganizationMock) => {
     try {
         const organizationCreated = await prisma.organization.create({
             data: {
                 createdBy: {
-                    connect: { id: managerId }
+                    connect: { id: adminId }
                 },
                 inviteCode: organization.inviteCode,
                 name: organization.name,
@@ -106,7 +106,7 @@ export const createOrganization = async (managerId: string, organization: Organi
     }
 }
 
-export const createOrganizations = async (managerId: string, organizationsMock: OrganizationMock[]) => {
+export const createOrganizations = async (adminId: string, organizationsMock: OrganizationMock[]) => {
     try {
 
         const organizations: Organization[] = []
@@ -118,7 +118,7 @@ export const createOrganizations = async (managerId: string, organizationsMock: 
                 cnpj: Math.floor(10000000000000 + Math.random() * 90000000000000).toString()
             }
 
-            const organizationCreated = await createOrganization(managerId, organizationToCreate)
+            const organizationCreated = await createOrganization(adminId, organizationToCreate)
             organizations.push(organizationCreated)
         }
         return organizations
@@ -217,7 +217,7 @@ export const assignCollaboratorsToDepartments = async (organizationId: string, d
     }
 }
 
-export const createGroup = async (managerId: string, groupMock: GroupMock) => {
+export const createGroup = async (adminId: string, groupMock: GroupMock) => {
     try {
         const group = await prisma.group.create({
             data: {
@@ -225,7 +225,7 @@ export const createGroup = async (managerId: string, groupMock: GroupMock) => {
                 slug: groupMock.slug,
 
                 createdBy: {
-                    connect: { id: managerId }
+                    connect: { id: adminId }
                 }
             }
         })

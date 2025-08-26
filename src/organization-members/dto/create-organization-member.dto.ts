@@ -4,7 +4,7 @@ import { IsEnum, IsNotEmpty, IsOptional, IsString } from 'class-validator';
 export enum MemberRole {
   SUPER_ADMIN = 'super_admin',
   EXECUTIVE = 'executive',
-  MANAGER = 'manager',
+  ADMIN = 'admin',
   COLLABORATOR = 'collaborator',
   PROFESSIONAL = 'professional',
   SUPPORT = 'support',

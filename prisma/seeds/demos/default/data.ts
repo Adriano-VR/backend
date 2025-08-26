@@ -7,7 +7,7 @@ export const demoDefaultUsers: UserMock[] = [
         name: 'Gestor Demo',
         email: 'gestor@demo.com',
         password: '123456',
-        role: Role.manager,
+        role: Role.admin,
         whatsapp: '11999999999',
         jobTitle: 'Gestor',
         slug: 'gestor-demo',

@@ -11,7 +11,7 @@ const mainDefaultSeed = async () => {
         group: demoDefaultGroup,
         organizations: demoDefaultOrganizations,
         profiles: demoDefaultUsers,
-        managerEmail: 'gestor@demo.com'
+        adminEmail: 'gestor@demo.com'
     }
 
     const factory = new CreateDemoFactory(prisma);

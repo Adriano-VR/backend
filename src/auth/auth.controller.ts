@@ -17,6 +17,8 @@ import { LoginDto } from './dto/login.dto';
 import { OAuthCallbackDto } from './dto/oauth-callback.dto';
 import { RefreshTokenDto } from './dto/refresh-token.dto';
 import { RegisterDto } from './dto/register.dto';
+import { ResetPasswordDto } from './dto/reset-password.dto';
+import { ResetPasswordConfirmDto } from './dto/reset-password-confirm.dto';
 
 interface AuthenticatedRequest extends ExpressRequest {
   user: { id: string; role: string; [key: string]: any };
@@ -63,6 +65,42 @@ export class AuthController {
       return result;
     } catch (error) {
       console.error('❌ [Controller] Erro ao reenviar email:', error);
+      throw error;
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Reset de senha',
+    description: 'Envia email de reset de senha para o usuário',
+  })
+  @Post('reset-password')
+  async resetPassword(@Body() dto: ResetPasswordDto) {
+    console.log('🔐 [Controller] Recebida requisição de reset de senha:', { email: dto.email });
+    
+    try {
+      await this.authService.resetPassword(dto.email);
+      console.log('✅ [Controller] Reset de senha processado com sucesso');
+      return { message: 'Email de reset de senha enviado com sucesso' };
+    } catch (error) {
+      console.error('❌ [Controller] Erro ao processar reset de senha:', error);
+      throw error;
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Confirmar reset de senha',
+    description: 'Confirma o reset de senha com os tokens e define a nova senha',
+  })
+  @Post('reset-password-confirm')
+  async resetPasswordConfirm(@Body() dto: ResetPasswordConfirmDto) {
+    console.log('🔐 [Controller] Recebida confirmação de reset de senha');
+    
+    try {
+      await this.authService.resetPasswordConfirm(dto.accessToken, dto.refreshToken, dto.password);
+      console.log('✅ [Controller] Reset de senha confirmado com sucesso');
+      return { message: 'Senha alterada com sucesso' };
+    } catch (error) {
+      console.error('❌ [Controller] Erro ao confirmar reset de senha:', error);
       throw error;
     }
   }

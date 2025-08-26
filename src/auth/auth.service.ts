@@ -108,6 +108,7 @@ export class AuthService {
         slug,
         name: dto.name,
         email: dto.email,
+        ...(dto.cpf ? { cpf: dto.cpf } : {}),
         emailConfirmed: supabaseUser.email_confirmed_at ? true : false,
         ...(dto.custom?.role ? { role: dto.custom.role } : {}),
         ...(dto.custom?.departmentId ? { departmentId: dto.custom.departmentId } : {}),
@@ -593,7 +594,7 @@ export class AuthService {
       whatsapp: dto.whatsapp,
       jobTitle: dto.jobTitle,
       nr1Status: dto.nr1Status as Nr1Status,
-      cpf: dto.cpf,
+      ...(dto.cpf ? { cpf: dto.cpf } : {}),
       role: dto.role,
     };
 
@@ -690,6 +691,77 @@ export class AuthService {
 
     } catch (error) {
       console.error('❌ [Auth] Erro ao verificar usuário Supabase:', error);
+      throw error;
+    }
+  }
+
+  /** Envia email de reset de senha */
+  async resetPassword(email: string): Promise<void> {
+    console.log('🔐 [Auth] Iniciando reset de senha para:', email);
+
+    try {
+      // 1. Verificar se o usuário existe
+      const user = await this.profileRepository.findByEmail(email);
+      if (!user) {
+        console.log('❌ [Auth] Usuário não encontrado para reset de senha:', email);
+        throw new BadRequestException('Usuário não encontrado com este email');
+      }
+
+      // 2. Enviar email de reset via Supabase
+      const { data, error } = await this.supabaseService.resetPassword(email);
+      if (error) {
+        console.error('❌ [Auth] Erro do Supabase ao resetar senha:', error);
+        throw new BadRequestException(error.message || 'Erro ao processar reset de senha');
+      }
+
+      // 3. Enviar email personalizado (opcional, para backup)
+      try {
+        await this.emailService.sendPasswordResetEmail(email);
+        console.log('✅ [Auth] Email personalizado enviado com sucesso');
+      } catch (emailError) {
+        console.warn('⚠️ [Auth] Falha ao enviar email personalizado, mas Supabase funcionou:', emailError);
+        // Não falhar se o email personalizado falhar, pois o Supabase já funcionou
+      }
+
+      console.log('✅ [Auth] Reset de senha processado com sucesso para:', email);
+    } catch (error) {
+      console.error('❌ [Auth] Erro ao processar reset de senha:', error);
+      throw error;
+    }
+  }
+
+  /** Confirma reset de senha com tokens */
+  async resetPasswordConfirm(accessToken: string, refreshToken: string, newPassword: string): Promise<void> {
+    console.log('🔐 [Auth] Confirmando reset de senha com tokens');
+
+    try {
+      // 1. Confirmar reset de senha no Supabase usando sessão de recuperação
+      const { data, error } = await this.supabaseService.resetPasswordConfirm(accessToken, refreshToken, newPassword);
+      if (error) {
+        console.error('❌ [Auth] Erro do Supabase ao confirmar reset de senha:', error);
+        throw new BadRequestException(error.message || 'Erro ao confirmar reset de senha');
+      }
+
+      console.log('✅ [Auth] Reset de senha confirmado com sucesso no Supabase');
+
+      // 2. Atualizar usuário no banco local (se necessário)
+      try {
+        // Extrair user ID do token (opcional, para logging)
+        const { data: userData } = await this.supabaseService.getUserFromToken(accessToken);
+        if (userData?.user) {
+          await this.profileRepository.update(userData.user.id, {
+            updatedAt: new Date(),
+          });
+          console.log('✅ [Auth] Usuário atualizado no banco local');
+        }
+      } catch (dbError) {
+        console.warn('⚠️ [Auth] Falha ao atualizar usuário no banco local:', dbError);
+        // Não falhar se a atualização no banco falhar
+      }
+
+      console.log('✅ [Auth] Reset de senha confirmado com sucesso');
+    } catch (error) {
+      console.error('❌ [Auth] Erro ao confirmar reset de senha:', error);
       throw error;
     }
   }

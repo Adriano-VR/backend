@@ -9,7 +9,7 @@ export const detranUsers: UserMock[] = [
         name: 'Gestor Demo',
         email: 'gestor_detran@demo.com',
         password: '123456',
-        role: Role.manager,
+        role: Role.admin,
 
         whatsapp: '11999999999',
         jobTitle: 'Gestor',

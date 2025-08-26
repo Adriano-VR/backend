@@ -74,7 +74,7 @@ export class FormsAnalysisService {
   /**
    * Lógica de conversão de resposta → score (0..100) baseada nas regras do COPSOQ III.
    */
-  private mapAnswerToScore(question: any, answer: any): number | null {
+  public mapAnswerToScore(question: any, answer: any): number | null {
     if (answer == null || !question?.options) return null;
 
     const ansStr = String(answer).trim().toLowerCase();
@@ -140,7 +140,7 @@ export class FormsAnalysisService {
     'Organização e conteúdo': ['Organização e conteúdo'],
     'Relações sociais e liderança': ['Relações sociais e liderança'],
     'Recompensas e valores': ['Recompensas e valores'],
-    'Saúde e bem‑estar': ['Saúde e bem‑estar'],
+    'Saúde e bem‑estar': ['Saúde e bem‑estar', 'Bem-estar', 'Bem estar'],
   };
 
   /**
@@ -148,6 +148,8 @@ export class FormsAnalysisService {
    */
 
   async getDomainsByForm(formId: string) {
+    console.log('🔍 Buscando domínios para o formulário:', formId);
+    
     const form = await this.prisma.form.findUnique({
       where: { id: formId },
       include: {
@@ -158,9 +160,18 @@ export class FormsAnalysisService {
         questions: { include: { question: true } },
       },
     });
+    
     if (!form) {
+      console.error('❌ Formulário não encontrado:', formId);
       throw new NotFoundException('Formulário não encontrado');
     }
+    
+    console.log('✅ Formulário encontrado:', {
+      id: form.id,
+      title: form.title,
+      questionsCount: form.questions.length,
+      submittedFormsCount: form.submittedForms.length
+    });
 
     // Mapeia questionId → dimension & options
     const questionMap = new Map<string, { dimension: string; options: any }>();
@@ -171,6 +182,11 @@ export class FormsAnalysisService {
           options: fq.question.options,
         });
       }
+    });
+    
+    console.log('📊 Mapeamento de questões:', {
+      totalQuestions: form.questions.length,
+      questionsWithDimensions: questionMap.size
     });
 
     // Acumula scores por dimensão
@@ -189,6 +205,11 @@ export class FormsAnalysisService {
         dimensionScores[info.dimension].push(score);
       });
     });
+    
+    console.log('📈 Scores por dimensão:', {
+      dimensions: Object.keys(dimensionScores),
+      totalScores: Object.values(dimensionScores).reduce((sum, scores) => sum + scores.length, 0)
+    });
 
     // Calcula média de cada dimensão
     const dimensionAverages = Object.entries(dimensionScores).map(
@@ -197,6 +218,8 @@ export class FormsAnalysisService {
         avg: scores.reduce((sum, v) => sum + v, 0) / scores.length,
       }),
     );
+    
+    console.log('📊 Médias por dimensão:', dimensionAverages);
 
     // Agrega por domínio
     const domainResults = Object.entries(this.DOMAIN_DIMENSIONS)
@@ -223,14 +246,34 @@ export class FormsAnalysisService {
           risk: string;
         } => !!x,
       );
+    
+    // Se não encontrou correspondências nos domínios configurados, cria domínios dinamicamente
+    if (domainResults.length === 0 && dimensionAverages.length > 0) {
+      console.log('🔄 Criando domínios dinâmicos para dimensões não mapeadas');
+      const dynamicDomains = dimensionAverages.map((dim) => ({
+        domain: dim.dimension,
+        score: Number(dim.avg.toFixed(1)),
+        marketAvg: 71.2,
+        risk: dim.avg < 60 ? 'high' : dim.avg <= 75 ? 'medium' : 'low',
+      }));
+      console.log('🏆 Domínios dinâmicos criados:', dynamicDomains);
+      return dynamicDomains.sort((a, b) => a.score - b.score).slice(0, 6);
+    }
+    
+    console.log('🏆 Resultados dos domínios:', domainResults);
 
     return domainResults.sort((a, b) => a.score - b.score).slice(0, 6);
   }
   async getDimensionsByForm(formId: string) {
-    return this.getDomainsByForm(formId);
+    console.log('🎯 getDimensionsByForm chamada para:', formId);
+    const result = await this.getDomainsByForm(formId);
+    console.log('✅ getDimensionsByForm retornando:', result);
+    return result;
   }
 
   async getDepartmentsByForm(formId: string) {
+    console.log('🏢 getDepartmentsByForm chamada para:', formId);
+    
     const form = await this.prisma.form.findUnique({
       where: { id: formId },
       include: {
@@ -248,8 +291,24 @@ export class FormsAnalysisService {
     });
 
     if (!form) {
+      console.error('❌ Formulário não encontrado:', formId);
       throw new NotFoundException('Formulário não encontrado');
     }
+    
+    console.log('📋 Formulário encontrado:', {
+      id: form.id,
+      title: form.title,
+      submittedFormsCount: form.submittedForms.length
+    });
+    
+    // Log detalhado dos submittedForms
+    console.log('📝 SubmittedForms:', form.submittedForms.map(sf => ({
+      id: sf.id,
+      profileId: sf.profileId,
+      hasDepartment: !!sf.profile?.department,
+      departmentName: sf.profile?.department?.name,
+      answersCount: sf.answers.length
+    })));
 
     const questionMap = new Map<string, { dimension: string; options: any }>();
     form.questions.forEach((fq) => {
@@ -270,12 +329,19 @@ export class FormsAnalysisService {
       }
     > = {};
 
+    console.log('👥 Processando formulários submetidos...');
+    
     for (const sf of form.submittedForms) {
       const department = sf.profile?.department;
-      if (!department) continue;
+      if (!department) {
+        console.log('⚠️ Formulário sem departamento:', sf.id);
+        continue;
+      }
 
       const deptId = department.id;
       const deptName = department.name;
+      
+      console.log('🏢 Processando departamento:', { id: deptId, name: deptName });
 
       if (!scoresByDept[deptId]) {
         scoresByDept[deptId] = {
@@ -303,21 +369,28 @@ export class FormsAnalysisService {
         scoresByDept[deptId].scores[dim].push(score);
       }
     }
+    
+    console.log('📊 Scores por departamento:', Object.keys(scoresByDept));
 
     const result = Object.entries(scoresByDept).map(([_, data]) => {
       const avg = (arr?: number[]) =>
         arr && arr.length ? arr.reduce((a, b) => a + b, 0) / arr.length : 0;
 
-      const get = (dim: string) => avg(data.scores[dim]);
+      // Calcula a média geral de todas as dimensões disponíveis
+      const allScores = Object.values(data.scores).flat();
+      const averageScore = avg(allScores);
+
+      // Para compatibilidade com COPSOQ, mantém as dimensões padrão
+      const get = (dim: string) => avg(data.scores[dim] || []);
 
       const workload = get('Demandas no trabalho');
       const autonomy = get('Organização e conteúdo');
       const support = get('Relações sociais e liderança');
       const recognition = get('Recompensas e valores');
-      const balance = get('Saúde e bem‑estar');
+      const balance = get('Saúde e bem‑estar') || get('Bem-estar') || get('Bem estar');
 
-      const all = [workload, autonomy, support, recognition, balance];
-      const averageScore = avg(all);
+      // Se não há scores válidos, retorna null para filtrar depois
+      if (allScores.length === 0) return null;
 
       return {
         department: data.departmentName,
@@ -331,8 +404,10 @@ export class FormsAnalysisService {
         risk:
           averageScore < 60 ? 'high' : averageScore <= 75 ? 'medium' : 'low',
       };
-    });
+    }).filter((item): item is NonNullable<typeof item> => item !== null); // Remove resultados null
 
+    console.log('🏆 Resultado final dos departamentos:', result);
+    
     return result.sort((a, b) => a.averageScore - b.averageScore);
   }
 

@@ -4,6 +4,7 @@ import { CopsoqAnalyticsDriver } from './drivers/copsoq-analytics-driver';
 import { FormAnalyticsResult } from './dto/form-analytics-result.dto';
 import { FormAnalyticsDriver } from './interfaces/form-analytics-driver.interface';
 import { question, answer } from '@prisma/client';
+import { FormsAnalysisService } from '../forms/analysis/forms.analysis.service';
 
 @Injectable()
 export class AnalyticsService {
@@ -12,7 +13,10 @@ export class AnalyticsService {
     // 'DASS21': new Dass21AnalyticsDriver(), // Exemplo para futuro
   };
 
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly formsAnalysisService: FormsAnalysisService,
+  ) {}
 
   async analyzeForm(formId: string): Promise<FormAnalyticsResult> {
     // Buscar o formulário e tipo
@@ -68,18 +72,25 @@ export class AnalyticsService {
   // 1. Overview do formulário (com departments detalhado)
   async getFormOverview(formId: string) {
     // Buscar o formulário para obter a organização
-    const form = await this.prisma.form.findUnique({
+    const formBasic = await this.prisma.form.findUnique({
       where: { id: formId },
       select: { organizationId: true },
     });
-    if (!form?.organizationId)
+    if (!formBasic?.organizationId)
       throw new NotFoundException('Formulário ou organização não encontrada');
 
     // Buscar todos os departamentos da organização
     const departments = await this.prisma.department.findMany({
-      where: { organizationId: form.organizationId },
+      where: { organizationId: formBasic.organizationId },
       select: { id: true, name: true },
     });
+
+    // Buscar o formulário com questões para calcular scores
+    const formWithQuestions = await this.prisma.form.findUnique({
+      where: { id: formId },
+      include: { questions: { include: { question: true } } },
+    });
+    if (!formWithQuestions) throw new NotFoundException('Formulário não encontrado');
 
     // Para cada departamento, buscar perfis e submittedForms desses perfis para o formId
     const departmentData = await Promise.all(
@@ -95,38 +106,69 @@ export class AnalyticsService {
           where: { formId, profileId: { in: profileIds }, deletedAt: null },
           include: { answers: true },
         });
-        // Score médio do departamento
+        // Score médio do departamento usando FormsAnalysisService
         const scores: number[] = [];
-        submittedForms.forEach((sf: any) => {
-          const values = sf.answers
-            .map((a: any) =>
-              typeof a.value === 'number' ? a.value : Number(a.value),
-            )
-            .filter((v: any) => !isNaN(v));
-          if (values.length) {
-            const avg =
-              values.reduce((a: number, b: number) => a + b, 0) / values.length;
-            scores.push(avg);
-          }
+        console.log(`🏢 Processando departamento ${dept.name}:`, { 
+          profilesCount: profiles.length, 
+          submittedFormsCount: submittedForms.length 
         });
+        
+        submittedForms.forEach((sf: any) => {
+          sf.answers.forEach((answer: any) => {
+            if (!answer.questionId) return;
+            
+            // Buscar a questão para obter as opções
+            const question = formWithQuestions.questions.find((fq: any) => fq.questionId === answer.questionId)?.question;
+            if (!question?.options) {
+              console.log('⚠️ Questão sem opções:', answer.questionId);
+              return;
+            }
+            
+            // Usar a lógica de mapeamento de score do FormsAnalysisService
+            const score = this.formsAnalysisService.mapAnswerToScore(
+              { options: question.options },
+              answer.value
+            );
+            console.log(`📊 Resposta: ${answer.value} -> Score: ${score}`);
+            if (score !== null) {
+              scores.push(score);
+            }
+          });
+        });
+        
+        console.log(`📈 Scores calculados para ${dept.name}:`, scores);
+        
         const avg = scores.length
           ? scores.reduce((a, b) => a + b, 0) / scores.length
           : 0;
         let risk: 'low' | 'medium' | 'high' = 'high';
         if (avg >= 80) risk = 'low';
         else if (avg >= 60) risk = 'medium';
+        // Para compatibilidade com o frontend, retornar campos específicos
+        // Como o WHO-5 só tem uma dimensão, vamos distribuir o score
+        const workload = avg; // Usar o score geral para todas as dimensões
+        const autonomy = avg;
+        const support = avg;
+        const recognition = avg;
+        const balance = avg;
+        
         return {
           id: dept.id,
-          name: dept.name,
+          department: dept.name,
           collaborators: submittedForms.length,
-          score: Math.round(avg),
+          workload: Math.round(workload),
+          autonomy: Math.round(autonomy),
+          support: Math.round(support),
+          recognition: Math.round(recognition),
+          balance: Math.round(balance),
+          averageScore: Math.round(avg),
           risk,
         };
       }),
     );
 
     // Calcular score médio geral
-    const allScores = departmentData.flatMap((d) => d.score);
+    const allScores = departmentData.flatMap((d) => d.averageScore);
     const averageScore = allScores.length
       ? allScores.reduce((a, b) => a + b, 0) / allScores.length
       : 0;
@@ -152,6 +194,14 @@ export class AnalyticsService {
         .filter((d) => d.risk === 'high')
         .reduce((sum, d) => sum + d.collaborators, 0),
     };
+    console.log('🏆 Resultado final do analytics:', {
+      averageScore,
+      totalCollaborators,
+      alerts,
+      riskDistribution,
+      departmentsCount: departmentData.length
+    });
+    
     return {
       averageScore: Math.round(averageScore),
       totalCollaborators,

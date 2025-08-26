@@ -1,13 +1,6 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
-  provider = "prisma-client-js"
-   binaryTargets = ["native", "windows"]
-  // output   = "../generated/prisma"
+  provider      = "prisma-client-js"
+  binaryTargets = ["native", "windows"]
 }
 
 datasource db {
@@ -16,25 +9,8 @@ datasource db {
   directUrl = env("DIRECT_URL")
 }
 
-enum Role {
-  super_admin
-  executive
-  manager
-  collaborator
-  professional
-  support
-  preset
-}
-
-enum Sector {
-  industry
-  service
-  commerce
-  other
-}
-
 model profile {
-  id                      String               @id @unique // ID do usuário autenticado (Supabase auth.users.id)
+  id                      String               @id @unique
   role                    Role                 @default(preset)
   name                    String
   profilePicture          String?              @map("profile_picture")
@@ -52,37 +28,24 @@ model profile {
   jobTitle                String?              @map("job_title")
   settings                Json?
   departmentId            String?              @map("department_id")
-  department              department?          @relation(fields: [departmentId], references: [id], onDelete: SetNull)
-  createdForms            form[]               @relation("FormCreatedBy")
-  createdProjects         project[]            @relation("ProjectCreatedBy")
-  notifications           notification[]
-  organizationsCreated    organization[]       @relation("OrganizationsCreatedBy")
-  createdGroups           group[]              @relation("GroupsCreatedBy")
   createdAt               DateTime             @default(now()) @map("created_at")
   updatedAt               DateTime             @updatedAt @map("updated_at")
   deletedAt               DateTime?            @map("deleted_at")
+  appointments            appointment[]
+  createdForms            form[]               @relation("FormCreatedBy")
+  createdGroups           group[]              @relation("GroupsCreatedBy")
+  histories               history[]
+  notifications           notification[]
+  organizationsCreated    organization[]       @relation("OrganizationsCreatedBy")
+  organizationMemberships organizationMember[]
+  department              department?          @relation(fields: [departmentId], references: [id])
+  createdProjects         project[]            @relation("ProjectCreatedBy")
   submittedForms          submittedForm[]
   userCourseProgresses    userCourseProgress[]
-  organizationMemberships organizationMember[]
-  histories               history[]
-  appointments            appointment[]
 
   @@index([role, email, id])
   @@map("profile")
 }
-
-// export type UserSettings = {
-//   onboardingCompleted?: boolean;
-//   nr1Status?: 'never_heard_of_it' | 'we_know_but_dont_do' | 'choosing_solution' | 'meeting_requirements';
-//   runTour?: boolean;
-//   profileCompleted?: boolean;
-//   onboardingProgress?: {
-//     currentStep?: number;
-//     answers?: Record<string, any>;
-//     updatedAt?: string;
-//     createdAt?: string;
-//   };
-// };
 
 model organization {
   id                     String               @id @default(uuid())
@@ -116,9 +79,7 @@ model organization {
   simei                  Json?                @map("simei")
   extra                  Json?                @map("extra")
   addressId              String?              @map("address_id")
-  address                address?             @relation(fields: [addressId], references: [id], onDelete: SetNull)
   createdById            String?              @map("created_by_id")
-  createdBy              profile?             @relation("OrganizationsCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   slug                   String               @unique
   numberOfCollaborators  String?              @map("number_of_collaborators")
   hasCompletedOnboarding Boolean              @default(false) @map("has_completed_onboarding")
@@ -130,13 +91,15 @@ model organization {
   createdAt              DateTime             @default(now()) @map("created_at")
   updatedAt              DateTime             @updatedAt @map("updated_at")
   deletedAt              DateTime?            @map("deleted_at")
-  projects               project[]
+  groupId                Int?                 @map("group_id")
+  activity               activity?
   departments            department[]
   forms                  form[]
-  groupId                Int?                 @map("group_id")
-  group                  group?               @relation(fields: [groupId], references: [id], onDelete: SetNull)
+  address                address?             @relation(fields: [addressId], references: [id])
+  createdBy              profile?             @relation("OrganizationsCreatedBy", fields: [createdById], references: [id])
+  group                  group?               @relation(fields: [groupId], references: [id])
   members                organizationMember[]
-  activity               activity?
+  projects               project[]
 
   @@map("organization")
 }
@@ -148,9 +111,9 @@ model activity {
   slug           String        @unique
   sector         Sector
   organizationId String?       @unique @map("organization_id")
-  organization   organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   createdAt      DateTime      @default(now()) @map("created_at")
   updatedAt      DateTime      @updatedAt @map("updated_at")
+  organization   organization? @relation(fields: [organizationId], references: [id])
 }
 
 model department {
@@ -161,7 +124,7 @@ model department {
   organizationId String?       @map("organization_id")
   updatedAt      DateTime      @updatedAt @map("updated_at")
   deletedAt      DateTime?     @map("deleted_at")
-  organization   organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  organization   organization? @relation(fields: [organizationId], references: [id])
   profiles       profile[]
 
   @@map("department")
@@ -173,13 +136,12 @@ model group {
   slug           String         @unique
   createdAt      DateTime       @default(now()) @map("created_at")
   createdById    String?        @map("created_by_id")
-  createdBy      profile?       @relation("GroupsCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
   organizationId String?        @map("organization_id")
   updatedAt      DateTime       @updatedAt @map("updated_at")
   deletedAt      DateTime?      @map("deleted_at")
+  createdBy      profile?       @relation("GroupsCreatedBy", fields: [createdById], references: [id])
   organizations  organization[]
 
-  // organization   organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   @@map("group")
 }
 
@@ -188,7 +150,7 @@ model form {
   slug                     String          @unique
   title                    String
   description              String?
-  instructions             String?         @map("instructions") // Instruções em markdown
+  instructions             String?         @map("instructions")
   isTemplate               Boolean         @default(false) @map("is_template")
   templateId               String?         @map("template_id")
   createdAt                DateTime        @default(now()) @map("created_at")
@@ -197,33 +159,33 @@ model form {
   updatedAt                DateTime        @updatedAt @map("updated_at")
   deletedAt                DateTime?       @map("deleted_at")
   limitDate                DateTime?       @map("limit_date")
-  template                 form?           @relation("FormTemplate", fields: [templateId], references: [id], onDelete: SetNull)
+  qualityDiagnosis         String          @default("")
+  createdBy                profile?        @relation("FormCreatedBy", fields: [createdById], references: [id])
+  organization             organization?   @relation(fields: [organizationId], references: [id])
+  template                 form?           @relation("FormTemplate", fields: [templateId], references: [id])
   formsUsingThisAsTemplate form[]          @relation("FormTemplate")
-  createdBy                profile?        @relation("FormCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
-  organization             organization?   @relation(fields: [organizationId], references: [id], onDelete: SetNull)
   questions                formQuestion[]
   submittedForms           submittedForm[]
-  qualityDiagnosis         String @default("")
 
   @@map("form")
 }
 
 model formQuestion {
-  id     String @id @default(uuid())
-  formId String
-  form   form   @relation(fields: [formId], references: [id])
+  id         String   @id @default(uuid())
+  formId     String
   questionId String
+  order      Int
+  required   Boolean
+  hidden     Boolean  @default(false)
+  form       form     @relation(fields: [formId], references: [id])
   question   question @relation(fields: [questionId], references: [id])
-  order    Int
-  required Boolean
-  hidden   Boolean @default(false)
 }
 
 model questionGroup {
   id        String     @id @unique @default(uuid())
   name      String
-  label      String  
-  slug      String   @unique
+  label     String
+  slug      String     @unique
   meta      Json?
   order     Int
   createdAt DateTime   @default(now()) @map("created_at")
@@ -235,22 +197,21 @@ model questionGroup {
 }
 
 model question {
-  id             String         @id @unique @default(uuid())
-  //-------------add isso -------------
-  code           String         @map("code") // EQ1, EC4, etc.
-  level          String         @map("level") // CORE, MIDDLE, LONG
-  dimension      String         @map("dimension") // Exigências cognitivas.
-  comment        String?        @map("comment") // Comentário para a questão.
-  text           String
-  type           QuestionType
-  options        Json? // Array de objetos com { value: number, label: string } para escalas e múltipla escolha
-  questionGroupId String?       @map("question_group_id")
-  questionGroup  questionGroup? @relation(fields: [questionGroupId], references: [id], onDelete: SetNull)
-  createdAt      DateTime       @default(now()) @map("created_at")
-  updatedAt      DateTime       @default(now()) @map("updated_at")
-  deletedAt      DateTime?      @map("deleted_at")
-  formQuestion   formQuestion[]
-  answers        answer[]
+  id              String         @id @unique @default(uuid())
+  code            String         @map("code")
+  level           String         @map("level")
+  dimension       String         @map("dimension")
+  comment         String?        @map("comment")
+  text            String
+  type            QuestionType
+  options         Json?
+  questionGroupId String?        @map("question_group_id")
+  createdAt       DateTime       @default(now()) @map("created_at")
+  updatedAt       DateTime       @default(now()) @map("updated_at")
+  deletedAt       DateTime?      @map("deleted_at")
+  answers         answer[]
+  formQuestion    formQuestion[]
+  questionGroup   questionGroup? @relation(fields: [questionGroupId], references: [id])
 
   @@map("question")
 }
@@ -265,8 +226,8 @@ model submittedForm {
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
   answers     answer[]
-  form        form?     @relation(fields: [formId], references: [id], onDelete: SetNull)
-  profile     profile?  @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  form        form?     @relation(fields: [formId], references: [id])
+  profile     profile?  @relation(fields: [profileId], references: [id])
 
   @@map("submitted_form")
 }
@@ -279,8 +240,8 @@ model answer {
   deletedAt       DateTime?      @map("deleted_at")
   questionId      String?
   submittedFormId String?
-  question        question?      @relation(fields: [questionId], references: [id], onDelete: SetNull)
-  submittedForm   submittedForm? @relation(fields: [submittedFormId], references: [id], onDelete: SetNull)
+  question        question?      @relation(fields: [questionId], references: [id])
+  submittedForm   submittedForm? @relation(fields: [submittedFormId], references: [id])
 
   @@unique([submittedFormId, questionId])
   @@map("answer")
@@ -295,7 +256,7 @@ model notification {
   updatedAt DateTime  @default(now()) @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
   profileId String?   @map("user_id")
-  profile   profile?  @relation(fields: [profileId], references: [id], onDelete: SetNull)
+  profile   profile?  @relation(fields: [profileId], references: [id])
 
   @@map("notification")
 }
@@ -312,7 +273,6 @@ model project {
   impact         String?
   metrics        String?
   timeline       String?
-  actions        action[]
   resources      String?
   risks          String?
   status         Status        @default(pending)
@@ -321,31 +281,33 @@ model project {
   organizationId String?       @map("organization_id")
   updatedAt      DateTime      @updatedAt @map("updated_at")
   deletedAt      DateTime?     @map("deleted_at")
-  createdBy      profile?      @relation("ProjectCreatedBy", fields: [createdById], references: [id], onDelete: SetNull)
-  organization   organization? @relation(fields: [organizationId], references: [id], onDelete: SetNull)
+  actions        action[]
+  createdBy      profile?      @relation("ProjectCreatedBy", fields: [createdById], references: [id])
+  organization   organization? @relation(fields: [organizationId], references: [id])
 
   @@map("project")
 }
 
 model action {
-  id          String       @id @default(uuid())
-  title       String
-  description String?
-  projectId   String?      @map("project_id")
-  project     project?     @relation(fields: [projectId], references: [id], onDelete: SetNull)
-  status      Status       @default(pending) @map("status") // pending, in_progress, completed
-  startDate   DateTime?    @map("start_date")
-  endDate     DateTime?    @map("end_date")
-  responsible String?      @map("responsible")
-  responsibleProfileId String?      @map("responsible_profile_id")
-  resources     String?      @map("resources")
-  createdAt   DateTime     @default(now()) @map("created_at")
-  updatedAt   DateTime     @updatedAt @map("updated_at")
-  deletedAt   DateTime?    @map("deleted_at")
+  id                   String    @id @default(uuid())
+  title                String
+  description          String?
+  projectId            String?   @map("project_id")
+  status               Status    @default(pending) @map("status")
+  startDate            DateTime? @map("start_date")
+  endDate              DateTime? @map("end_date")
+  responsible          String?   @map("responsible")
+  responsibleProfileId String?   @map("responsible_profile_id")
+  resources            String?   @map("resources")
+  createdAt            DateTime  @default(now()) @map("created_at")
+  updatedAt            DateTime  @updatedAt @map("updated_at")
+  deletedAt            DateTime? @map("deleted_at")
+  project              project?  @relation(fields: [projectId], references: [id])
+
   @@map("action")
 }
 
-  model lead {
+model lead {
   id          String       @id @default(uuid())
   nome        String
   email       String
@@ -361,40 +323,6 @@ model action {
   utmSource   String?      @map("utm_source")
 
   @@map("lead")
-}
-
-enum Status {
-  pending
-  in_progress
-  completed
-}
-
-enum Nr1Status {
-  never_heard_of_it
-  we_know_but_dont_do
-  choosing_solution
-  meeting_requirements
-}
-
-//-------------add isso -------------
-enum QuestionType {
-  scale_frequency
-  scale_intensity
-  qualitative
-  multiple_choice
-  text
-  number
-}
-
-enum LeadFormType {
-  RISK_CALCULATOR
-  DEMO_REQUEST
-  HOME_FORM
-}
-
-enum ProjectType {
-  project
-  action_plan
 }
 
 model trail {
@@ -416,10 +344,10 @@ model course {
   title                String
   description          String?
   trailId              String?              @map("trail_id")
-  trail                trail?               @relation(fields: [trailId], references: [id], onDelete: SetNull)
   createdAt            DateTime             @default(now()) @map("created_at")
   updatedAt            DateTime             @updatedAt @map("updated_at")
   deletedAt            DateTime?            @map("deleted_at")
+  trail                trail?               @relation(fields: [trailId], references: [id])
   modules              module[]
   userCourseProgresses userCourseProgress[]
 
@@ -432,11 +360,11 @@ model module {
   title       String
   description String?
   courseId    String    @map("course_id")
-  course      course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
   createdAt   DateTime  @default(now()) @map("created_at")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
   lessons     lesson[]
+  course      course    @relation(fields: [courseId], references: [id], onDelete: Cascade)
 
   @@map("module")
 }
@@ -447,10 +375,10 @@ model lesson {
   title     String
   content   String?
   moduleId  String    @map("module_id")
-  module    module    @relation(fields: [moduleId], references: [id], onDelete: Cascade)
   createdAt DateTime  @default(now()) @map("created_at")
   updatedAt DateTime  @updatedAt @map("updated_at")
   deletedAt DateTime? @map("deleted_at")
+  module    module    @relation(fields: [moduleId], references: [id], onDelete: Cascade)
 
   @@map("lesson")
 }
@@ -464,41 +392,27 @@ model userCourseProgress {
   progress    Float?
   status      ProgressStatus @default(in_progress)
   details     Json?
-  profile     profile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
   course      course         @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  profile     profile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@unique([profileId, courseId])
   @@map("user_course_progress")
-}
-
-enum ProgressStatus {
-  in_progress
-  completed
-  not_started
-  abandoned
 }
 
 model organizationMember {
   id             String           @id @default(uuid())
   profileId      String           @map("profile_id")
   organizationId String           @map("organization_id")
-  role           Role // Permissão do usuário nesta organização
+  role           Role
   status         PermissionStatus @default(pending)
   createdAt      DateTime         @default(now()) @map("created_at")
   updatedAt      DateTime         @updatedAt @map("updated_at")
   deletedAt      DateTime?        @map("deleted_at")
-  profile        profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
   organization   organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  profile        profile          @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@unique([profileId, organizationId])
   @@map("organization_member")
-}
-
-enum PermissionStatus {
-  pending
-  active
-  suspended
-  removed
 }
 
 model address {
@@ -515,31 +429,17 @@ model address {
   @@map("address")
 }
 
-enum HistoryType {
-  feeling
-  form // Novo tipo para registrar formulários respondidos
-  // You can add more types here in the future, such as: activity, event, etc.
-}
-
 model history {
   id        String      @id @default(uuid())
-  type      HistoryType @default(feeling) // By default, it will be "feeling"
-  data      Json // Dynamic data related to the type
+  type      HistoryType @default(feeling)
+  data      Json
   profileId String      @map("profile_id")
-  profile   profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
   createdAt DateTime    @default(now()) @map("created_at")
   updatedAt DateTime    @updatedAt @map("updated_at")
   deletedAt DateTime?   @map("deleted_at")
+  profile   profile     @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@map("history")
-}
-
-enum AppointmentStatus {
-  scheduled
-  confirmed
-  completed
-  cancelled
-  rescheduled
 }
 
 model appointment {
@@ -552,10 +452,87 @@ model appointment {
   location    String?
   notes       String?
   profileId   String            @map("profile_id")
-  profile     profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
   createdAt   DateTime          @default(now()) @map("created_at")
   updatedAt   DateTime          @updatedAt @map("updated_at")
   deletedAt   DateTime?         @map("deleted_at")
+  profile     profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@map("appointment")
+}
+
+enum Role {
+  super_admin
+  executive
+  admin
+  collaborator
+  professional
+  support
+  preset
+}
+
+enum Sector {
+  industry
+  service
+  commerce
+  other
+}
+
+enum Status {
+  pending
+  in_progress
+  completed
+}
+
+enum Nr1Status {
+  never_heard_of_it
+  we_know_but_dont_do
+  choosing_solution
+  meeting_requirements
+}
+
+enum QuestionType {
+  scale_frequency
+  scale_intensity
+  qualitative
+  multiple_choice
+  text
+  number
+}
+
+enum LeadFormType {
+  RISK_CALCULATOR
+  DEMO_REQUEST
+  HOME_FORM
+}
+
+enum ProjectType {
+  project
+  action_plan
+}
+
+enum ProgressStatus {
+  in_progress
+  completed
+  not_started
+  abandoned
+}
+
+enum PermissionStatus {
+  pending
+  active
+  suspended
+  removed
+}
+
+enum HistoryType {
+  feeling
+  form
+}
+
+enum AppointmentStatus {
+  scheduled
+  confirmed
+  completed
+  cancelled
+  rescheduled
 }

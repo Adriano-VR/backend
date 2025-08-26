@@ -40,4 +40,33 @@ export class EmailService {
     });
     return content;
   }
+
+  // Método para enviar email de reset de senha
+  async sendPasswordResetEmail(email: string): Promise<void> {
+    if (!this.isConfigured) {
+      this.logger.warn('SendGrid não configurado, email não será enviado');
+      return;
+    }
+
+    try {
+      const template = this.loadTemplate('password-reset');
+      const htmlContent = this.parseTemplate(template, {
+        email: email,
+        resetUrl: `${process.env.FRONTEND_URL}/reset-password` || 'http://localhost:3004/reset-password'
+      });
+
+      const msg = {
+        to: email,
+        from: process.env.SENDGRID_FROM_EMAIL || 'noreply@mentesegura.com',
+        subject: 'Reset de Senha - MenteSegura',
+        html: htmlContent,
+      };
+
+      await sgMail.send(msg);
+      this.logger.log(`✅ Email de reset de senha enviado para: ${email}`);
+    } catch (error) {
+      this.logger.error(`❌ Erro ao enviar email de reset de senha para ${email}:`, error);
+      throw new Error(`Falha ao enviar email de reset de senha: ${error.message}`);
+    }
+  }
 }

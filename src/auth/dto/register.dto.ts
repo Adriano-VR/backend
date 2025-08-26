@@ -15,6 +15,10 @@ export class RegisterDto {
   @IsEmail()
   email!: string;
 
+  @IsOptional()
+  @IsString()
+  cpf?: string;
+
   @IsString()
   @IsNotEmpty()
   password!: string;

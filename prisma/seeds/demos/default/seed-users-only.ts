@@ -9,7 +9,7 @@ const seedUsersAndOrganization = async () => {
 
     // Criar usuários
     const collaboratorsCreated: any[] = []
-    let manager: any = null;
+    let admin: any = null;
     
     for (const user of demoDefaultUsers) {
         try {
@@ -19,21 +19,21 @@ const seedUsersAndOrganization = async () => {
             // Separar colaboradores do gestor
             if (createdUser.role === 'collaborator') {
                 collaboratorsCreated.push(createdUser);
-            } else if (createdUser.role === 'manager') {
-                manager = createdUser;
+            } else if (createdUser.role === 'admin') {
+                admin = createdUser;
             }
         } catch (error) {
             console.error(`❌ Erro ao criar usuário ${user.name}:`, error);
         }
     }
 
-    if (!manager) {
-        throw new Error('Gestor não encontrado. Certifique-se de que existe um usuário com role "manager"');
+    if (!admin) {
+        throw new Error('Administrador não encontrado. Certifique-se de que existe um usuário com role "admin"');
     }
 
     // Criar organizações
     console.log('🏢 Criando organizações...');
-    const organizations = await createOrganizations(manager.id, demoDefaultOrganizations);
+    const organizations = await createOrganizations(admin.id, demoDefaultOrganizations);
     console.log('✅ Organizações criadas.');
 
     // Adicionar usuários à organização

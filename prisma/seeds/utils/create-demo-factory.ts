@@ -7,7 +7,7 @@ export interface DemoConfig {
     group: GroupMock;
     organizations: OrganizationMock[];
     profiles: UserMock[];
-    managerEmail: string;
+    adminEmail: string;
 }
 
 export class CreateDemoFactory {
@@ -26,23 +26,23 @@ export class CreateDemoFactory {
         }
         console.log('✅ Usuários criados.');
 
-        // Buscar gestor
-        const manager = await this.prisma.profile.findFirst({
+        // Buscar administrador
+        const admin = await this.prisma.profile.findFirst({
             where: {
-                email: configs.managerEmail
+                email: configs.adminEmail
             }
         })
 
-        if (!manager) {
-            throw new Error('Gestor não encontrado')
+        if (!admin) {
+            throw new Error('Administrador não encontrado')
         }
 
         // Criar grupo
-        const group = await createGroup(manager.id, configs.group)
+        const group = await createGroup(admin.id, configs.group)
         console.log('✅ Grupo criado.');
 
         // Criar organizações
-        const organizations = await createOrganizations(manager.id, configs.organizations)
+        const organizations = await createOrganizations(admin.id, configs.organizations)
         console.log('✅ Organizações criadas.');
 
         // Adicionar organizações ao grupo
@@ -68,7 +68,7 @@ export class CreateDemoFactory {
             organizations,
             departments,
             collaborators: collaboratorsCreated,
-            manager
+            admin
         };
     }
 }

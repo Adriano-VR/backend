@@ -11,7 +11,7 @@ const mainDetranSeed = async () => {
         group: detranGroup,
         organizations: detranOrganizations,
         profiles: detranUsers,
-        managerEmail: 'gestor_detran@demo.com'
+        adminEmail: 'gestor_detran@demo.com'
     }
 
     const factory = new CreateDemoFactory(prisma);

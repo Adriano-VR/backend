@@ -153,7 +153,7 @@ async function getOrganizationalForms(orgId: string) {
 async function getOrganizationCollaborators(orgId: string) {
   return await prisma.profile.findMany({
     where: {
-      role: { in: ['collaborator', 'manager', 'professional'] },
+      role: { in: ['collaborator', 'admin', 'professional'] },
       deletedAt: null,
       organizationMemberships: {
         some: {

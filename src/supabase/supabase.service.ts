@@ -82,6 +82,53 @@ export class SupabaseService {
     return this.supabase.auth.admin.getUserById(userId);
   }
 
+  // Método para obter usuário a partir do token de acesso
+  async getUserFromToken(accessToken: string) {
+    try {
+      console.log('🔍 [Supabase] Obtendo usuário a partir do token de acesso');
+      console.log('🔍 [Supabase] URL:', process.env.SUPABASE_URL);
+      console.log('🔍 [Supabase] ANON_KEY configurada:', !!process.env.SUPABASE_ANON_KEY);
+      console.log('🔍 [Supabase] Token recebido:', accessToken.substring(0, 20) + '...');
+      
+      // Criar um cliente Supabase com o token de acesso
+      const userClient = createClient(
+        process.env.SUPABASE_URL!,
+        process.env.SUPABASE_ANON_KEY!,
+        {
+          global: {
+            headers: {
+              Authorization: `Bearer ${accessToken}`,
+            },
+          },
+        }
+      );
+
+      const { data, error } = await userClient.auth.getUser();
+      
+      if (error) {
+        console.error('❌ [Supabase] Erro ao obter usuário do token:', error);
+        return { data: null, error };
+      }
+
+      if (!data?.user) {
+        console.error('❌ [Supabase] Usuário não encontrado no token');
+        return { data: null, error: { message: 'Usuário não encontrado' } };
+      }
+
+      console.log('✅ [Supabase] Usuário obtido do token:', data.user.id);
+      return { data: { user: data.user }, error: null };
+    } catch (error) {
+      console.error('❌ [Supabase] Erro inesperado ao obter usuário do token:', error);
+      return { 
+        data: null, 
+        error: { 
+          message: 'Erro interno ao obter usuário do token',
+          status: 500 
+        } 
+      };
+    }
+  }
+
   // Método para buscar usuário por email no Supabase Auth
   async getUserByEmail(email: string) {
     try {
@@ -198,6 +245,82 @@ export class SupabaseService {
     } catch (error) {
       console.error('❌ [Supabase] Erro inesperado no OAuth:', error);
       return { data: null, error };
+    }
+  }
+
+  // Método para reset de senha
+  async resetPassword(email: string) {
+    try {
+      console.log('🔐 [Supabase] Iniciando reset de senha para:', email);
+      
+      const { data, error } = await this.supabase.auth.resetPasswordForEmail(email, {
+        redirectTo: `${process.env.FRONTEND_URL}/reset-password` || 'http://localhost:3004/reset-password'
+      });
+
+      if (error) {
+        console.error('❌ [Supabase] Erro ao resetar senha:', error);
+        return { data: null, error };
+      }
+
+      console.log('✅ [Supabase] Email de reset de senha enviado com sucesso para:', email);
+      return { data, error: null };
+    } catch (error) {
+      console.error('❌ [Supabase] Erro inesperado ao resetar senha:', error);
+      return { 
+        data: null, 
+        error: { 
+          message: 'Erro interno ao resetar senha',
+          status: 500 
+        } 
+      };
+    }
+  }
+
+  // Método para confirmar reset de senha usando sessão de recuperação
+  async resetPasswordConfirm(accessToken: string, refreshToken: string, newPassword: string) {
+    try {
+      console.log('🔐 [Supabase] Confirmando reset de senha com sessão de recuperação');
+      
+      // 1. Assumir a sessão de recuperação
+      const { data: session, error: sessionErr } = await this.supabase.auth.setSession({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+      });
+
+      if (sessionErr || !session?.session) {
+        console.error('❌ [Supabase] Erro ao assumir sessão de recuperação:', sessionErr);
+        return { 
+          data: null, 
+          error: { 
+            message: 'Token inválido ou expirado',
+            status: 400 
+          } 
+        };
+      }
+
+      console.log('✅ [Supabase] Sessão de recuperação assumida para usuário:', session.session.user.id);
+
+      // 2. Atualizar senha
+      const { data, error } = await this.supabase.auth.updateUser({
+        password: newPassword
+      });
+
+      if (error) {
+        console.error('❌ [Supabase] Erro ao atualizar senha:', error);
+        return { data: null, error };
+      }
+
+      console.log('✅ [Supabase] Senha atualizada com sucesso');
+      return { data, error: null };
+    } catch (error) {
+      console.error('❌ [Supabase] Erro inesperado ao confirmar reset de senha:', error);
+      return { 
+        data: null, 
+        error: { 
+          message: 'Erro interno ao confirmar reset de senha',
+          status: 500 
+        } 
+      };
     }
   }
 

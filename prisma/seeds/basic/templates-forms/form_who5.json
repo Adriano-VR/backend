@@ -3,7 +3,7 @@
   "id": "form_who5_001",
   "titulo": "Avaliação WHO-5 - Índice de Bem-estar OMS (cinco)",
   "descricao": "Formulário para avaliação do bem-estar baseado no WHO-5 Well-being Index, versão de 1998.",
-  "instrucoes": "**Instruções importantes para o WHO-5:**\n\n- Indique, por favor, para cada uma das cinco afirmações, a que se aproxima mais do modo como você tem se sentido nas **últimas duas semanas**\n- Note que os números maiores indicam maior bem-estar\n- Para cada questão, selecione a opção que melhor descreve sua situação:\n  - 5 = Todo o tempo\n  - 4 = A maior parte do tempo\n  - 3 = Mais de metade do tempo\n  - 2 = Menos de metade do tempo\n  - 1 = Algumas vezes\n  - 0 = Nunca\n- Seja honesto e sincero em suas respostas\n- Não deixe perguntas em branco\n- Este formulário é confidencial e será usado apenas para avaliação psicológica\n- **Importante:** Este formulário não substitui uma avaliação profissional\n- **Pontuação:** A pontuação bruta é calculada pela soma dos valores das cinco respostas (0 a 25). Para percentagem, multiplique por 4 (0 a 100%).",
+  "instrucoes": "**Instruções importantes para o WHO-5:**\n\n- Indique, por favor, para cada uma das cinco afirmações, a que se aproxima mais do modo como você tem se sentido nas **últimas duas semanas**\n- Note que os números maiores indicam maior bem-estar\n- Para cada questão, selecione a opção que melhor descreve sua situação:\n  - 5 = Todo o tempo\n  - 4 = A maior parte do tempo\n  - 3 = Mais de metade do tempo\n  - 2 = Menos de metade do tempo\n  - 1 = Algumas vezes\n  - 0 = Nunca\n- Seja honesto e sincero em suas respostas\n- Não deixe perguntas em branco\n- Este formulário é confidencial e será usado apenas para avaliação psicológica.",
   "tipo": "psicossocial",
   "questions": [
     {
