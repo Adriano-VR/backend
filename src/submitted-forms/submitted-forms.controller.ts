@@ -90,6 +90,32 @@ export class SubmittedFormsController {
 
   @UseGuards(AuthGuard)
   @ApiOperation({
+    summary: 'Vincular submittedForm a uma campanha',
+    description: 'Vincula um submittedForm existente a uma campanha específica',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID único do submittedForm',
+    type: 'string',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'SubmittedForm vinculado à campanha com sucesso',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'SubmittedForm não encontrado',
+  })
+  @Patch(':id/campaign')
+  async linkToCampaign(
+    @Param('id') id: string,
+    @Body() body: { campaignId: string },
+  ): Promise<SubmittedForm> {
+    return this.submittedFormsService.linkToCampaign(id, body.campaignId);
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiOperation({
     summary: 'Buscar submissões por formulário',
     description: 'Retorna todas as submissões de um formulário específico',
   })

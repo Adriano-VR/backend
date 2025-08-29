@@ -99,4 +99,15 @@ export class SubmittedFormsService {
         totalForms > 0 ? Math.round((completedForms / totalForms) * 100) : 0,
     };
   }
+
+  async linkToCampaign(id: string, campaignId: string): Promise<SubmittedForm> {
+    const submittedForm = await this.submittedFormRepository.findById(id);
+    if (!submittedForm) {
+      throw new NotFoundException(`SubmittedForm com ID ${id} não encontrado`);
+    }
+
+    return this.submittedFormRepository.update(id, { 
+      campaign: { connect: { id: campaignId } }
+    });
+  }
 }

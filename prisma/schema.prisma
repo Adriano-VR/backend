@@ -32,6 +32,8 @@ model profile {
   updatedAt               DateTime             @updatedAt @map("updated_at")
   deletedAt               DateTime?            @map("deleted_at")
   appointments            appointment[]
+  campaignsCreated        campaign[]           @relation("CampaignCreatedBy")
+  campaignDocuments       campaignDocument[]   @relation("CampaignDocumentUploadedBy")
   createdForms            form[]               @relation("FormCreatedBy")
   createdGroups           group[]              @relation("GroupsCreatedBy")
   histories               history[]
@@ -93,6 +95,7 @@ model organization {
   deletedAt              DateTime?            @map("deleted_at")
   groupId                Int?                 @map("group_id")
   activity               activity?
+  campaigns              campaign[]
   departments            department[]
   forms                  form[]
   address                address?             @relation(fields: [addressId], references: [id])
@@ -160,6 +163,7 @@ model form {
   deletedAt                DateTime?       @map("deleted_at")
   limitDate                DateTime?       @map("limit_date")
   qualityDiagnosis         String          @default("")
+
   createdBy                profile?        @relation("FormCreatedBy", fields: [createdById], references: [id])
   organization             organization?   @relation(fields: [organizationId], references: [id])
   template                 form?           @relation("FormTemplate", fields: [templateId], references: [id])
@@ -223,13 +227,55 @@ model submittedForm {
   formId      String?   @map("form_id")
   startedAt   DateTime  @default(now()) @map("started_at")
   profileId   String?   @map("user_id")
+  campaignId  String?   @map("campaign_id")
   updatedAt   DateTime  @updatedAt @map("updated_at")
   deletedAt   DateTime? @map("deleted_at")
   answers     answer[]
+  campaign    campaign? @relation(fields: [campaignId], references: [id])
   form        form?     @relation(fields: [formId], references: [id])
   profile     profile?  @relation(fields: [profileId], references: [id])
 
   @@map("submitted_form")
+}
+
+model campaign {
+  id             String             @id @default(uuid())
+  name           String
+  description    String?
+  frequency      CampaignFrequency  @default(semestral)
+  startDate      DateTime           @map("start_date")
+  endDate        DateTime?          @map("end_date")
+  status         CampaignStatus     @default(active)
+  organizationId String?            @map("organization_id")
+  createdById    String?            @map("created_by_id")
+  createdAt      DateTime           @default(now()) @map("created_at")
+  updatedAt      DateTime           @updatedAt @map("updated_at")
+  deletedAt      DateTime?          @map("deleted_at")
+  createdBy      profile?           @relation("CampaignCreatedBy", fields: [createdById], references: [id])
+  organization   organization?      @relation(fields: [organizationId], references: [id])
+  documents      campaignDocument[]
+  submittedForms submittedForm[]
+  projects       project[]          @relation("campaignToproject")
+
+  @@map("campaign")
+}
+
+model campaignDocument {
+  id           String    @id @default(uuid())
+  name         String
+  description  String?
+  fileUrl      String    @map("file_url")
+  fileType     String    @map("file_type")
+  fileSize     Int       @map("file_size")
+  campaignId   String    @map("campaign_id")
+  uploadedById String?   @map("uploaded_by_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+  campaign     campaign  @relation(fields: [campaignId], references: [id], onDelete: Cascade)
+  uploadedBy   profile?  @relation("CampaignDocumentUploadedBy", fields: [uploadedById], references: [id])
+
+  @@map("campaign_document")
 }
 
 model answer {
@@ -284,6 +330,7 @@ model project {
   actions        action[]
   createdBy      profile?      @relation("ProjectCreatedBy", fields: [createdById], references: [id])
   organization   organization? @relation(fields: [organizationId], references: [id])
+  campaigns      campaign[]    @relation("campaignToproject")
 
   @@map("project")
 }
@@ -535,4 +582,18 @@ enum AppointmentStatus {
   completed
   cancelled
   rescheduled
+}
+
+enum CampaignFrequency {
+  semestral
+  anual
+  trimestral
+  mensal
+}
+
+enum CampaignStatus {
+  active
+  inactive
+  completed
+  cancelled
 }

@@ -18,6 +18,7 @@ import { AuthGuard } from '../auth/auth.guard';
 import { AssociateProfileToOrgDto } from './dto/associate-profile-to-org';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { UpdateOrganizationSettingsDto } from './dto/update-organization-settings.dto';
 import { OrganizationsService } from './organizations.service';
 
 @ApiTags('Organizations')
@@ -270,6 +271,59 @@ export class OrganizationsController {
     @Body() updateOrganizationDto: UpdateOrganizationDto,
   ): Promise<Organization> {
     return this.organizationsService.update(id, updateOrganizationDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: 'Atualizar configurações da organização',
+    description: 'Atualiza as configurações específicas da organização, incluindo frequência de formulários',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID único da organização',
+    type: 'string',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Configurações atualizadas com sucesso',
+  })
+  @ApiResponse({
+    status: 400,
+    description: 'Dados inválidos',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Organização não encontrada',
+  })
+  @Patch(':id/settings')
+  async updateSettings(
+    @Param('id') id: string,
+    @Body() updateSettingsDto: UpdateOrganizationSettingsDto,
+  ): Promise<Organization> {
+    return this.organizationsService.updateSettings(id, updateSettingsDto);
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiOperation({
+    summary: 'Buscar configurações da organização',
+    description: 'Retorna as configurações específicas da organização, incluindo frequência de formulários',
+  })
+  @ApiParam({
+    name: 'id',
+    description: 'ID único da organização',
+    type: 'string',
+  })
+  @ApiResponse({
+    status: 200,
+    description: 'Configurações encontradas com sucesso',
+  })
+  @ApiResponse({
+    status: 404,
+    description: 'Organização não encontrada',
+  })
+  @Get(':id/settings')
+  async getSettings(@Param('id') id: string): Promise<any> {
+    return this.organizationsService.getSettings(id);
   }
 
   @UseGuards(AuthGuard)

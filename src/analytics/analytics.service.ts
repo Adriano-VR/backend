@@ -413,16 +413,25 @@ export class AnalyticsService {
           include: {
             question: {
               include: {
-                questionGroup: true
+                questionGroup: {
+                  select: {
+                    id: true,
+                    name: true,
+                    label: true,
+                    order: true
+                  }
+                }
               }
             }
           },
           orderBy: {
-            order: 'asc'
+            order: 'asc' // Ordenar por formQuestion.order
           }
         }
       }
     });
+
+
 
     if (!form) {
       throw new NotFoundException('Formulário não encontrado');
@@ -489,7 +498,7 @@ export class AnalyticsService {
         code: question.code || `Q${formQuestion.order}`,
         text: question.text,
         type: question.type,
-        order: formQuestion.order || 999,
+        order: formQuestion.order || 999, // Usar formQuestion.order para manter consistência
         options: question.options,
         distribution,
         averageScore,

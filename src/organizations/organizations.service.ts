@@ -12,6 +12,7 @@ import { QueryParserService } from '../shared/query-parser/query-parser.service'
 import { AssociateProfileToOrgDto } from './dto/associate-profile-to-org';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
 import { UpdateOrganizationDto } from './dto/update-organization.dto';
+import { UpdateOrganizationSettingsDto } from './dto/update-organization-settings.dto';
 
 @Injectable()
 export class OrganizationsService {
@@ -264,6 +265,43 @@ export class OrganizationsService {
     return this.organizationRepository.update(id, updateData);
   }
 
+  async updateSettings(
+    id: string,
+    updateSettingsDto: UpdateOrganizationSettingsDto,
+  ): Promise<Organization> {
+    const existingOrganization = await this.organizationRepository.findById(id);
+    if (!existingOrganization) {
+      throw new NotFoundException(`Organização com ID ${id} não encontrada`);
+    }
+
+    // Preparar dados para atualização das settings
+    const currentSettings = existingOrganization.settings as any || {};
+    const updateData: any = {};
+
+    // Se formApplicationFrequency for fornecido, adicionar às settings
+    if (updateSettingsDto.formApplicationFrequency) {
+      updateData.settings = {
+        ...currentSettings,
+        formApplicationFrequency: updateSettingsDto.formApplicationFrequency,
+      };
+    }
+
+    // Se outras settings forem fornecidas, mesclar com as existentes
+    if (updateSettingsDto.settings) {
+      updateData.settings = {
+        ...updateData.settings,
+        ...updateSettingsDto.settings,
+      };
+    }
+
+    // Se não há nada para atualizar, retornar a organização atual
+    if (Object.keys(updateData).length === 0) {
+      return existingOrganization;
+    }
+
+    return this.organizationRepository.update(id, updateData);
+  }
+
   async remove(id: string): Promise<Organization> {
     const existingOrganization = await this.organizationRepository.findById(id);
     if (!existingOrganization) {
@@ -368,5 +406,21 @@ export class OrganizationsService {
       data.profileId,
       existingOrg.id,
     );
+  }
+
+  async getSettings(id: string): Promise<any> {
+    const organization = await this.organizationRepository.findById(id);
+    if (!organization) {
+      throw new NotFoundException(`Organização com ID ${id} não encontrada`);
+    }
+
+    // Retornar apenas as configurações relevantes
+    const settings = organization.settings as any || {};
+    return {
+      id: organization.id,
+      name: organization.name,
+      settings: settings,
+      formApplicationFrequency: settings.formApplicationFrequency || 'semestral',
+    };
   }
 }

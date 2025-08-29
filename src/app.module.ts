@@ -6,6 +6,8 @@ import { ApiRootController } from './api-root.controller';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
+import { CampaignsModule } from './campaigns/campaigns.module';
+import { ProjectsModule } from './projects/projects.module';
 import { HistoryModule } from './history/history.module';
 import { AppointmentsModule } from './appointments/appointments.module';
 import { CoursesModule } from './courses/courses.module';
@@ -25,6 +27,7 @@ import { QuestionsModule } from './questions/questions.module';
 import { UtilsModule } from './shared/utils/utils.module';
 import { SubmittedFormsModule } from './submitted-forms/submitted-forms.module';
 import { TrailsModule } from './trails/trails.module';
+import { UserCourseProgressModule } from './user-course-progress/user-course-progress.module';
 
 @Module({
   imports: [
@@ -53,6 +56,9 @@ import { TrailsModule } from './trails/trails.module';
     GenericModule,
     HistoryModule,
     AppointmentsModule,
+    UserCourseProgressModule,
+    CampaignsModule,
+    ProjectsModule,
   ],
   controllers: [AppController, ApiRootController, DashboardController],
   providers: [AppService],

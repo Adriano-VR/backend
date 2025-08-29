@@ -78,7 +78,15 @@ export class FormsService {
   }
 
   async findPublicForms(): Promise<Form[]> {
-    return this.formRepository.findPublicForms();
+    try {
+      console.log('🔍 [FormsService] findPublicForms iniciado');
+      const forms = await this.formRepository.findPublicForms();
+      console.log('✅ [FormsService] findPublicForms executado com sucesso:', forms.length);
+      return forms;
+    } catch (error) {
+      console.error('❌ [FormsService] Erro em findPublicForms:', error);
+      throw error;
+    }
   }
 
   async cloneForm(cloneFormDto: CloneFormDto): Promise<Form[]> {
@@ -102,6 +110,8 @@ export class FormsService {
       createdById,
     });
   }
+
+
 
   async removeByTemplate(
     templateId: string,

@@ -9,7 +9,7 @@
     {
       "codigo": "WHO5_1",
       "categoria": "Bem-estar",
-      "label": "Senti-me alegre e bem disposto(a)",
+      "label": "Me senti alegre e bem disposto(a)",
       "tipo": "radio",
       "opcoes": [
         { "value": 5, "label": "Todo o tempo" },
@@ -25,7 +25,7 @@
     {
       "codigo": "WHO5_2",
       "categoria": "Bem-estar",
-      "label": "Senti-me calmo(a) e tranquilo(a)",
+      "label": "Me senti calmo(a) e tranquilo(a)",
       "tipo": "radio",
       "opcoes": [
         { "value": 5, "label": "Todo o tempo" },
@@ -41,7 +41,7 @@
     {
       "codigo": "WHO5_3",
       "categoria": "Bem-estar",
-      "label": "Senti-me ativo(a) e enérgico(a)",
+      "label": "Me senti ativo(a) e enérgico(a)",
       "tipo": "radio",
       "opcoes": [
         { "value": 5, "label": "Todo o tempo" },

@@ -109,28 +109,39 @@ export class PrismaFormRepository
   }
 
   async findPublicForms(): Promise<Form[]> {
-    const forms = await this.prisma.form.findMany({
-      where: {
-        isTemplate: true,
-        deletedAt: null,
-      },
-      include: {
-        questions: {
-          include: {
-            question: {
-              include: {
-                questionGroup: true,
+    try {
+      console.log('🔍 [PrismaFormRepository] findPublicForms iniciado');
+      
+      const forms = await this.prisma.form.findMany({
+        where: {
+          isTemplate: true,
+          deletedAt: null,
+        },
+        include: {
+          questions: {
+            include: {
+              question: {
+                include: {
+                  questionGroup: true,
+                },
               },
             },
-          },
-          orderBy: {
-            order: 'asc',
+            orderBy: {
+              order: 'asc',
+            },
           },
         },
-      },
-    });
-    console.log(forms, `forms - findPublicForms`);
-    return forms as Form[];
+      });
+      
+      console.log('✅ [PrismaFormRepository] findPublicForms executado com sucesso:', forms.length);
+      console.log('📋 [PrismaFormRepository] Forms encontrados:', forms.map(f => ({ id: f.id, title: f.title, isTemplate: f.isTemplate })));
+      
+      return forms as Form[];
+    } catch (error) {
+      console.error('❌ [PrismaFormRepository] Erro em findPublicForms:', error);
+      console.error('❌ [PrismaFormRepository] Stack trace:', error.stack);
+      throw error;
+    }
   }
 
   // ... resto dos métodos permanecem iguais

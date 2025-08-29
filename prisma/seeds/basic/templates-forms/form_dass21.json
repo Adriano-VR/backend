@@ -161,7 +161,7 @@
       "dimension": "Ansiedade",
       "comment": "Avaliação de ansiedade",
       "level": "DASS21",
-      "text": "Senti-me agitado",
+      "text": "Me senti agitado",
       "type": "scale_intensity",
       "options": [
         { "value": 0, "label": "Não se aplicou a mim" },
@@ -191,7 +191,7 @@
       "dimension": "Depressão",
       "comment": "Avaliação de depressão",
       "level": "DASS21",
-      "text": "Senti-me depressivo(a) e sem ânimo",
+      "text": "Me senti depressivo(a) e sem ânimo",
       "type": "scale_intensity",
       "options": [
         { "value": 0, "label": "Não se aplicou a mim" },

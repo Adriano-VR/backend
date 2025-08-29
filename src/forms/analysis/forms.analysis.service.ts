@@ -56,7 +56,7 @@ export class FormsAnalysisService {
       organizationName: form.organization.name,
       activityName: form.organization.activity?.name ?? 'Não definido',
       averageScore,
-      marketAverage: 71.2,
+      marketAverage: null, // Será calculado dinamicamente
       responseRate:
         completed.length > 0
           ? Number(
@@ -232,7 +232,7 @@ export class FormsAnalysisService {
         return {
           domain,
           score: Number(domainAvg.toFixed(1)),
-          marketAvg: 71.2,
+          marketAvg: null, // Será calculado dinamicamente
           risk: domainAvg < 60 ? 'high' : domainAvg <= 75 ? 'medium' : 'low',
         };
       })
@@ -242,7 +242,7 @@ export class FormsAnalysisService {
         ): x is {
           domain: string;
           score: number;
-          marketAvg: number;
+          marketAvg: null;
           risk: string;
         } => !!x,
       );
@@ -253,7 +253,7 @@ export class FormsAnalysisService {
       const dynamicDomains = dimensionAverages.map((dim) => ({
         domain: dim.dimension,
         score: Number(dim.avg.toFixed(1)),
-        marketAvg: 71.2,
+                  marketAvg: null, // Será calculado dinamicamente
         risk: dim.avg < 60 ? 'high' : dim.avg <= 75 ? 'medium' : 'low',
       }));
       console.log('🏆 Domínios dinâmicos criados:', dynamicDomains);
@@ -262,7 +262,7 @@ export class FormsAnalysisService {
     
     console.log('🏆 Resultados dos domínios:', domainResults);
 
-    return domainResults.sort((a, b) => a.score - b.score).slice(0, 6);
+    return domainResults.filter((a): a is NonNullable<typeof a> => a !== null).sort((a, b) => a.score - b.score).slice(0, 6);
   }
   async getDimensionsByForm(formId: string) {
     console.log('🎯 getDimensionsByForm chamada para:', formId);

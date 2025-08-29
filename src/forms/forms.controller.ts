@@ -72,7 +72,14 @@ export class FormsController {
   @Get('public')
   async findPublicForms(): Promise<Form[]> {
     console.log('findPublicForms');
-    return this.formsService.findPublicForms();
+    try {
+      const forms = await this.formsService.findPublicForms();
+      console.log('✅ findPublicForms executado com sucesso:', forms.length);
+      return forms;
+    } catch (error) {
+      console.error('❌ Erro em findPublicForms:', error);
+      throw error;
+    }
   }
 
   @ApiOperation({
@@ -226,4 +233,6 @@ export class FormsController {
   ): Promise<Form> {
     return this.formsService.removeByTemplate(templateId, organizationId);
   }
+
+
 }

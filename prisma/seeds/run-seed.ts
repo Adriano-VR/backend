@@ -30,16 +30,17 @@ async function main() {
     console.log('1. Executar seed básico (templates)');
     console.log('2. Executar seed completo (demos)');
     console.log('3. Disponibilizar formulários para organizações');
+    console.log('4. Executar seed de campanhas');
     console.log('');
     console.log('👥 SEEDS DE USUÁRIOS:');
-    console.log('4. Usuários e organização demo');
-    console.log('5. Respostas do formulário espiritual');
+    console.log('5. Usuários e organização demo');
+    console.log('6. Respostas do formulário espiritual');
     console.log('');
     console.log('🧹 MANUTENÇÃO:');
-    console.log('6. Limpar formulários duplicados');
-    console.log('7. Verificar sincronização do banco');
-    console.log('8. Regenerar Prisma Client');
-    console.log('9. Limpar banco de dados');
+    console.log('7. Limpar formulários duplicados');
+    console.log('8. Verificar sincronização do banco');
+    console.log('9. Regenerar Prisma Client');
+    console.log('10. Limpar banco de dados');
     console.log('');
     console.log('0. Sair\n');
 
@@ -49,7 +50,7 @@ async function main() {
         output: process.stdout
     });
 
-    rl.question('Escolha uma opção (0-9): ', async (answer: string) => {
+    rl.question('Escolha uma opção (0-10): ', async (answer: string) => {
         switch (answer.trim()) {
             case '1':
                 console.log('\n🚀 Executando seed básico (templates)...\n');
@@ -85,6 +86,17 @@ async function main() {
                 break;
 
             case '4':
+                console.log('\n🚀 Executando seed de campanhas...\n');
+                const successCampaigns = runCommand(
+                    'ts-node campaigns/campaign-seed.ts',
+                    'Seed de campanhas'
+                );
+                if (successCampaigns) {
+                    console.log('🎉 Seed de campanhas executado com sucesso!');
+                }
+                break;
+
+            case '5':
                 console.log('\n🚀 Executando usuários e organização demo...\n');
                 const successUsers = runCommand(
                     'ts-node demos/default/seed-users-only.ts',
@@ -95,71 +107,69 @@ async function main() {
                 }
                 break;
 
-            case '5':
+            case '6':
                 console.log('\n🚀 Executando respostas do formulário espiritual...\n');
                 const successEspiritualResponses = runCommand(
                     'ts-node demos/default/seed-espiritual-responses.ts',
                     'Seed das respostas do formulário espiritual'
                 );
                 if (successEspiritualResponses) {
-                    console.log('🎉 Respostas espirituais criadas com sucesso!');
+                    console.log('🎉 Respostas do formulário espiritual criadas com sucesso!');
                 }
                 break;
 
-            case '6':
-                console.log('\n🧹 Executando limpeza de formulários duplicados...\n');
+            case '7':
+                console.log('\n🧹 Limpando formulários duplicados...\n');
                 const successClean = runCommand(
                     'ts-node utils/clean-duplicate-forms.ts',
                     'Limpeza de formulários duplicados'
                 );
                 if (successClean) {
-                    console.log('🎉 Limpeza concluída com sucesso!');
+                    console.log('🎉 Formulários duplicados removidos com sucesso!');
                 }
                 break;
 
-        
-
-            case '7':
-                console.log('\n🔍 Verificando sincronização do banco...\n');
-                runCommand(
-                    'npx prisma db push',
-                    'Sincronização do banco'
-                );
-                break;
-
             case '8':
-                console.log('\n🔧 Regenerando Prisma Client...\n');
-                runCommand(
-                    'npx prisma generate',
-                    'Geração do Prisma Client'
+                console.log('\n🔍 Verificando sincronização do banco...\n');
+                const successSync = runCommand(
+                    'ts-node utils/check-db-sync.ts',
+                    'Verificação de sincronização do banco'
                 );
+                if (successSync) {
+                    console.log('🎉 Verificação de sincronização concluída!');
+                }
                 break;
 
             case '9':
-                console.log('\n🗑️ Limpando banco de dados...\n');
-                console.log('⚠️ ATENÇÃO: Esta ação irá apagar todos os dados do banco!');
-                rl.question('Tem certeza que deseja continuar? (s/N): ', (confirm: string) => {
-                    if (confirm.toLowerCase() === 's' || confirm.toLowerCase() === 'sim') {
-                        runCommand(
-                           "npx prisma migrate reset --force && npm run seed:deleteTestUsers",
-                           'Limpeza do banco de dados'
-                        );
-                    } else {
-                        console.log('❌ Operação cancelada pelo usuário.');
-                    }
-                    rl.close();
-                });
-                return; // Retorna para evitar fechar o readline antes da confirmação
+                console.log('\n🔄 Regenerando Prisma Client...\n');
+                const successPrisma = runCommand(
+                    'cd ../../ && pnpm prisma generate',
+                    'Regeneração do Prisma Client'
+                );
+                if (successPrisma) {
+                    console.log('🎉 Prisma Client regenerado com sucesso!');
+                }
+                break;
 
-        
+            case '10':
+                console.log('\n🗑️ Limpando banco de dados...\n');
+                const successCleanDb = runCommand(
+                    'cd ../../ && pnpm prisma db push --force-reset',
+                    'Limpeza do banco de dados'
+                );
+                if (successCleanDb) {
+                    console.log('🎉 Banco de dados limpo com sucesso!');
+                }
+                break;
+
             case '0':
-                console.log('\n👋 Saindo...');
+                console.log('\n👋 Saindo...\n');
                 rl.close();
                 process.exit(0);
                 break;
 
             default:
-                console.log('\n❌ Opção inválida!');
+                console.log('\n❌ Opção inválida. Por favor, escolha uma opção válida.\n');
                 break;
         }
 
@@ -167,9 +177,5 @@ async function main() {
     });
 }
 
-// Executar se chamado diretamente
-if (require.main === module) {
-    main().catch(console.error);
-}
-
-export default main; 
+// Executar a função principal
+main().catch(console.error); 
