@@ -10,6 +10,7 @@ export enum CampaignFrequency {
 export enum CampaignStatus {
   ACTIVE = 'active',
   INACTIVE = 'inactive',
+  PAUSED = 'paused',
   COMPLETED = 'completed',
   CANCELLED = 'cancelled',
 }

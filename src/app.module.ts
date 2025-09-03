@@ -24,6 +24,7 @@ import { OrganizationMembersModule } from './organization-members/organization-m
 import { OrganizationsModule } from './organizations/organizations.module';
 import { ProfilesModule } from './profiles/profiles.module';
 import { QuestionsModule } from './questions/questions.module';
+import { TarefaModule } from './tarefa/tarefa.module';
 import { UtilsModule } from './shared/utils/utils.module';
 import { SubmittedFormsModule } from './submitted-forms/submitted-forms.module';
 import { TrailsModule } from './trails/trails.module';
@@ -59,6 +60,7 @@ import { UserCourseProgressModule } from './user-course-progress/user-course-pro
     UserCourseProgressModule,
     CampaignsModule,
     ProjectsModule,
+    TarefaModule,
   ],
   controllers: [AppController, ApiRootController, DashboardController],
   providers: [AppService],

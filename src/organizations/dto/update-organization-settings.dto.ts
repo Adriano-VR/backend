@@ -26,3 +26,4 @@ export class UpdateOrganizationSettingsDto {
   @IsOptional()
   settings?: any;
 }
+

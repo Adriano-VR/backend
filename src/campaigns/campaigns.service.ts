@@ -3,10 +3,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { CreateCampaignDto } from './dto/create-campaign.dto';
 import { UpdateCampaignDto } from './dto/update-campaign.dto';
 import { CampaignResponseDto } from './dto/campaign-response.dto';
+import { ChecklistProjectService } from '../services/checklist-project.service';
 
 @Injectable()
 export class CampaignsService {
-  constructor(private readonly prisma: PrismaService) {}
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly checklistProjectService: ChecklistProjectService
+  ) {}
 
   async create(createCampaignDto: CreateCampaignDto, userId: string): Promise<CampaignResponseDto> {
     const campaign = await this.prisma.campaign.create({
@@ -206,6 +210,22 @@ export class CampaignsService {
         },
       },
     });
+
+    // Se a campanha foi ativada, criar automaticamente o projeto de checklist
+    if (updateCampaignDto.status === 'active' && existingCampaign.status !== 'active') {
+      try {
+        console.log('🚀 [CampaignsService] Campanha ativada, criando projeto de checklist automaticamente...');
+        if (campaign.organizationId) {
+          await this.checklistProjectService.createChecklistProject(campaign.id, campaign.organizationId);
+          console.log('✅ [CampaignsService] Projeto de checklist criado com sucesso!');
+        } else {
+          console.log('⚠️ [CampaignsService] Campanha não possui organização associada, não é possível criar projeto de checklist');
+        }
+      } catch (error) {
+        console.error('❌ [CampaignsService] Erro ao criar projeto de checklist:', error);
+        // Não falhar a atualização da campanha se houver erro na criação do projeto
+      }
+    }
 
     return this.mapToResponseDto(campaign);
   }

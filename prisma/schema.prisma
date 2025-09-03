@@ -245,7 +245,7 @@ model campaign {
   frequency      CampaignFrequency  @default(semestral)
   startDate      DateTime           @map("start_date")
   endDate        DateTime?          @map("end_date")
-  status         CampaignStatus     @default(active)
+  status         CampaignStatus     @default(inactive)
   organizationId String?            @map("organization_id")
   createdById    String?            @map("created_by_id")
   createdAt      DateTime           @default(now()) @map("created_at")
@@ -328,6 +328,7 @@ model project {
   updatedAt      DateTime      @updatedAt @map("updated_at")
   deletedAt      DateTime?     @map("deleted_at")
   actions        action[]
+  tarefas        tarefa[]
   createdBy      profile?      @relation("ProjectCreatedBy", fields: [createdById], references: [id])
   organization   organization? @relation(fields: [organizationId], references: [id])
   campaigns      campaign[]    @relation("campaignToproject")
@@ -352,6 +353,24 @@ model action {
   project              project?  @relation(fields: [projectId], references: [id])
 
   @@map("action")
+}
+
+model tarefa {
+  id                    String        @id @default(uuid())
+  titulo                String
+  descricao             String?
+  responsavel           String?
+  dataInicio            DateTime?     @map("data_inicio")
+  dataPrevisaoConclusao DateTime?     @map("data_previsao_conclusao")
+  dataConclusao         DateTime?     @map("data_conclusao")
+  status                TarefaStatus  @default(pendente)
+  projectId             String        @map("project_id")
+  createdAt             DateTime      @default(now()) @map("created_at")
+  updatedAt             DateTime      @updatedAt @map("updated_at")
+  deletedAt             DateTime?     @map("deleted_at")
+  project               project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@map("tarefa")
 }
 
 model lead {
@@ -530,6 +549,13 @@ enum Status {
   completed
 }
 
+enum TarefaStatus {
+  pendente
+  iniciado
+  concluido
+  cancelado
+}
+
 enum Nr1Status {
   never_heard_of_it
   we_know_but_dont_do
@@ -555,6 +581,7 @@ enum LeadFormType {
 enum ProjectType {
   project
   action_plan
+  checklist
 }
 
 enum ProgressStatus {
@@ -594,6 +621,7 @@ enum CampaignFrequency {
 enum CampaignStatus {
   active
   inactive
+  paused
   completed
   cancelled
 }
