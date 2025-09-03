@@ -72,6 +72,7 @@ async function bootstrap() {
     'https://mentesegura.vercel.app', // Staging environment
     'https://mentesegura-backend.fly.dev',
     'https://mentesegura-git-preview-xbase-app.vercel.app',
+    'https://mentesegura-phi.vercel.app',
   ];
 
   // Add any additional origins from environment variables
