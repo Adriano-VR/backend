@@ -47,4 +47,12 @@ export class CreateSubmittedFormDto {
   })
   @IsString()
   profileId: string;
+
+  @ApiPropertyOptional({
+    description: 'ID da campanha ativa da organização (vinculação automática)',
+    example: 'uuid-da-campanha',
+  })
+  @IsOptional()
+  @IsString()
+  campaignId?: string;
 }

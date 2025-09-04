@@ -1,8 +1,9 @@
 import { IsString, IsOptional, IsEnum, IsBoolean, IsUUID } from 'class-validator';
 
 export enum ProjectType {
-  PROJECT = 'project',
-  ACTION_PLAN = 'action_plan',
+  CHECKLIST = 'checklist',
+  PREVENTIVO = 'preventivo',
+  CONTIGENCIAL = 'contigencial',
 }
 
 export enum ProjectStatus {

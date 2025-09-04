@@ -312,7 +312,7 @@ model project {
   title          String
   slug           String        @unique
   isTemplate     Boolean       @default(false) @map("is_template")
-  type           ProjectType   @default(project) @map("type")
+  type           ProjectType   @default(checklist) @map("type")
   description    String?
   problem        String?
   solution       String?
@@ -579,9 +579,9 @@ enum LeadFormType {
 }
 
 enum ProjectType {
-  project
-  action_plan
   checklist
+  preventivo
+  contigencial
 }
 
 enum ProgressStatus {

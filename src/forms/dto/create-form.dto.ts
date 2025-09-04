@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsBoolean, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsOptional, IsString, IsDateString } from 'class-validator';
 
 export class CreateFormDto {
   @ApiProperty({
@@ -51,4 +51,12 @@ export class CreateFormDto {
   @IsOptional()
   @IsString()
   organizationId?: string;
+
+  @ApiPropertyOptional({
+    description: 'Data limite para responder o formulário',
+    example: '2024-12-31T23:59:59.000Z',
+  })
+  @IsOptional()
+  @IsDateString()
+  limitDate?: string;
 }

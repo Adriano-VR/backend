@@ -1,5 +1,5 @@
-import { ApiProperty } from '@nestjs/swagger';
-import { IsString, IsArray } from 'class-validator';
+import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { IsString, IsArray, IsOptional, IsDateString } from 'class-validator';
 
 export class CloneFormDto {
   @ApiProperty({
@@ -23,4 +23,12 @@ export class CloneFormDto {
   })
   @IsString()
   createdById: string;
+
+  @ApiPropertyOptional({
+    description: 'Data limite para responder o formulário',
+    example: '2024-12-31T23:59:59.000Z',
+  })
+  @IsOptional()
+  @IsDateString()
+  limitDate?: string;
 }

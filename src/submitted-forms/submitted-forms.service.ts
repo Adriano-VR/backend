@@ -3,16 +3,29 @@ import { SubmittedForm } from '../../prisma/types';
 import { SubmittedFormRepository } from '../repositories/submitted-form-repositorie';
 import { CreateSubmittedFormDto } from './dto/create-submitted-form.dto';
 import { UpdateSubmittedFormDto } from './dto/update-submitted-form.dto';
+import { PrismaService } from '../prisma/prisma.service';
 
 @Injectable()
 export class SubmittedFormsService {
   constructor(
     private readonly submittedFormRepository: SubmittedFormRepository,
+    private readonly prisma: PrismaService,
   ) {}
 
   async create(
     createSubmittedFormDto: CreateSubmittedFormDto,
   ): Promise<SubmittedForm> {
+    // Se não foi fornecido campaignId, buscar a campanha ativa da organização
+    if (!createSubmittedFormDto.campaignId) {
+      const activeCampaign = await this.findActiveCampaignForForm(createSubmittedFormDto.formId);
+      if (activeCampaign) {
+        createSubmittedFormDto.campaignId = activeCampaign.id;
+        console.log(`🔗 [SubmittedFormsService] Vinculando submitted form à campanha ativa: ${activeCampaign.name}`);
+      } else {
+        console.log('⚠️ [SubmittedFormsService] Nenhuma campanha ativa encontrada para vincular o submitted form');
+      }
+    }
+
     return this.submittedFormRepository.create(createSubmittedFormDto);
   }
 
@@ -109,5 +122,43 @@ export class SubmittedFormsService {
     return this.submittedFormRepository.update(id, { 
       campaign: { connect: { id: campaignId } }
     });
+  }
+
+  /**
+   * Busca a campanha ativa da organização do formulário
+   */
+  private async findActiveCampaignForForm(formId: string): Promise<{ id: string; name: string } | null> {
+    try {
+      // Buscar o formulário e sua organização
+      const form = await this.prisma.form.findUnique({
+        where: { id: formId },
+        select: {
+          organizationId: true,
+        },
+      });
+
+      if (!form || !form.organizationId) {
+        console.log('⚠️ [SubmittedFormsService] Formulário não encontrado ou sem organização');
+        return null;
+      }
+
+      // Buscar campanha ativa da organização
+      const activeCampaign = await this.prisma.campaign.findFirst({
+        where: {
+          organizationId: form.organizationId,
+          status: 'active',
+          deletedAt: null,
+        },
+        select: {
+          id: true,
+          name: true,
+        },
+      });
+
+      return activeCampaign;
+    } catch (error) {
+      console.error('❌ [SubmittedFormsService] Erro ao buscar campanha ativa:', error);
+      return null;
+    }
   }
 }

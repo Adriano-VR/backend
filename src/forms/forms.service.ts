@@ -103,11 +103,13 @@ export class FormsService {
     templateId: string,
     organizationId: string,
     createdById: string,
+    limitDate?: string,
   ): Promise<Form[]> {
     return this.formRepository.cloneForm({
       templateFormIds: [templateId],
       organizationId,
       createdById,
+      limitDate,
     });
   }
 

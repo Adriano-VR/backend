@@ -13,6 +13,23 @@ export class CampaignsService {
   ) {}
 
   async create(createCampaignDto: CreateCampaignDto, userId: string): Promise<CampaignResponseDto> {
+    // Verificar se está tentando criar uma campanha ativa
+    if (createCampaignDto.status === 'active' && createCampaignDto.organizationId) {
+      const activeCampaign = await this.prisma.campaign.findFirst({
+        where: {
+          organizationId: createCampaignDto.organizationId,
+          status: 'active',
+          deletedAt: null,
+        },
+      });
+
+      if (activeCampaign) {
+        throw new BadRequestException(
+          `Não é possível criar uma campanha ativa. A organização já possui uma campanha ativa: "${activeCampaign.name}". Finalize ou pause a campanha ativa antes de criar uma nova.`
+        );
+      }
+    }
+
     const campaign = await this.prisma.campaign.create({
       data: {
         ...createCampaignDto,
@@ -133,6 +150,13 @@ export class CampaignsService {
             deletedAt: null,
           },
           include: {
+            profile: {
+              select: {
+                id: true,
+                name: true,
+                email: true,
+              },
+            },
             _count: {
               select: {
                 answers: true,
@@ -171,6 +195,27 @@ export class CampaignsService {
 
     if (!existingCampaign) {
       throw new NotFoundException('Campanha não encontrada');
+    }
+
+    // Verificar se está tentando ativar uma campanha
+    if (updateCampaignDto.status === 'active' && existingCampaign.status !== 'active') {
+      // Verificar se já existe uma campanha ativa na mesma organização
+      if (existingCampaign.organizationId) {
+        const activeCampaign = await this.prisma.campaign.findFirst({
+          where: {
+            organizationId: existingCampaign.organizationId,
+            status: 'active',
+            deletedAt: null,
+            id: { not: id }, // Excluir a campanha atual da verificação
+          },
+        });
+
+        if (activeCampaign) {
+          throw new BadRequestException(
+            `Não é possível ativar esta campanha. A organização já possui uma campanha ativa: "${activeCampaign.name}". Finalize ou pause a campanha ativa antes de iniciar uma nova.`
+          );
+        }
+      }
     }
 
     const updateData: any = { ...updateCampaignDto };
@@ -274,6 +319,7 @@ export class CampaignsService {
                 answers: true,
               },
             },
+            profile: true,
           },
         },
         projects: {
@@ -307,6 +353,11 @@ export class CampaignsService {
         startedAt: form.startedAt,
         completedAt: form.completedAt,
         answersCount: form._count.answers,
+        profile: form.profile ? {
+          id: form.profile.id,
+          name: form.profile.name,
+          email: form.profile.email,
+        } : null,
       })),
       projects: campaign.projects.map(project => ({
         id: project.id,

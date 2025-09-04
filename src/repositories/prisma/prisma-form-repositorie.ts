@@ -147,7 +147,7 @@ export class PrismaFormRepository
   // ... resto dos métodos permanecem iguais
 
   async cloneForm(cloneFormDto: CloneFormDto): Promise<Form[]> {
-    const { organizationId, templateFormIds, createdById } = cloneFormDto;
+    const { organizationId, templateFormIds, createdById, limitDate } = cloneFormDto;
     const clonedForms: Form[] = [];
 
     for (const templateId of templateFormIds) {
@@ -187,7 +187,7 @@ export class PrismaFormRepository
           title: template.title,
           description: template.description,
           instructions: template.instructions, // Incluindo instructions na clonagem
-          limitDate: template.limitDate, // Incluindo limitDate na clonagem
+          limitDate: limitDate ? new Date(limitDate) : template.limitDate, // Usar limitDate fornecido ou do template
           isTemplate: false,
           organizationId: organizationId,
           createdById: createdById,

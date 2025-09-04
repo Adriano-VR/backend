@@ -193,13 +193,14 @@ export class FormsController {
   async createByTemplate(
     @Param('organizationId') organizationId: string,
     @Param('templateId') templateId: string,
-    @Body() body: { createdById: string },
+    @Body() body: { createdById: string; limitDate?: string },
   ): Promise<Form[]> {
     console.log(body, `"createByTemplate"`);
     return this.formsService.createByTemplate(
       templateId,
       organizationId,
       body.createdById,
+      body.limitDate,
     );
   }
 
