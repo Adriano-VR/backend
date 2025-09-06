@@ -104,7 +104,7 @@ export async function seedCampaignsWithProjects() {
       {
         name: 'Manual de Saúde Mental Organizacional',
         description: 'Guia completo com políticas e procedimentos de saúde mental',
-        fileUrl: 'https://example.com/manual-saude-mental.pdf',
+        fileUrl: 'http://localhost:3004/uploads/manual-saude-mental.pdf',
         fileType: 'application/pdf',
         fileSize: 2048576, // 2MB
         campaignId: mainCampaign.id,
@@ -113,7 +113,7 @@ export async function seedCampaignsWithProjects() {
       {
         name: 'Apresentação - Campanha de Bem-estar',
         description: 'Slides de apresentação da campanha para stakeholders',
-        fileUrl: 'https://example.com/apresentacao-campanha.pptx',
+        fileUrl: 'http://localhost:3004/uploads/apresentacao-campanha.pptx',
         fileType: 'application/vnd.openxmlformats-officedocument.presentationml.presentation',
         fileSize: 1048576, // 1MB
         campaignId: mainCampaign.id,
@@ -122,7 +122,7 @@ export async function seedCampaignsWithProjects() {
       {
         name: 'Checklist de Implementação',
         description: 'Lista de verificação para implementação das ações da campanha',
-        fileUrl: 'https://example.com/checklist-implementacao.xlsx',
+        fileUrl: 'http://localhost:3004/uploads/checklist-implementacao.xlsx',
         fileType: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',
         fileSize: 512000, // 500KB
         campaignId: mainCampaign.id,

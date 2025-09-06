@@ -255,7 +255,8 @@ model campaign {
   organization   organization?      @relation(fields: [organizationId], references: [id])
   documents      campaignDocument[]
   submittedForms submittedForm[]
-  projects       project[]          @relation("campaignToproject")
+  projects       project[]          @relation("ProjectToCampaign")
+  campaigns      project[]          @relation("campaignToproject")
 
   @@map("campaign")
 }
@@ -325,12 +326,14 @@ model project {
   createdAt      DateTime      @default(now()) @map("created_at")
   createdById    String?       @map("created_by_id")
   organizationId String?       @map("organization_id")
+  campaignId     String?       @map("campaign_id")
   updatedAt      DateTime      @updatedAt @map("updated_at")
   deletedAt      DateTime?     @map("deleted_at")
   actions        action[]
   tarefas        tarefa[]
   createdBy      profile?      @relation("ProjectCreatedBy", fields: [createdById], references: [id])
   organization   organization? @relation(fields: [organizationId], references: [id])
+  campaign       campaign?     @relation("ProjectToCampaign", fields: [campaignId], references: [id])
   campaigns      campaign[]    @relation("campaignToproject")
 
   @@map("project")

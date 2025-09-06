@@ -65,4 +65,8 @@ export class CreateProjectDto {
   @IsOptional()
   @IsUUID()
   organizationId?: string;
+
+  @IsOptional()
+  @IsUUID()
+  campaignId?: string;
 }
