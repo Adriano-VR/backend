@@ -1,4 +1,4 @@
-import { TarefaStatus } from '@prisma/client'
+import { TaskStatus } from '@prisma/client'
 
 export interface CreateTarefaDto {
   titulo: string
@@ -16,7 +16,7 @@ export interface UpdateTarefaDto {
   dataInicio?: Date
   dataPrevisaoConclusao?: Date
   dataConclusao?: Date
-  status?: TarefaStatus
+  status?: TaskStatus
 }
 
 export interface TarefaResponse {
@@ -27,10 +27,10 @@ export interface TarefaResponse {
   dataInicio: Date | null
   dataPrevisaoConclusao: Date | null
   dataConclusao: Date | null
-  status: TarefaStatus
+  status: TaskStatus
   projectId: string
   createdAt: Date
   updatedAt: Date
 }
 
-export { TarefaStatus }
+export { TaskStatus }

@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException, BadRequestException } from '@nestjs/common'
 import { PrismaService } from '../prisma/prisma.service'
-import { CreateTarefaDto, UpdateTarefaDto, TarefaResponse } from '../types/tarefa'
-import { TarefaStatus } from '@prisma/client'
+import { CreateTarefaDto, UpdateTarefaDto, TarefaResponse, TaskStatus } from '../types/tarefa'
 
 @Injectable()
 export class TarefaService {
@@ -17,7 +16,7 @@ export class TarefaService {
       throw new NotFoundException('Projeto não encontrado')
     }
 
-    const tarefa = await this.prisma.tarefa.create({
+    const tarefa = await this.prisma.task.create({
       data: {
         titulo: createTarefaDto.titulo,
         descricao: createTarefaDto.descricao,
@@ -34,7 +33,7 @@ export class TarefaService {
   async findAll(projectId?: string): Promise<TarefaResponse[]> {
     const where = projectId ? { projectId } : {}
 
-    const tarefas = await this.prisma.tarefa.findMany({
+    const tarefas = await this.prisma.task.findMany({
       where,
       orderBy: { createdAt: 'desc' }
     })
@@ -43,7 +42,7 @@ export class TarefaService {
   }
 
   async findOne(id: string): Promise<TarefaResponse> {
-    const tarefa = await this.prisma.tarefa.findUnique({
+    const tarefa = await this.prisma.task.findUnique({
       where: { id }
     })
 
@@ -56,7 +55,7 @@ export class TarefaService {
 
   async update(id: string, updateTarefaDto: UpdateTarefaDto): Promise<TarefaResponse> {
     // Verificar se a tarefa existe
-    const existingTarefa = await this.prisma.tarefa.findUnique({
+    const existingTarefa = await this.prisma.task.findUnique({
       where: { id }
     })
 
@@ -70,7 +69,7 @@ export class TarefaService {
       updateData.dataConclusao = new Date()
     }
 
-    const tarefa = await this.prisma.tarefa.update({
+    const tarefa = await this.prisma.task.update({
       where: { id },
       data: updateData
     })
@@ -79,7 +78,7 @@ export class TarefaService {
   }
 
   async remove(id: string): Promise<void> {
-    const tarefa = await this.prisma.tarefa.findUnique({
+    const tarefa = await this.prisma.task.findUnique({
       where: { id }
     })
 
@@ -87,13 +86,13 @@ export class TarefaService {
       throw new NotFoundException('Tarefa não encontrada')
     }
 
-    await this.prisma.tarefa.delete({
+    await this.prisma.task.delete({
       where: { id }
     })
   }
 
   async findByProject(projectId: string): Promise<TarefaResponse[]> {
-    const tarefas = await this.prisma.tarefa.findMany({
+    const tarefas = await this.prisma.task.findMany({
       where: { projectId },
       orderBy: { createdAt: 'desc' }
     })
@@ -115,7 +114,7 @@ export class TarefaService {
       updateData.dataConclusao = new Date()
     }
 
-    const tarefa = await this.prisma.tarefa.update({
+    const tarefa = await this.prisma.task.update({
       where: { id },
       data: updateData
     })
