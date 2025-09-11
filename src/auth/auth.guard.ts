@@ -26,7 +26,12 @@ export class AuthGuard implements CanActivate {
     const request = context.switchToHttp().getRequest();
     const token = this.extractTokenFromHeader(request);
 
+    console.log('🔍 [AuthGuard] Verificando autenticação...');
+    console.log('🔍 [AuthGuard] Token presente:', !!token);
+    console.log('🔍 [AuthGuard] Headers authorization:', request.headers.authorization);
+
     if (!token) {
+      console.log('❌ [AuthGuard] Token não encontrado');
       throw new UnauthorizedException();
     }
 
@@ -35,14 +40,11 @@ export class AuthGuard implements CanActivate {
         secret: this.jwtSecret,
       });
 
-      // const route = request.route;
-      // const method = request.method;
-
-      // console.log('🔍 Route:', route)
-      // console.log('🔍 Method:', method)
+      console.log('✅ [AuthGuard] Token válido, payload:', payload);
 
       request['user'] = payload;
-    } catch {
+    } catch (error) {
+      console.log('❌ [AuthGuard] Erro ao verificar token:', error);
       throw new UnauthorizedException();
     }
     return true;

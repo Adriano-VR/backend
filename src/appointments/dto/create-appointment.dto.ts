@@ -25,4 +25,12 @@ export class CreateAppointmentDto {
   @IsOptional()
   @IsEnum(['regular', 'emergency', 'virtual_agent'])
   appointmentType?: 'regular' | 'emergency' | 'virtual_agent';
+
+  @IsOptional()
+  @IsString()
+  professionalId?: string;
+
+  @IsOptional()
+  @IsEnum(['scheduled', 'confirmed', 'completed', 'cancelled', 'rescheduled'])
+  status?: 'scheduled' | 'confirmed' | 'completed' | 'cancelled' | 'rescheduled';
 }

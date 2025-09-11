@@ -32,6 +32,7 @@ model profile {
   updatedAt               DateTime             @updatedAt @map("updated_at")
   deletedAt               DateTime?            @map("deleted_at")
   appointments            appointment[]
+  professionalAppointments appointment[]      @relation("ProfessionalAppointments")
   campaignsCreated        campaign[]           @relation("CampaignCreatedBy")
   campaignDocuments       campaignDocument[]   @relation("CampaignDocumentUploadedBy")
   createdForms            form[]               @relation("FormCreatedBy")
@@ -522,10 +523,12 @@ model appointment {
   location       String?
   notes          String?
   profileId      String            @map("profile_id")
+  professionalId String?           @map("professional_id")
   createdAt      DateTime          @default(now()) @map("created_at")
   updatedAt      DateTime          @updatedAt @map("updated_at")
   deletedAt      DateTime?         @map("deleted_at")
   profile        profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  professional   profile?          @relation("ProfessionalAppointments", fields: [professionalId], references: [id], onDelete: Cascade)
 
   @@map("appointment")
 }
@@ -617,7 +620,9 @@ enum AppointmentStatus {
 
 enum AppointmentType {
   regular
+  follow_up
   emergency
+  consultation
   virtual_agent
 }
 

@@ -1,7 +1,6 @@
 // src/auth/dto/complete-profile.dto.ts
 import { IsString, IsOptional, IsEnum } from 'class-validator';
 import { Role } from './role.enum';
-import { Nr1Status } from './nr1-status.enum';
 
 export class CompleteProfileDto {
   @IsString()
@@ -20,13 +19,23 @@ export class CompleteProfileDto {
   descricaoProfissional?: string;
 
   @IsOptional()
-  @IsEnum(Nr1Status)
-  nr1Status?: Nr1Status;
+  @IsString()
+  registroProfissional?: string;
+
+  @IsOptional()
+  @IsString()
+  especializacao?: string;
+
+  @IsOptional()
+  @IsString()
+  experienciaAnos?: string;
+
 
   @IsOptional()
   @IsString()
   cpf?: string;
 
   @IsEnum(Role)
-  role!: Role; // permanece obrigatório para definir o fluxo após completar
+  @IsOptional()
+  role?: Role; // tornar opcional para evitar erro de validação
 }

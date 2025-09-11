@@ -37,6 +37,11 @@ export class AppointmentsController {
     return this.appointmentsService.findByProfile(profileId);
   }
 
+  @Get('professional/:professionalId')
+  async findByProfessional(@Param('professionalId') professionalId: string) {
+    return this.appointmentsService.findByProfessional(professionalId);
+  }
+
   @Get('profile/:profileId/next')
   async findNextByProfile(@Param('profileId') profileId: string) {
     return this.appointmentsService.findNextByProfile(profileId);
@@ -85,5 +90,10 @@ export class AppointmentsController {
     @Param('type') type: 'regular' | 'emergency' | 'virtual_agent',
   ) {
     return this.appointmentsService.findByType(profileId, type);
+  }
+
+  @Get('professional/:professionalId/statistics')
+  async getProfessionalStatistics(@Param('professionalId') professionalId: string) {
+    return this.appointmentsService.getProfessionalStatistics(professionalId);
   }
 }

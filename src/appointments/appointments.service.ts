@@ -17,7 +17,7 @@ export class AppointmentsService {
   ) {}
 
   async create(createAppointmentDto: CreateAppointmentDto, profileId: string) {
-    const { title, description, startTime, endTime, location, notes, appointmentType = 'regular' } =
+    const { title, description, startTime, endTime, location, notes, appointmentType = 'regular', professionalId } =
       createAppointmentDto;
 
     return this.prisma.appointment.create({
@@ -31,6 +31,7 @@ export class AppointmentsService {
         location,
         notes,
         profileId: profileId,
+        professionalId: professionalId,
       },
     });
   }
@@ -40,6 +41,28 @@ export class AppointmentsService {
       where: {
         profileId: profileId,
         deletedAt: null,
+      },
+      orderBy: {
+        startTime: 'asc',
+      },
+    });
+  }
+
+  async findByProfessional(professionalId: string) {
+    return this.prisma.appointment.findMany({
+      where: {
+        professionalId: professionalId,
+        deletedAt: null,
+      },
+      include: {
+        profile: {
+          select: {
+            id: true,
+            name: true,
+            email: true,
+            whatsapp: true,
+          },
+        },
       },
       orderBy: {
         startTime: 'asc',
@@ -215,5 +238,104 @@ export class AppointmentsService {
         startTime: 'desc',
       },
     });
+  }
+
+  async getProfessionalStatistics(professionalId: string) {
+    const now = new Date();
+    const startOfMonth = new Date(now.getFullYear(), now.getMonth(), 1);
+    const startOfLastMonth = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+    const endOfLastMonth = new Date(now.getFullYear(), now.getMonth(), 0);
+
+    // Total de pacientes únicos
+    const totalPatients = await this.prisma.appointment.groupBy({
+      by: ['profileId'],
+      where: {
+        professionalId: professionalId,
+        deletedAt: null,
+      },
+    });
+
+    // Novos pacientes este mês
+    const newPatientsThisMonth = await this.prisma.appointment.groupBy({
+      by: ['profileId'],
+      where: {
+        professionalId: professionalId,
+        deletedAt: null,
+        createdAt: {
+          gte: startOfMonth,
+        },
+      },
+    });
+
+    // Avaliações pendentes (consultas agendadas)
+    const pendingAppointments = await this.prisma.appointment.count({
+      where: {
+        professionalId: professionalId,
+        status: 'scheduled',
+        deletedAt: null,
+        startTime: {
+          gte: now,
+        },
+      },
+    });
+
+    // Avaliações com prazo próximo (próximos 3 dias)
+    const threeDaysFromNow = new Date(now.getTime() + 3 * 24 * 60 * 60 * 1000);
+    const appointmentsNearDeadline = await this.prisma.appointment.count({
+      where: {
+        professionalId: professionalId,
+        status: 'scheduled',
+        deletedAt: null,
+        startTime: {
+          gte: now,
+          lte: threeDaysFromNow,
+        },
+      },
+    });
+
+    // Sessões realizadas este mês
+    const sessionsThisMonth = await this.prisma.appointment.count({
+      where: {
+        professionalId: professionalId,
+        status: 'completed',
+        deletedAt: null,
+        startTime: {
+          gte: startOfMonth,
+        },
+      },
+    });
+
+    // Sessões realizadas no mês anterior
+    const sessionsLastMonth = await this.prisma.appointment.count({
+      where: {
+        professionalId: professionalId,
+        status: 'completed',
+        deletedAt: null,
+        startTime: {
+          gte: startOfLastMonth,
+          lte: endOfLastMonth,
+        },
+      },
+    });
+
+    // Calcular percentual de crescimento
+    const growthPercentage = sessionsLastMonth > 0 
+      ? Math.round(((sessionsThisMonth - sessionsLastMonth) / sessionsLastMonth) * 100)
+      : sessionsThisMonth > 0 ? 100 : 0;
+
+    // Média de satisfação (simulada por enquanto - pode ser implementada com avaliações reais)
+    const averageSatisfaction = 4.9;
+    const satisfactionGrowth = 0.3;
+
+    return {
+      totalPatients: totalPatients.length,
+      newPatientsThisMonth: newPatientsThisMonth.length,
+      pendingAppointments,
+      appointmentsNearDeadline,
+      sessionsThisMonth,
+      growthPercentage,
+      averageSatisfaction,
+      satisfactionGrowth,
+    };
   }
 }

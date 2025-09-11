@@ -135,7 +135,18 @@ export class AuthController {
     @Request() req: AuthenticatedRequest,
     @Body() dto: CompleteProfileDto,
   ) {
-    return this.authService.completeProfile(req.user.id, dto);
+    console.log('🔍 [AuthController] complete-profile chamado');
+    console.log('🔍 [AuthController] req.user:', req.user);
+    console.log('🔍 [AuthController] dto:', dto);
+    
+    try {
+      const result = await this.authService.completeProfile(req.user.id, dto);
+      console.log('✅ [AuthController] complete-profile sucesso:', result);
+      return result;
+    } catch (error) {
+      console.error('❌ [AuthController] complete-profile erro:', error);
+      throw error;
+    }
   }
 
   @UseGuards(AuthGuard)

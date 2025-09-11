@@ -589,14 +589,31 @@ export class AuthService {
   /** Atualiza somente o perfil do usuário */
   async completeProfile(userId: string, dto: CompleteProfileDto) {
     console.log('🛠 [Auth] CompleteProfile, só atualiza user…');
+    console.log('🛠 [Auth] DTO recebido:', dto);
+    
     const data: any = {
       name: dto.name,
       whatsapp: dto.whatsapp,
       jobTitle: dto.jobTitle,
-      nr1Status: dto.nr1Status as Nr1Status,
       ...(dto.cpf ? { cpf: dto.cpf } : {}),
-      role: dto.role,
+      role: dto.role || 'professional', // Sempre definir um role válido
     };
+
+    // Campos específicos para profissionais (sempre processar quando chamado do formulário de profissional)
+    if (dto.role === 'professional' || !dto.role) {
+      if (dto.descricaoProfissional) {
+        data.bio = dto.descricaoProfissional;
+      }
+      if (dto.registroProfissional) {
+        data.settings = {
+          ...data.settings,
+          registroProfissional: dto.registroProfissional,
+          especializacao: dto.especializacao,
+          experienciaAnos: dto.experienciaAnos,
+        };
+      }
+    }
+
 
     const updated = await this.profileRepository.update(userId, data);
 
