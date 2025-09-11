@@ -26,7 +26,7 @@ export class ProjectsController {
     @Body() createProjectDto: CreateProjectDto,
     @Request() req: any,
   ): Promise<ProjectResponseDto> {
-    return this.projectsService.create(createProjectDto, req.user.id);
+    return this.projectsService.create(createProjectDto, req.user.sub);
   }
 
   @Get()

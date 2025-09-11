@@ -14,6 +14,8 @@ import {
   CreateAppointmentDto,
   UpdateAppointmentDto,
   RescheduleAppointmentDto,
+  CreateEmergencyAppointmentDto,
+  CreateVirtualAgentAppointmentDto,
 } from './dto';
 import { AuthGuard } from '../auth/auth.guard';
 
@@ -59,5 +61,29 @@ export class AppointmentsController {
   @Delete(':id')
   async remove(@Param('id') id: string) {
     return this.appointmentsService.remove(id);
+  }
+
+  @Post('emergency')
+  async createEmergency(
+    @Body() createEmergencyDto: CreateEmergencyAppointmentDto,
+    @Request() req,
+  ) {
+    return this.appointmentsService.createEmergency(createEmergencyDto, req.user.sub);
+  }
+
+  @Post('virtual-agent')
+  async createVirtualAgent(
+    @Body() createVirtualAgentDto: CreateVirtualAgentAppointmentDto,
+    @Request() req,
+  ) {
+    return this.appointmentsService.createVirtualAgent(createVirtualAgentDto, req.user.sub);
+  }
+
+  @Get('profile/:profileId/type/:type')
+  async findByType(
+    @Param('profileId') profileId: string,
+    @Param('type') type: 'regular' | 'emergency' | 'virtual_agent',
+  ) {
+    return this.appointmentsService.findByType(profileId, type);
   }
 }

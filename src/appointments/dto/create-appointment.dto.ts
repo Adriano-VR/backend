@@ -1,4 +1,4 @@
-import { IsString, IsOptional, IsDateString } from 'class-validator';
+import { IsString, IsOptional, IsDateString, IsEnum } from 'class-validator';
 
 export class CreateAppointmentDto {
   @IsString()
@@ -21,4 +21,8 @@ export class CreateAppointmentDto {
   @IsOptional()
   @IsString()
   notes?: string;
+
+  @IsOptional()
+  @IsEnum(['regular', 'emergency', 'virtual_agent'])
+  appointmentType?: 'regular' | 'emergency' | 'virtual_agent';
 }

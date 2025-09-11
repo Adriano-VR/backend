@@ -1,6 +1,6 @@
 generator client {
   provider      = "prisma-client-js"
-  binaryTargets = ["native", "windows"]
+ binaryTargets = ["native", "windows", "debian-openssl-3.0.x"]
 }
 
 datasource db {
@@ -330,7 +330,7 @@ model project {
   updatedAt      DateTime      @updatedAt @map("updated_at")
   deletedAt      DateTime?     @map("deleted_at")
   actions        action[]
-  tarefas        tarefa[]
+  tasks          task[]
   createdBy      profile?      @relation("ProjectCreatedBy", fields: [createdById], references: [id])
   organization   organization? @relation(fields: [organizationId], references: [id])
   campaign       campaign?     @relation("ProjectToCampaign", fields: [campaignId], references: [id])
@@ -358,7 +358,7 @@ model action {
   @@map("action")
 }
 
-model tarefa {
+model task {
   id                    String        @id @default(uuid())
   titulo                String
   descricao             String?
@@ -366,14 +366,14 @@ model tarefa {
   dataInicio            DateTime?     @map("data_inicio")
   dataPrevisaoConclusao DateTime?     @map("data_previsao_conclusao")
   dataConclusao         DateTime?     @map("data_conclusao")
-  status                TarefaStatus  @default(pendente)
+  status                TaskStatus    @default(pendente)
   projectId             String        @map("project_id")
   createdAt             DateTime      @default(now()) @map("created_at")
   updatedAt             DateTime      @updatedAt @map("updated_at")
   deletedAt             DateTime?     @map("deleted_at")
   project               project       @relation(fields: [projectId], references: [id], onDelete: Cascade)
 
-  @@map("tarefa")
+  @@map("task")
 }
 
 model lead {
@@ -512,19 +512,20 @@ model history {
 }
 
 model appointment {
-  id          String            @id @default(uuid())
-  title       String
-  description String?
-  startTime   DateTime          @map("start_time")
-  endTime     DateTime          @map("end_time")
-  status      AppointmentStatus @default(scheduled)
-  location    String?
-  notes       String?
-  profileId   String            @map("profile_id")
-  createdAt   DateTime          @default(now()) @map("created_at")
-  updatedAt   DateTime          @updatedAt @map("updated_at")
-  deletedAt   DateTime?         @map("deleted_at")
-  profile     profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  id             String            @id @default(uuid())
+  title          String
+  description    String?
+  startTime      DateTime          @map("start_time")
+  endTime        DateTime          @map("end_time")
+  status         AppointmentStatus @default(scheduled)
+  appointmentType AppointmentType  @default(regular) @map("appointment_type")
+  location       String?
+  notes          String?
+  profileId      String            @map("profile_id")
+  createdAt      DateTime          @default(now()) @map("created_at")
+  updatedAt      DateTime          @updatedAt @map("updated_at")
+  deletedAt      DateTime?         @map("deleted_at")
+  profile        profile           @relation(fields: [profileId], references: [id], onDelete: Cascade)
 
   @@map("appointment")
 }
@@ -552,7 +553,7 @@ enum Status {
   completed
 }
 
-enum TarefaStatus {
+enum TaskStatus {
   pendente
   iniciado
   concluido
@@ -612,6 +613,12 @@ enum AppointmentStatus {
   completed
   cancelled
   rescheduled
+}
+
+enum AppointmentType {
+  regular
+  emergency
+  virtual_agent
 }
 
 enum CampaignFrequency {

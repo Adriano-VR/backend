@@ -185,7 +185,8 @@ export class CampaignsService {
     return this.mapToResponseDto(campaign);
   }
 
-  async update(id: string, updateCampaignDto: UpdateCampaignDto): Promise<CampaignResponseDto> {
+  async update(id: string, updateCampaignDto: UpdateCampaignDto, createdById?: string): Promise<CampaignResponseDto> {
+    console.log('🔍 [CampaignsService] createdById recebido:', createdById);
     const existingCampaign = await this.prisma.campaign.findFirst({
       where: {
         id,
@@ -261,7 +262,7 @@ export class CampaignsService {
       try {
         console.log('🚀 [CampaignsService] Campanha ativada, criando projeto de checklist automaticamente...');
         if (campaign.organizationId) {
-          await this.checklistProjectService.createChecklistProject(campaign.id, campaign.organizationId);
+          await this.checklistProjectService.createChecklistProject(campaign.id, campaign.organizationId, createdById);
           console.log('✅ [CampaignsService] Projeto de checklist criado com sucesso!');
         } else {
           console.log('⚠️ [CampaignsService] Campanha não possui organização associada, não é possível criar projeto de checklist');

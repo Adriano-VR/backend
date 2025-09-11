@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
-import { ProjectType, TarefaStatus } from '@prisma/client';
+import { ProjectType, TaskStatus } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
 
@@ -32,9 +32,10 @@ interface ChecklistData {
 export class ChecklistProjectService {
   constructor(private readonly prisma: PrismaService) {}
 
-  async createChecklistProject(campaignId: string, organizationId: string): Promise<any> {
+  async createChecklistProject(campaignId: string, organizationId: string, createdById?: string): Promise<any> {
     try {
       console.log('🔍 [ChecklistProjectService] Criando projeto de checklist para campanha:', campaignId);
+      console.log('🔍 [ChecklistProjectService] createdById recebido:', createdById);
 
       // Carregar dados do checklist do arquivo JSON
       const checklistData = await this.loadChecklistData();
@@ -65,6 +66,8 @@ export class ChecklistProjectService {
           type: 'checklist' as ProjectType,
           description: checklistData.description,
           organizationId: organizationId,
+          campaignId: campaignId, // Relação direta
+          createdById: createdById, // ID do usuário que criou
           campaigns: {
             connect: {
               id: campaignId
@@ -94,14 +97,14 @@ export class ChecklistProjectService {
           }
 
           // Mapear prioridade para status
-          let status: TarefaStatus = 'pendente';
+          let status: TaskStatus = 'pendente';
           if (tarefaData.prioridade === 'alta') {
             status = 'pendente';
           } else if (tarefaData.prioridade === 'média') {
             status = 'pendente';
           }
 
-          const tarefa = await this.prisma.tarefa.create({
+          const task = await this.prisma.task.create({
             data: {
               titulo: tarefaData.titulo,
               descricao: tarefaData.descricao,
@@ -114,7 +117,7 @@ export class ChecklistProjectService {
           });
 
           totalTarefas++;
-          console.log(`  ✅ [ChecklistProjectService] Tarefa criada: ${tarefa.titulo}`);
+          console.log(`  ✅ [ChecklistProjectService] Tarefa criada: ${task.titulo}`);
         }
       }
 

@@ -1,17 +1,23 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
+import { NotificationsService } from '../notifications/notifications.service';
 import {
   CreateAppointmentDto,
   UpdateAppointmentDto,
   RescheduleAppointmentDto,
+  CreateEmergencyAppointmentDto,
+  CreateVirtualAgentAppointmentDto,
 } from './dto';
 
 @Injectable()
 export class AppointmentsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(
+    private prisma: PrismaService,
+    private notificationsService: NotificationsService,
+  ) {}
 
   async create(createAppointmentDto: CreateAppointmentDto, profileId: string) {
-    const { title, description, startTime, endTime, location, notes } =
+    const { title, description, startTime, endTime, location, notes, appointmentType = 'regular' } =
       createAppointmentDto;
 
     return this.prisma.appointment.create({
@@ -21,6 +27,7 @@ export class AppointmentsService {
         startTime: new Date(startTime),
         endTime: new Date(endTime),
         status: 'scheduled',
+        appointmentType,
         location,
         notes,
         profileId: profileId,
@@ -125,6 +132,87 @@ export class AppointmentsService {
       where: { id },
       data: {
         deletedAt: new Date(),
+      },
+    });
+  }
+
+  async createEmergency(createEmergencyDto: CreateEmergencyAppointmentDto, profileId: string) {
+    const { description, notes } = createEmergencyDto;
+    const now = new Date();
+    const endTime = new Date(now.getTime() + 60 * 60 * 1000); // 1 hora de duração
+
+    const appointment = await this.prisma.appointment.create({
+      data: {
+        title: 'Atendimento de Emergência',
+        description,
+        startTime: now,
+        endTime: endTime,
+        status: 'scheduled',
+        appointmentType: 'emergency',
+        location: 'Online - Emergência',
+        notes,
+        profileId: profileId,
+      },
+    });
+
+    // Criar notificação para o usuário
+    await this.prisma.notification.create({
+      data: {
+        title: 'Atendimento de Emergência Solicitado',
+        message: 'Sua solicitação de atendimento de emergência foi enviada. Um profissional entrará em contato em breve.',
+        profileId: profileId,
+      },
+    });
+
+    // Notificar profissionais (buscar todos os profissionais)
+    const professionals = await this.prisma.profile.findMany({
+      where: {
+        role: 'professional',
+      },
+    });
+
+    for (const professional of professionals) {
+      await this.prisma.notification.create({
+        data: {
+          title: 'Nova Solicitação de Emergência',
+          message: `Nova solicitação de atendimento de emergência recebida. Descrição: ${description}`,
+          profileId: professional.id,
+        },
+      });
+    }
+
+    return appointment;
+  }
+
+  async createVirtualAgent(createVirtualAgentDto: CreateVirtualAgentAppointmentDto, profileId: string) {
+    const { description, notes } = createVirtualAgentDto;
+    const now = new Date();
+    const endTime = new Date(now.getTime() + 30 * 60 * 1000); // 30 minutos de duração
+
+    return this.prisma.appointment.create({
+      data: {
+        title: 'Atendimento com Agente Virtual',
+        description,
+        startTime: now,
+        endTime: endTime,
+        status: 'scheduled',
+        appointmentType: 'virtual_agent',
+        location: 'Chat Virtual',
+        notes,
+        profileId: profileId,
+      },
+    });
+  }
+
+  async findByType(profileId: string, appointmentType: 'regular' | 'emergency' | 'virtual_agent') {
+    return this.prisma.appointment.findMany({
+      where: {
+        profileId: profileId,
+        appointmentType: appointmentType,
+        deletedAt: null,
+      },
+      orderBy: {
+        startTime: 'desc',
       },
     });
   }

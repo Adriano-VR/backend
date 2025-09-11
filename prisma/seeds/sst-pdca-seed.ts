@@ -1,4 +1,4 @@
-import { PrismaClient, ProjectType, TarefaStatus } from '@prisma/client'
+import { PrismaClient, ProjectType, TaskStatus } from '@prisma/client'
 
 const prisma = new PrismaClient()
 
@@ -287,13 +287,13 @@ async function main() {
     let totalTarefas = 0
     
     // Verificar se já existem tarefas para este projeto
-    const existingTarefas = await prisma.tarefa.findMany({
+    const existingTasks = await prisma.task.findMany({
       where: { projectId: project.id }
     })
     
-    if (existingTarefas.length > 0) {
-      console.log(`✅ Projeto já possui ${existingTarefas.length} tarefas. Pulando criação...`)
-      totalTarefas = existingTarefas.length
+    if (existingTasks.length > 0) {
+      console.log(`✅ Projeto já possui ${existingTasks.length} tarefas. Pulando criação...`)
+      totalTarefas = existingTasks.length
     } else {
       for (const [phaseKey, phase] of Object.entries(checklistData.phases)) {
         console.log(`📋 Criando tarefas da fase: ${phase.title}`)
@@ -308,14 +308,14 @@ async function main() {
           }
 
           // Mapear prioridade para status
-          let status: TarefaStatus = 'pendente'
+          let status: TaskStatus = 'pendente'
           if (tarefaData.prioridade === 'alta') {
             status = 'pendente'
           } else if (tarefaData.prioridade === 'média') {
             status = 'pendente'
           }
 
-          const tarefa = await prisma.tarefa.create({
+          const task = await prisma.task.create({
             data: {
               titulo: tarefaData.titulo,
               descricao: tarefaData.descricao,
@@ -328,7 +328,7 @@ async function main() {
           })
           
           totalTarefas++
-          console.log(`  ✅ Tarefa criada: ${tarefa.titulo}`)
+          console.log(`  ✅ Tarefa criada: ${task.titulo}`)
         }
       }
     }

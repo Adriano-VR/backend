@@ -56,8 +56,17 @@ export class CampaignsController {
   async update(
     @Param('id') id: string,
     @Body() updateCampaignDto: UpdateCampaignDto,
+    @Request() req: any,
   ): Promise<CampaignResponseDto> {
-    return this.campaignsService.update(id, updateCampaignDto);
+    console.log('🔍 [CampaignsController] req.user:', req.user);
+    console.log('🔍 [CampaignsController] req.user.id:', req.user?.id);
+    console.log('🔍 [CampaignsController] req.user.sub:', req.user?.sub);
+    
+    // Usar sub se id não estiver disponível
+    const userId = req.user?.id || req.user?.sub;
+    console.log('🔍 [CampaignsController] userId final:', userId);
+    
+    return this.campaignsService.update(id, updateCampaignDto, userId);
   }
 
   @Delete(':id')

@@ -31,16 +31,17 @@ async function main() {
     console.log('2. Executar seed completo (demos)');
     console.log('3. Disponibilizar formulários para organizações');
     console.log('4. Executar seed de campanhas');
+    console.log('5. Executar seed de notificações');
     console.log('');
     console.log('👥 SEEDS DE USUÁRIOS:');
-    console.log('5. Usuários e organização demo');
-    console.log('6. Respostas do formulário espiritual');
+    console.log('6. Usuários e organização demo');
+    console.log('7. Respostas do formulário espiritual');
     console.log('');
     console.log('🧹 MANUTENÇÃO:');
-    console.log('7. Limpar formulários duplicados');
-    console.log('8. Verificar sincronização do banco');
-    console.log('9. Regenerar Prisma Client');
-    console.log('10. Limpar banco de dados');
+    console.log('8. Limpar formulários duplicados');
+    console.log('9. Verificar sincronização do banco');
+    console.log('10. Regenerar Prisma Client');
+    console.log('11. Limpar banco de dados');
     console.log('');
     console.log('0. Sair\n');
 
@@ -50,7 +51,7 @@ async function main() {
         output: process.stdout
     });
 
-    rl.question('Escolha uma opção (0-10): ', async (answer: string) => {
+    rl.question('Escolha uma opção (0-11): ', async (answer: string) => {
         switch (answer.trim()) {
             case '1':
                 console.log('\n🚀 Executando seed básico (templates)...\n');
@@ -97,6 +98,17 @@ async function main() {
                 break;
 
             case '5':
+                console.log('\n🚀 Executando seed de notificações...\n');
+                const successNotifications = runCommand(
+                    'ts-node run-notification-seed.ts',
+                    'Seed de notificações'
+                );
+                if (successNotifications) {
+                    console.log('🎉 Seed de notificações executado com sucesso!');
+                }
+                break;
+
+            case '6':
                 console.log('\n🚀 Executando usuários e organização demo...\n');
                 const successUsers = runCommand(
                     'ts-node demos/default/seed-users-only.ts',
@@ -107,7 +119,7 @@ async function main() {
                 }
                 break;
 
-            case '6':
+            case '7':
                 console.log('\n🚀 Executando respostas do formulário espiritual...\n');
                 const successEspiritualResponses = runCommand(
                     'ts-node demos/default/seed-espiritual-responses.ts',
@@ -118,7 +130,7 @@ async function main() {
                 }
                 break;
 
-            case '7':
+            case '8':
                 console.log('\n🧹 Limpando formulários duplicados...\n');
                 const successClean = runCommand(
                     'ts-node utils/clean-duplicate-forms.ts',
@@ -129,7 +141,7 @@ async function main() {
                 }
                 break;
 
-            case '8':
+            case '9':
                 console.log('\n🔍 Verificando sincronização do banco...\n');
                 const successSync = runCommand(
                     'ts-node utils/check-db-sync.ts',
@@ -140,7 +152,7 @@ async function main() {
                 }
                 break;
 
-            case '9':
+            case '10':
                 console.log('\n🔄 Regenerando Prisma Client...\n');
                 const successPrisma = runCommand(
                     'cd ../../ && pnpm prisma generate',
@@ -151,7 +163,7 @@ async function main() {
                 }
                 break;
 
-            case '10':
+            case '11':
                 console.log('\n🗑️ Limpando banco de dados...\n');
                 const successCleanDb = runCommand(
                     'cd ../../ && pnpm prisma db push --force-reset',

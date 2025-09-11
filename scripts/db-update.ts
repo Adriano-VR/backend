@@ -60,6 +60,24 @@ const scriptCategories = {
                 name: 'Seed Formulários Submetidos',
                 description: 'Executa seed de formulários já submetidos',
                 command: 'pnpm seed:submitedForms'
+            },
+            {
+                id: 'seed-campaigns',
+                name: 'Seed Campanhas',
+                description: 'Executa seed de campanhas de exemplo',
+                command: 'pnpm seed:campaigns'
+            },
+            {
+                id: 'seed-projects',
+                name: 'Seed Projetos (SST)',
+                description: 'Executa seed de projeto de checklist SST',
+                command: 'pnpm seed:projects'
+            },
+            {
+                id: 'seed-notifications',
+                name: 'Seed Notificações',
+                description: 'Executa seed de notificações de exemplo',
+                command: 'pnpm seed:notifications'
             }
         ]
     },
