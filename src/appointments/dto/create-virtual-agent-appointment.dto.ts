@@ -9,4 +9,3 @@ export class CreateVirtualAgentAppointmentDto {
   notes?: string;
 }
 
-
