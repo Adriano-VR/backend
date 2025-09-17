@@ -20,7 +20,7 @@ export class AppointmentsService {
     const { title, description, startTime, endTime, location, notes, appointmentType = 'regular', professionalId } =
       createAppointmentDto;
 
-    return this.prisma.appointment.create({
+    const appointment = await this.prisma.appointment.create({
       data: {
         title,
         description,
@@ -34,6 +34,14 @@ export class AppointmentsService {
         professionalId: professionalId,
       },
     });
+    if (professionalId) {
+      await this.notificationsService.createNotification({
+        profileId: professionalId,
+        title: 'Nova consulta agendada',
+        message: `Uma nova consulta foi agendada para ${new Date(startTime).toLocaleString()}.`,
+      });
+    }
+    return appointment;
   }
 
   async findByProfile(profileId: string) {
@@ -99,7 +107,7 @@ export class AppointmentsService {
       throw new NotFoundException(`Appointment with ID ${id} not found`);
     }
 
-    return this.prisma.appointment.update({
+    const updated = await this.prisma.appointment.update({
       where: { id },
       data: {
         ...updateAppointmentDto,
@@ -111,6 +119,34 @@ export class AppointmentsService {
         }),
       },
     });
+
+    // Gatilhos por status
+    if (appointment?.profileId && updateAppointmentDto.status) {
+      if (updateAppointmentDto.status === 'confirmed') {
+        await this.notificationsService.createNotification({
+          profileId: appointment.profileId,
+          title: 'Consulta confirmada',
+          message: 'Sua consulta foi confirmada pelo profissional.',
+        });
+      }
+      if (updateAppointmentDto.status === 'cancelled') {
+        await this.notificationsService.createNotification({
+          profileId: appointment.profileId,
+          title: 'Consulta cancelada',
+          message: 'Sua consulta foi cancelada. Agende um novo horário se necessário.',
+        });
+      }
+      if (updateAppointmentDto.status === 'rescheduled') {
+        const newStart = (updateAppointmentDto as any).startTime || updated.startTime;
+        await this.notificationsService.createNotification({
+          profileId: appointment.profileId,
+          title: 'Consulta reagendada',
+          message: `Sua consulta foi reagendada para ${new Date(newStart).toLocaleString()}.`,
+        });
+      }
+    }
+
+    return updated;
   }
 
   async reschedule(id: string, rescheduleDto: RescheduleAppointmentDto) {

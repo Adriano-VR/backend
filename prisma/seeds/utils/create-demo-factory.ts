@@ -57,6 +57,10 @@ export class CreateDemoFactory {
         await addUsersToOrganization(organizations[0].id, collaboratorsCreated)
         console.log('✅ Colaboradores adicionados à organização.');
 
+        // Adicionar admin como membro da organização
+        await addUsersToOrganization(organizations[0].id, [admin])
+        console.log('✅ Admin adicionado como membro da organização.');
+
         // Distribuir colaboradores pelos departamentos
         await assignCollaboratorsToDepartments(organizations[0].id, departments)
         console.log('✅ Colaboradores distribuídos pelos departamentos.');

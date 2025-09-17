@@ -4,9 +4,10 @@ import { PrismaSubmittedFormRepository } from '../repositories/prisma/prisma-sub
 import { SubmittedFormRepository } from '../repositories/submitted-form-repositorie';
 import { SubmittedFormsController } from './submitted-forms.controller';
 import { SubmittedFormsService } from './submitted-forms.service';
+import { NotificationsModule } from '../notifications/notifications.module';
 
 @Module({
-  imports: [PrismaModule],
+  imports: [PrismaModule, NotificationsModule],
   controllers: [SubmittedFormsController],
   providers: [
     SubmittedFormsService,

@@ -41,6 +41,11 @@ const seedUsersAndOrganization = async () => {
     await addUsersToOrganization(organizations[0].id, collaboratorsCreated);
     console.log('✅ Usuários adicionados à organização.');
 
+    // Adicionar admin como membro da organização
+    console.log('👑 Adicionando admin como membro da organização...');
+    await addUsersToOrganization(organizations[0].id, [admin]);
+    console.log('✅ Admin adicionado como membro da organização.');
+
     // Criar departamentos
     console.log('🏢 Criando departamentos...');
     const departments = await createDepartments(organizations[0].id, demoDefaultOrganizations[0].departments || []);

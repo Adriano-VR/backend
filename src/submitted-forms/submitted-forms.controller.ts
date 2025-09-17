@@ -201,6 +201,10 @@ export class SubmittedFormsController {
     @Param('id') id: string,
     @Body() updateSubmittedFormDto: UpdateSubmittedFormDto,
   ): Promise<SubmittedForm> {
+    console.log(`🔍 [SubmittedFormsController] Recebendo requisição de update:`, {
+      id,
+      updateData: updateSubmittedFormDto
+    });
     return this.submittedFormsService.update(id, updateSubmittedFormDto);
   }
 

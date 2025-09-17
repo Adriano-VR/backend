@@ -1,25 +1,16 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { NotFoundException } from '@nestjs/common';
 import { SubmittedFormsService } from '../src/submitted-forms/submitted-forms.service';
-import { PrismaService } from '../src/prisma/prisma.service';
 import { SubmittedFormRepository } from '../src/repositories/submitted-form-repositorie';
-import { CreateSubmittedFormDto, FormStatus } from '../src/submitted-forms/dto/create-submitted-form.dto';
+import { PrismaService } from '../src/prisma/prisma.service';
+import { NotificationsService } from '../src/notifications/notifications.service';
 
 describe('SubmittedFormsService', () => {
   let service: SubmittedFormsService;
+  let repository: SubmittedFormRepository;
   let prismaService: PrismaService;
-  let submittedFormRepository: SubmittedFormRepository;
+  let notificationsService: NotificationsService;
 
-  const mockPrismaService = {
-    form: {
-      findUnique: jest.fn(),
-    },
-    campaign: {
-      findFirst: jest.fn(),
-    },
-  };
-
-  const mockSubmittedFormRepository = {
+  const mockRepository = {
     create: jest.fn(),
     findAll: jest.fn(),
     findById: jest.fn(),
@@ -32,24 +23,46 @@ describe('SubmittedFormsService', () => {
     findFormsByOrganization: jest.fn(),
   };
 
+  const mockPrismaService = {
+    form: {
+      findUnique: jest.fn(),
+      findFirst: jest.fn(),
+    },
+    campaign: {
+      findFirst: jest.fn(),
+    },
+    profile: {
+      findFirst: jest.fn(),
+    },
+  };
+
+  const mockNotificationsService = {
+    createNotification: jest.fn(),
+  };
+
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
       providers: [
         SubmittedFormsService,
         {
+          provide: SubmittedFormRepository,
+          useValue: mockRepository,
+        },
+        {
           provide: PrismaService,
           useValue: mockPrismaService,
         },
         {
-          provide: SubmittedFormRepository,
-          useValue: mockSubmittedFormRepository,
+          provide: NotificationsService,
+          useValue: mockNotificationsService,
         },
       ],
     }).compile();
 
     service = module.get<SubmittedFormsService>(SubmittedFormsService);
+    repository = module.get<SubmittedFormRepository>(SubmittedFormRepository);
     prismaService = module.get<PrismaService>(PrismaService);
-    submittedFormRepository = module.get<SubmittedFormRepository>(SubmittedFormRepository);
+    notificationsService = module.get<NotificationsService>(NotificationsService);
   });
 
   afterEach(() => {
@@ -57,189 +70,70 @@ describe('SubmittedFormsService', () => {
   });
 
   describe('create', () => {
-    it('deve criar submitted form sem campanha quando não há campanha ativa', async () => {
-      const createSubmittedFormDto: CreateSubmittedFormDto = {
-        formId: 'form-123',
-        profileId: 'profile-123',
-        status: FormStatus.pending,
-      };
+    it('deve notificar o admin da organização quando um colaborador submeter formulário', async () => {
+      const dto = {
+        formId: 'form-1',
+        profileId: 'user-1',
+        status: 'completed',
+      } as any;
 
-      const mockForm = {
-        id: 'form-123',
-        organizationId: 'org-123',
-      };
+      const created = { id: 'sub-1', ...dto, campaignId: 'camp-1' };
+      const form = { id: 'form-1', organizationId: 'org-1', title: 'Formulário Teste' };
+      const admin = { id: 'admin-1', role: 'admin', name: 'Admin Teste' };
 
-      const mockSubmittedForm = {
-        id: 'submitted-form-123',
-        ...createSubmittedFormDto,
-        campaignId: null,
-      };
+      (mockRepository.create as jest.Mock).mockResolvedValue(created);
+      (mockPrismaService.form.findUnique as jest.Mock).mockResolvedValue(form);
+      (mockPrismaService.campaign.findFirst as jest.Mock).mockResolvedValue({ id: 'camp-1', name: 'Campanha Ativa' });
+      (mockPrismaService.profile.findFirst as jest.Mock).mockResolvedValue(admin);
 
-      mockPrismaService.form.findUnique.mockResolvedValue(mockForm);
-      mockPrismaService.campaign.findFirst.mockResolvedValue(null); // Nenhuma campanha ativa
-      mockSubmittedFormRepository.create.mockResolvedValue(mockSubmittedForm);
-
-      const result = await service.create(createSubmittedFormDto);
+      const result = await service.create(dto);
 
       expect(result).toBeDefined();
-      expect(result.campaignId).toBeNull();
-      expect(mockSubmittedFormRepository.create).toHaveBeenCalledWith(createSubmittedFormDto);
-    });
-
-    it('deve vincular automaticamente à campanha ativa quando não fornecido campaignId', async () => {
-      const createSubmittedFormDto: CreateSubmittedFormDto = {
-        formId: 'form-123',
-        profileId: 'profile-123',
-        status: FormStatus.pending,
-      };
-
-      const mockForm = {
-        id: 'form-123',
-        organizationId: 'org-123',
-      };
-
-      const mockActiveCampaign = {
-        id: 'campaign-123',
-        name: 'Campanha Ativa',
-      };
-
-      const mockSubmittedForm = {
-        id: 'submitted-form-123',
-        ...createSubmittedFormDto,
-        campaignId: 'campaign-123',
-      };
-
-      mockPrismaService.form.findUnique.mockResolvedValue(mockForm);
-      mockPrismaService.campaign.findFirst.mockResolvedValue(mockActiveCampaign);
-      mockSubmittedFormRepository.create.mockResolvedValue(mockSubmittedForm);
-
-      const result = await service.create(createSubmittedFormDto);
-
-      expect(result).toBeDefined();
-      expect(result.campaignId).toBe('campaign-123');
-      expect(mockSubmittedFormRepository.create).toHaveBeenCalledWith({
-        ...createSubmittedFormDto,
-        campaignId: 'campaign-123',
+      expect(mockNotificationsService.createNotification).toHaveBeenCalledWith({
+        profileId: admin.id,
+        title: 'Nova resposta de formulário',
+        message: expect.stringContaining('colaborador respondeu'),
       });
-    });
-
-    it('deve usar campaignId fornecido quando fornecido', async () => {
-      const createSubmittedFormDto: CreateSubmittedFormDto = {
-        formId: 'form-123',
-        profileId: 'profile-123',
-        status: FormStatus.pending,
-        campaignId: 'campaign-fornecida-123',
-      };
-
-      const mockSubmittedForm = {
-        id: 'submitted-form-123',
-        ...createSubmittedFormDto,
-      };
-
-      mockSubmittedFormRepository.create.mockResolvedValue(mockSubmittedForm);
-
-      const result = await service.create(createSubmittedFormDto);
-
-      expect(result).toBeDefined();
-      expect(result.campaignId).toBe('campaign-fornecida-123');
-      expect(mockSubmittedFormRepository.create).toHaveBeenCalledWith(createSubmittedFormDto);
-      expect(mockPrismaService.form.findUnique).not.toHaveBeenCalled();
-    });
-
-    it('deve lidar com erro quando formulário não é encontrado', async () => {
-      const createSubmittedFormDto: CreateSubmittedFormDto = {
-        formId: 'form-inexistente',
-        profileId: 'profile-123',
-        status: FormStatus.pending,
-      };
-
-      const mockSubmittedForm = {
-        id: 'submitted-form-123',
-        ...createSubmittedFormDto,
-        campaignId: null,
-      };
-
-      mockPrismaService.form.findUnique.mockResolvedValue(null);
-      mockSubmittedFormRepository.create.mockResolvedValue(mockSubmittedForm);
-
-      const result = await service.create(createSubmittedFormDto);
-
-      expect(result).toBeDefined();
-      expect(result.campaignId).toBeNull();
-      expect(mockSubmittedFormRepository.create).toHaveBeenCalledWith(createSubmittedFormDto);
-    });
-
-    it('deve lidar com erro quando formulário não tem organização', async () => {
-      const createSubmittedFormDto: CreateSubmittedFormDto = {
-        formId: 'form-123',
-        profileId: 'profile-123',
-        status: FormStatus.pending,
-      };
-
-      const mockForm = {
-        id: 'form-123',
-        organizationId: null,
-      };
-
-      const mockSubmittedForm = {
-        id: 'submitted-form-123',
-        ...createSubmittedFormDto,
-        campaignId: null,
-      };
-
-      mockPrismaService.form.findUnique.mockResolvedValue(mockForm);
-      mockSubmittedFormRepository.create.mockResolvedValue(mockSubmittedForm);
-
-      const result = await service.create(createSubmittedFormDto);
-
-      expect(result).toBeDefined();
-      expect(result.campaignId).toBeNull();
-      expect(mockSubmittedFormRepository.create).toHaveBeenCalledWith(createSubmittedFormDto);
     });
   });
 
-  describe('linkToCampaign', () => {
-    it('deve vincular submitted form à campanha', async () => {
-      const submittedFormId = 'submitted-form-123';
-      const campaignId = 'campaign-123';
+  describe('update', () => {
+    it('deve notificar o admin quando status mudar para completed', async () => {
+      const id = 'sub-1';
+      const updateDto = { status: 'completed' };
+      const existing = { id, formId: 'form-1', status: 'in_progress' };
+      const updated = { ...existing, status: 'completed' };
+      const form = { id: 'form-1', organizationId: 'org-1', title: 'Formulário Teste' };
+      const admin = { id: 'admin-1', role: 'admin', name: 'Admin Teste' };
 
-      const mockSubmittedForm = {
-        id: submittedFormId,
-        formId: 'form-123',
-        profileId: 'profile-123',
-        campaignId: null,
-      };
+      (mockRepository.findById as jest.Mock).mockResolvedValue(existing);
+      (mockRepository.update as jest.Mock).mockResolvedValue(updated);
+      (mockPrismaService.form.findUnique as jest.Mock).mockResolvedValue(form);
+      (mockPrismaService.profile.findFirst as jest.Mock).mockResolvedValue(admin);
 
-      const mockUpdatedSubmittedForm = {
-        ...mockSubmittedForm,
-        campaignId: campaignId,
-      };
-
-      mockSubmittedFormRepository.findById.mockResolvedValue(mockSubmittedForm);
-      mockSubmittedFormRepository.update.mockResolvedValue(mockUpdatedSubmittedForm);
-
-      const result = await service.linkToCampaign(submittedFormId, campaignId);
+      const result = await service.update(id, updateDto);
 
       expect(result).toBeDefined();
-      expect(result.campaignId).toBe(campaignId);
-      expect(mockSubmittedFormRepository.update).toHaveBeenCalledWith(submittedFormId, {
-        campaign: { connect: { id: campaignId } }
+      expect(mockNotificationsService.createNotification).toHaveBeenCalledWith({
+        profileId: admin.id,
+        title: 'Formulário completado',
+        message: expect.stringContaining('colaborador completou'),
       });
     });
 
-    it('deve lançar NotFoundException quando submitted form não existe', async () => {
-      const submittedFormId = 'submitted-form-inexistente';
-      const campaignId = 'campaign-123';
+    it('não deve notificar quando status não for completed', async () => {
+      const id = 'sub-1';
+      const updateDto = { status: 'in_progress' };
+      const existing = { id, formId: 'form-1', status: 'pending' };
+      const updated = { ...existing, status: 'in_progress' };
 
-      mockSubmittedFormRepository.findById.mockResolvedValue(null);
+      (mockRepository.findById as jest.Mock).mockResolvedValue(existing);
+      (mockRepository.update as jest.Mock).mockResolvedValue(updated);
 
-      await expect(service.linkToCampaign(submittedFormId, campaignId)).rejects.toThrow(
-        NotFoundException
-      );
+      const result = await service.update(id, updateDto);
 
-      await expect(service.linkToCampaign(submittedFormId, campaignId)).rejects.toThrow(
-        'SubmittedForm com ID submitted-form-inexistente não encontrado'
-      );
+      expect(result).toBeDefined();
+      expect(mockNotificationsService.createNotification).not.toHaveBeenCalled();
     });
   });
 });

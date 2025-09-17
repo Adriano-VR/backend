@@ -34,7 +34,7 @@ export class AuthService {
 
   /** Só cria o usuário */
   async register(dto: RegisterDto) {
-    console.log('📝 [Auth] Iniciando registro via Supabase:', dto.email);
+  
 
     try {
       // 1. Verificar se usuário já existe no Supabase primeiro

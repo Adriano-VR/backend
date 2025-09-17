@@ -5,6 +5,34 @@ import { PrismaService } from '../prisma/prisma.service';
 export class NotificationsService {
   constructor(private prisma: PrismaService) {}
 
+  async createNotification({
+    profileId,
+    title,
+    message,
+  }: {
+    profileId: string;
+    title: string;
+    message?: string;
+  }) {
+    console.log(`🔔 [NotificationsService] Criando notificação:`, {
+      profileId,
+      title,
+      message
+    });
+    
+    const notification = await this.prisma.notification.create({
+      data: {
+        profileId,
+        title,
+        message,
+      },
+    });
+    
+    console.log(`✅ [NotificationsService] Notificação criada com sucesso:`, notification);
+    
+    return notification;
+  }
+
   async getNotificationsByUserId(userId: string) {
     return this.prisma.notification.findMany({
       where: {

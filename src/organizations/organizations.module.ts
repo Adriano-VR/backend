@@ -4,6 +4,8 @@ import { ProfileRepository } from 'src/repositories/profile-repositorie';
 import { PrismaModule } from '../prisma/prisma.module';
 import { OrganizationRepository } from '../repositories/organization-repositorie';
 import { PrismaOrganizationRepository } from '../repositories/prisma/prisma-organization-repositorie';
+import { OrganizationMemberRepository } from '../repositories/organization-member-repository';
+import { PrismaOrganizationMemberRepository } from '../repositories/prisma/prisma-organization-member-repository';
 import { QueryParserModule } from '../shared/query-parser/query-parser.module';
 import { OrganizationsController } from './organizations.controller';
 import { OrganizationsService } from './organizations.service';
@@ -16,6 +18,10 @@ import { OrganizationsService } from './organizations.service';
     {
       provide: OrganizationRepository,
       useClass: PrismaOrganizationRepository,
+    },
+    {
+      provide: OrganizationMemberRepository,
+      useClass: PrismaOrganizationMemberRepository,
     },
     {
       provide: ProfileRepository,

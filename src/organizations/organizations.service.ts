@@ -8,6 +8,7 @@ import { ProfileRepository } from 'src/repositories/profile-repositorie';
 import { UtilsService } from 'src/shared/utils';
 import { Organization } from '../../prisma/types';
 import { OrganizationRepository } from '../repositories/organization-repositorie';
+import { OrganizationMemberRepository } from '../repositories/organization-member-repository';
 import { QueryParserService } from '../shared/query-parser/query-parser.service';
 import { AssociateProfileToOrgDto } from './dto/associate-profile-to-org';
 import { CreateOrganizationDto } from './dto/create-organization.dto';
@@ -18,6 +19,7 @@ import { UpdateOrganizationSettingsDto } from './dto/update-organization-setting
 export class OrganizationsService {
   constructor(
     private readonly organizationRepository: OrganizationRepository,
+    private readonly organizationMemberRepository: OrganizationMemberRepository,
     private readonly queryParserService: QueryParserService,
     private readonly profileRepository: ProfileRepository,
     private readonly utilsService: UtilsService,
@@ -80,7 +82,35 @@ export class OrganizationsService {
       };
     }
 
-    return this.organizationRepository.create(createData);
+    // Criar a organização
+    const organization = await this.organizationRepository.create(createData);
+
+    // Se createdById foi fornecido, criar o membro admin automaticamente
+    if (createdById) {
+      console.log(`🔧 [OrganizationsService] Criando membro admin para criador da organização:`, {
+        profileId: createdById,
+        organizationId: organization.id
+      });
+      
+      try {
+        await this.organizationMemberRepository.create({
+          profile: {
+            connect: { id: createdById },
+          },
+          organization: {
+            connect: { id: organization.id },
+          },
+          role: 'admin',
+          status: 'active',
+        });
+        console.log(`✅ [OrganizationsService] Membro admin criado com sucesso`);
+      } catch (error) {
+        console.error('❌ [OrganizationsService] Erro ao criar membro admin:', error);
+        // Não vamos falhar a criação da organização por causa deste erro
+      }
+    }
+
+    return organization;
   }
 
   async findAll(): Promise<Organization[]> {

@@ -161,13 +161,16 @@ export class PrismaProfileRepository
       return [];
     }
 
-    // Buscar todos os profiles da mesma organização
+    // Buscar todos os profiles da mesma organização, excluindo admin
     const profiles = await this.prisma.profile.findMany({
       where: {
         department: {
           organizationId: userProfile.department.organization.id,
         },
         deletedAt: null,
+        role: {
+          not: 'admin' // Excluir admin da listagem de colaboradores
+        },
       },
       include: this.getIncludeOptions(),
       orderBy: {
